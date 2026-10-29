@@ -7,7 +7,9 @@ namespace App\Controller;
 use App\Entity\Link;
 use App\Entity\User;
 use App\Exception\DuplicateLinkException;
+use App\Form\HistoricalLinkType;
 use App\Form\LinkType;
+use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
 use App\Service\LinkManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,6 +42,33 @@ final class LinkController extends AbstractController
         }
 
         return $this->render('link/new.html.twig', [
+            'form' => $form,
+            'duplicate' => $duplicate,
+        ]);
+    }
+
+    #[Route(path: '/liens/reprendre', name: 'app_link_seed', methods: ['GET', 'POST'])]
+    public function seed(Request $request, LinkManager $linkManager, #[CurrentUser] User $user): Response
+    {
+        $submission = new HistoricalLinkSubmission();
+        $submission->poster = $user;
+        $form = $this->createForm(HistoricalLinkType::class, $submission);
+        $form->handleRequest($request);
+
+        $duplicate = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $linkManager->seed($submission);
+                $this->addFlash('success', 'Lien repris de Chat.');
+
+                return $this->redirectToRoute('app_page');
+            } catch (DuplicateLinkException $exception) {
+                $duplicate = $exception->existing;
+                $form->get('url')->addError(new FormError($exception->getMessage()));
+            }
+        }
+
+        return $this->render('link/seed.html.twig', [
             'form' => $form,
             'duplicate' => $duplicate,
         ]);

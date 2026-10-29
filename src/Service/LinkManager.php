@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\Link;
 use App\Entity\User;
 use App\Exception\DuplicateLinkException;
+use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
 use App\Message\FetchLinkPreview;
 use App\Repository\LinkRepository;
@@ -25,6 +26,25 @@ final readonly class LinkManager
 
     /** @throws DuplicateLinkException quand le lien existe déjà : rien n'est créé */
     public function add(LinkSubmission $submission, User $poster): Link
+    {
+        return $this->create($submission, $poster, $this->clock->now(), seeded: false);
+    }
+
+    /**
+     * Reprise d'un lien de l'historique Chat : date et posteur d'origine, jamais annoncé (R5).
+     *
+     * @throws DuplicateLinkException quand le lien existe déjà : rien n'est créé
+     */
+    public function seed(HistoricalLinkSubmission $submission): Link
+    {
+        if (null === $submission->poster || null === $submission->postedAt) {
+            throw new \LogicException('Une reprise validée porte toujours son posteur et sa date d\'origine.');
+        }
+
+        return $this->create($submission, $submission->poster, $submission->postedAt, seeded: true);
+    }
+
+    private function create(LinkSubmission $submission, User $poster, \DateTimeImmutable $postedAt, bool $seeded): Link
     {
         $url = (string) $submission->url;
         $normalizedUrl = $this->urlAnalyzer->normalize($url);
@@ -48,9 +68,10 @@ final readonly class LinkManager
             $normalizedUrl,
             $categories,
             $poster,
-            $this->clock->now(),
+            $postedAt,
             $this->urlAnalyzer->sourceType($url),
             '' === $context ? null : $context,
+            $seeded,
         );
 
         $this->linkRepository->save($link);

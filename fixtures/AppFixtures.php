@@ -28,6 +28,13 @@ class AppFixtures extends Fixture
 
         $manager->persist($user);
 
+        foreach (['marie@example.com', 'karim@example.com'] as $email) {
+            $member = new User();
+            $member->setEmail($email);
+            $member->setPassword($this->passwordHasher->hashPassword($member, 'password'));
+            $manager->persist($member);
+        }
+
         $categories = [];
         foreach (['Tester une app mobile', 'Choisir une librairie PHP', 'Concevoir une interface'] as $name) {
             $categories[$name] = new Category($name, new \DateTimeImmutable());

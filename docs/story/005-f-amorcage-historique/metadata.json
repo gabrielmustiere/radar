@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "title": "Reprendre un lien de l'historique Chat pour amorcer Radar",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": [
+    "contribution",
+    "amorcage",
+    "lien"
+  ],
+  "backlog": "amorcage-historique",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : reprise une à une avec date et posteur d'origine, doublon refusé, jamais annoncé, mention « repris de Chat »."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Planification",
+      "description": "Plan technique rédigé : formulaire de reprise hérité de l'ajout, création factorisée dans LinkManager, marqueur seeded."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "4/4 étapes livrées, make lint/phpunit (68)/playwright (5) verts. Écarts : champs du formulaire et avertissement de doublon extraits en partiels Twig partagés (évite la duplication entre ajout et reprise) ; aide de test submit() paramétrée."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 bloquant, 0 important, 0 mineur."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "2 écarts réalignés dans le plan, 6/6 critères d'acceptation et 3/3 critères de sortie cochés, aucune dette."
+    }
+  ]
+}

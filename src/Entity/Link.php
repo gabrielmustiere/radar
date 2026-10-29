@@ -56,6 +56,9 @@ class Link
     #[ORM\Column(name: 'site_name', length: 255, nullable: true)]
     private ?string $siteName = null;
 
+    #[ORM\Column(options: ['default' => false])]
+    private bool $seeded;
+
     /** @var Collection<int, Category> */
     #[ORM\ManyToMany(targetEntity: Category::class)]
     #[ORM\JoinTable(name: 'link_category')]
@@ -70,7 +73,9 @@ class Link
         \DateTimeImmutable $postedAt,
         SourceType $sourceType,
         ?string $context = null,
+        bool $seeded = false,
     ) {
+        $this->seeded = $seeded;
         $this->url = $url;
         $this->normalizedUrl = $normalizedUrl;
         $this->sourceType = $sourceType;
@@ -117,6 +122,11 @@ class Link
     public function getCategories(): Collection
     {
         return $this->categories;
+    }
+
+    public function isSeeded(): bool
+    {
+        return $this->seeded;
     }
 
     public function getSourceType(): SourceType

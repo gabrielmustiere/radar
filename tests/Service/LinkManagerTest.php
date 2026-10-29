@@ -9,6 +9,7 @@ use App\Entity\Link;
 use App\Entity\User;
 use App\Enum\Type\SourceType;
 use App\Exception\DuplicateLinkException;
+use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
 use App\Message\FetchLinkPreview;
 use App\Repository\CategoryRepository;
@@ -113,6 +114,21 @@ final class LinkManagerTest extends TestCase
         } catch (DuplicateLinkException $exception) {
             self::assertSame($existing, $exception->existing);
         }
+    }
+
+    public function testSeedKeepsOriginalPosterAndDateAndIsNeverAnnounced(): void
+    {
+        $submission = new HistoricalLinkSubmission();
+        $submission->url = 'https://example.com/historique';
+        $submission->categories = [$this->existing];
+        $submission->postedAt = new \DateTimeImmutable('2026-03-15');
+        $submission->poster = new User()->setEmail('karim@example.com');
+
+        $link = $this->manager()->seed($submission);
+
+        self::assertSame($submission->poster, $link->getPostedBy());
+        self::assertSame($submission->postedAt, $link->getPostedAt());
+        self::assertTrue($link->isSeeded());
     }
 
     private function manager(

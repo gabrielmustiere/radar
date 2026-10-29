@@ -1,0 +1,13 @@
+<div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-500/10" role="alert" data-test="link-duplicate">
+    <p class="flex items-center gap-2 text-sm font-semibold text-amber-900 dark:text-amber-200">
+        <twig:ux:icon name="tabler:copy-check" class="size-5"/> Ce lien est déjà dans Radar
+    </p>
+    <p class="mt-1 text-sm text-amber-800 dark:text-amber-300">Pas besoin de l'ajouter une seconde fois : le voici, avec ses catégories.</p>
+    <div class="mt-4 max-w-sm">
+        {% include 'link/_card.html.twig' with {link: duplicate} %}
+    </div>
+    <a href="{{ path('app_link_show', {id: duplicate.id}) }}" data-test="link-duplicate-show"
+       class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-teal-700 hover:underline dark:text-teal-400">
+        Voir la carte <twig:ux:icon name="tabler:arrow-right" class="size-4"/>
+    </a>
+</div>

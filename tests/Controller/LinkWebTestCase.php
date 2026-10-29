@@ -27,12 +27,16 @@ abstract class LinkWebTestCase extends WebTestCase
     }
 
     /** @param array<string, mixed> $values */
-    protected function submit(KernelBrowser $client, array $values): void
-    {
-        $crawler = $client->request('GET', '/liens/ajouter');
-        $token = $crawler->filter('input[name="link[_token]"]')->attr('value');
+    protected function submit(
+        KernelBrowser $client,
+        array $values,
+        string $path = '/liens/ajouter',
+        string $form = 'link',
+    ): void {
+        $crawler = $client->request('GET', $path);
+        $token = $crawler->filter(sprintf('input[name="%s[_token]"]', $form))->attr('value');
 
-        $client->request('POST', '/liens/ajouter', ['link' => [...$values, '_token' => $token]]);
+        $client->request('POST', $path, [$form => [...$values, '_token' => $token]]);
     }
 
     protected function categoryId(string $name): int

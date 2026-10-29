@@ -8,7 +8,7 @@ use App\Entity\Category;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-final class LinkSubmission
+class LinkSubmission
 {
     public const int MAX_CATEGORIES = 2;
 

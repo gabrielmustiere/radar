@@ -171,7 +171,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `004-f-doublon-lien` · **livrée**
   - C1.3 · P1, P6 · dép. `ajout-lien` · Vision : hypothèse 3 / règle R6
 - [ ] `amorcage-historique` — Permettre aux contributeurs habituels de reprendre un lien de l'historique Chat avec sa date et son posteur d'origine, sans annonce, pour amorcer la base avant l'ouverture.
-  - Pas encore cadrée
+  - Story `005-f-amorcage-historique` · **clôture en cours**
   - C1.4 · P6 · dép. `ajout-lien` · Vision : horizon 3-6 mois (amorçage) / anti-objectif « importer tout l'historique »
 - [ ] `exploration-categories` — Permettre à un membre de parcourir les liens d'une catégorie-besoin et d'ouvrir le lien d'origine pour retrouver ce que l'équipe a repéré sur un sujet.
   - Pas encore cadrée

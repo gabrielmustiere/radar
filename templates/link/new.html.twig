@@ -10,45 +10,11 @@
         </p>
 
         {% if duplicate %}
-            <div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-500/10" role="alert" data-test="link-duplicate">
-                <p class="flex items-center gap-2 text-sm font-semibold text-amber-900 dark:text-amber-200">
-                    <twig:ux:icon name="tabler:copy-check" class="size-5"/> Ce lien est déjà dans Radar
-                </p>
-                <p class="mt-1 text-sm text-amber-800 dark:text-amber-300">Pas besoin de l'ajouter une seconde fois : le voici, avec ses catégories.</p>
-                <div class="mt-4 max-w-sm">
-                    {% include 'link/_card.html.twig' with {link: duplicate} %}
-                </div>
-                <a href="{{ path('app_link_show', {id: duplicate.id}) }}" data-test="link-duplicate-show"
-                   class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-teal-700 hover:underline dark:text-teal-400">
-                    Voir la carte <twig:ux:icon name="tabler:arrow-right" class="size-4"/>
-                </a>
-            </div>
+            {% include 'link/_duplicate.html.twig' %}
         {% endif %}
 
         {{ form_start(form, {attr: {class: 'mt-8 space-y-6', 'data-test': 'link-form', novalidate: 'novalidate'}}) }}
-            {{ form_row(form.url) }}
-
-            <fieldset data-test="link-categories">
-                <legend class="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100">{{ form.categories.vars.label }}</legend>
-                {% if form.categories|length > 0 %}
-                    <div class="flex flex-wrap gap-2">
-                        {% for choice in form.categories %}
-                            <label class="cursor-pointer">
-                                {{ form_widget(choice, {attr: {class: 'peer sr-only'}, label: false}) }}
-                                <span class="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm text-gray-700 ring-1 ring-gray-200 transition hover:ring-gray-300 peer-checked:bg-teal-50 peer-checked:font-medium peer-checked:text-teal-800 peer-checked:ring-teal-500 peer-focus-visible:ring-2 dark:bg-gray-950 dark:text-gray-300 dark:ring-gray-800 dark:peer-checked:bg-teal-500/10 dark:peer-checked:text-teal-300">
-                                    {{ choice.vars.label }}
-                                </span>
-                            </label>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Aucune catégorie pour l'instant : créez la première ci-dessous.</p>
-                {% endif %}
-                {{ form_errors(form.categories) }}
-            </fieldset>
-
-            {{ form_row(form.newCategory) }}
-            {{ form_row(form.context) }}
+            {% include 'link/_fields.html.twig' %}
 
             <div class="flex items-center gap-3">
                 <button type="submit" data-test="link-submit"
@@ -56,6 +22,8 @@
                     <twig:ux:icon name="tabler:plus" class="size-4"/> Ajouter
                 </button>
                 <a href="{{ path('app_page') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Annuler</a>
+                <a href="{{ path('app_link_seed') }}" data-test="link-seed-entry"
+                   class="ml-auto text-sm font-medium text-teal-700 hover:underline dark:text-teal-400">Reprendre un lien de Chat</a>
             </div>
         {{ form_end(form) }}
     </div>

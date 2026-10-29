@@ -53,6 +53,11 @@
             <span data-test="link-poster">{{ link.postedBy.displayName }}</span>
             <span class="size-1 rounded-full bg-gray-300 dark:bg-gray-700"></span>
             <time datetime="{{ link.postedAt|date('c') }}" data-test="link-date">{{ link.postedAt|date('d/m/Y') }}</time>
+            {% if link.seeded %}
+                <span class="ml-auto inline-flex items-center gap-1" title="Repris de l'historique Google Chat" data-test="link-seeded">
+                    <twig:ux:icon name="tabler:history" class="size-3.5"/> repris de Chat
+                </span>
+            {% endif %}
         </div>
     </div>
 </article>
