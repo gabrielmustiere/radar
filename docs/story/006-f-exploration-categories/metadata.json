@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "title": "Parcourir les liens d'une catégorie-besoin",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": [
+    "exploration",
+    "categorie",
+    "navigation"
+  ],
+  "backlog": "exploration-categories",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : catégories et compteurs dans la barre latérale, page de catégorie, ouverture du lien d'origine depuis la carte."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Planification",
+      "description": "Plan technique rédigé : Twig Component CategoryNav, page /categories/{id} avec double JOIN, carte actionnable vers le lien d'origine."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "4/4 étapes livrées, make lint/phpunit (72)/playwright (6) verts. Aucun écart avec le plan."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 bloquant, 0 important, 0 mineur."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "Conforme au plan : 7/7 critères d'acceptation et 3/3 critères de sortie cochés, pas de report."
+    }
+  ]
+}

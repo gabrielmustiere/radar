@@ -109,6 +109,7 @@
                 </a>
             </li>
         </ul>
+        <twig:CategoryNav :currentId="category.id ?? null"/>
         <ul class="mt-4 space-y-1 border-t border-gray-200 pt-4 dark:border-gray-800">
             <li>
                 <a href="{{ path('app_design_system') }}" class="{{ app.current_route == 'app_design_system' ? nav_active : nav_idle }}">

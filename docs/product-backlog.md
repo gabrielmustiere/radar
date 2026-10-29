@@ -174,7 +174,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `005-f-amorcage-historique` · **livrée**
   - C1.4 · P6 · dép. `ajout-lien` · Vision : horizon 3-6 mois (amorçage) / anti-objectif « importer tout l'historique »
 - [ ] `exploration-categories` — Permettre à un membre de parcourir les liens d'une catégorie-besoin et d'ouvrir le lien d'origine pour retrouver ce que l'équipe a repéré sur un sujet.
-  - Pas encore cadrée
+  - Story `006-f-exploration-categories` · **clôture en cours**
   - C4.1, C4.3 · P2 · dép. `carte-apercu` · Vision : problème central / principe 3
 - [ ] `recherche-mot-cle` — Permettre à un membre de rechercher par mot dans les titres, descriptions, contextes et catégories pour retrouver un lien dont il se souvient vaguement.
   - Pas encore cadrée
