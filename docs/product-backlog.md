@@ -159,10 +159,10 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 
 > Les cases sont **dérivées** de `docs/story/*/metadata.json` (champ `backlog` + `delivery`) — ne les coche pas à la main, la prochaine passe les recalculerait. Une case est cochée quand la story est **livrée** (`delivery.commit` renseigné) ; les états intermédiaires se lisent sur la ligne « Story ».
 
-### MVP — Lancement initial · `0/9 livrées`
+### MVP — Lancement initial · `1/9 livrées`
 
-- [ ] `ajout-lien` — Permettre à un membre d'ajouter un lien en moins de 15 secondes (URL, une ou deux catégories existantes ou nouvelles, contexte facultatif) pour que la veille entre dans Radar plutôt que dans Chat.
-  - Story `002-f-ajout-lien` · **clôture en cours**
+- [x] `ajout-lien` — Permettre à un membre d'ajouter un lien en moins de 15 secondes (URL, une ou deux catégories existantes ou nouvelles, contexte facultatif) pour que la veille entre dans Radar plutôt que dans Chat.
+  - Story `002-f-ajout-lien` · **livrée**
   - C1.1, C1.2, C3.1 · P1, P6 · dép. — · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
 - [ ] `carte-apercu` — Permettre à un membre de juger un lien sans cliquer grâce à une carte (aperçu générique, type de source, posteur, date, catégories) et à une carte de repli soignée.
   - Pas encore cadrée
@@ -229,7 +229,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 
 ### Capacités par horizon
 
-- **MVP** — livrées : — · planifiées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1
+- **MVP** — livrées : C1.1, C1.2, C3.1 · planifiées : C1.3, C1.4, C2.1, C2.3, C2.4, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1
 - **V2** — livrées : — · planifiées : C1.5, C2.2, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
