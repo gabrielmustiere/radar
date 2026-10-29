@@ -1,0 +1,6 @@
+{# Carte d'une liste : celle dont l'aperçu est encore en construction se met à jour seule #}
+{% if link.previewStatus is same as constant('App\\Enum\\Type\\PreviewStatus::Pending') %}
+    <twig:PendingLinkCard :link="link" key="link-{{ link.id }}"/>
+{% else %}
+    {% include 'link/_card.html.twig' %}
+{% endif %}

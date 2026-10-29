@@ -23,7 +23,7 @@
                     <h2 class="mb-4 text-sm font-semibold text-gray-500 dark:text-gray-400" data-test="feed-day-label">{{ day_links|first.postedAt|day_label }}</h2>
                     <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                         {% for link in day_links %}
-                            {% include 'link/_card.html.twig' %}
+                            {% include 'link/_list_card.html.twig' %}
                         {% endfor %}
                     </div>
                 </section>

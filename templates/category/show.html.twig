@@ -14,7 +14,7 @@
     {% else %}
         <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-test="link-list">
             {% for link in links.items %}
-                {% include 'link/_card.html.twig' %}
+                {% include 'link/_list_card.html.twig' %}
             {% endfor %}
         </div>
     {% include 'link/_pager.html.twig' %}
