@@ -18,7 +18,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 ## Langages & runtimes
 
 - **PHP** `>=8.5` — source : `composer.json` ; épinglé `8.5` — source : `.php-version`
-- **Node** — outillage de dev uniquement (Playwright), aucune contrainte de version déclarée — source : `package.json`
+- **Node** — outillage de dev uniquement (Tailwind, serveur embarqué de Playwright PHP qui exige Node 20+), aucune contrainte de version déclarée — source : `package.json`
 
 ## Backend
 
@@ -36,7 +36,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **Assets** : AssetMapper + importmap, sans bundler JS (`config/packages/asset_mapper.yaml`, `importmap.php`)
 - **CSS** : Tailwind CSS `4.3.3` via `symfonycasts/tailwind-bundle` (`config/packages/symfonycasts_tailwind.yaml`, `package-lock.json`) ; Flowbite `4.0.2` (`package-lock.json`, `importmap.php`)
 - **Design system** : « Paper » — tokens `@theme` (`DESIGN.md`, `assets/styles/app.css`), composants Twig (`templates/components/`)
-- **TypeScript** : non (seule la config Playwright est en TS : `playwright.config.ts`)
+- **TypeScript** : non
 
 ## Données & stockage
 
@@ -57,7 +57,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 
 - **Dépôt** : GitHub, `gabrielmustiere/radar` — _source : déclaratif utilisateur_
 - **Pipeline CI** : _non en place_ (aucun `.github/workflows/`)
-- **Tests** : PHPUnit `13.3.5` (Unit + Functional) (`composer.lock`, `phpunit.dist.xml`) ; Playwright `1.63.0` (E2E) (`package-lock.json`, `playwright.config.ts`)
+- **Tests** : PHPUnit `13.3.5` (Unit + Functional) (`composer.lock`, `phpunit.dist.xml`) ; Playwright PHP `1.5.0` (E2E, testsuite `e2e` dans `tests/E2E/`) (`composer.lock`, `phpunit.dist.xml`)
 - **Analyse statique / style** : PHPStan `2.2.16` niveau 10 + extensions Doctrine/Symfony/PHPUnit/strict-rules (`composer.lock`, `phpstan.dist.neon`) ; PHP-CS-Fixer (`.php-cs-fixer.dist.php`) ; PHP Insights (`phpinsights.php`)
 - **Déploiement** : _non renseigné_
 

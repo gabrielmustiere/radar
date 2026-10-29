@@ -15,7 +15,7 @@ Outil interne de veille technologique et produit : les liens partagés (YouTube,
 - **Assets** : Tailwind CSS 4 + Symfony UX (Stimulus, Icons, Live Component, Turbo)
 - **E-mails** : Mailpit pour la capture en développement
 - **Auth** : Authentification par formulaire (email/password)
-- **Tests** : PHPUnit 13 (Unit + Functional) + Playwright 1.63 (E2E)
+- **Tests** : PHPUnit 13 (Unit + Functional) + Playwright PHP 1.5 (E2E, `tests/E2E/`)
 - **Qualité** : PHPStan (level 10) + PHP-CS-Fixer
 - **Async** : Symfony Messenger (transport Doctrine)
 - **AI** : Symfony AI Mate (CLI) + serveurs MCP intégrés (Playwright, Chrome DevTools)

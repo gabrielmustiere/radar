@@ -57,7 +57,7 @@ Pour le multi-étapes : suivre le workflow `PLAN → ANALYZE → BUILD → TEST`
 
 - PHP 8.5+ (`declare(strict_types=1)` partout), SQLite (`var/data.db`), Symfony 8.1, Symfony Messenger (Doctrine)
 - Frontend : Tailwind CSS 4, Stimulus, Symfony UX (Live Components, Turbo, Icons)
-- Tests : PHPUnit 13 + Playwright (E2E)
+- Tests : PHPUnit 13 + Playwright PHP (E2E, `playwright-php/playwright`)
 - Qualité : PHPStan level 10 + PHP-CS-Fixer
 - AI : Symfony AI Mate en CLI (`symfony php vendor/bin/mate`, voir `AGENTS.md`) configuré dans `mate/` (extensions symfony + monolog) ; extensions maison dans `Mate\` (`mate/src/`)
 
@@ -82,7 +82,7 @@ make quality                              # CS-Fixer + PHPStan + build
 - Pas de `dump()`, `var_dump()`, `dd()` dans le code commité
 - Toute modif de schéma = migration générée par `symfony console make:migration`
 - PHPUnit 13 : `createStub()` sans attentes, `createMock()` avec `expects()`
-- Playwright : sélecteurs `data-test="..."`, config dans `playwright.config.ts`
+- Playwright : tests PHPUnit dans `tests/E2E/` (étendre `E2ETestCase`, testsuite `e2e` exclue de `make phpunit`), sélecteurs `data-test="..."`, base URL via `PLAYWRIGHT_BASE_URL` (défaut `https://radar.wip`)
 - Enums : backed string enums dans `src/Enum/Type/`
 - Mailer : classes dédiées dans `src/Mailer/` avec `TemplatedEmail`
 

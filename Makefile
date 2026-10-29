@@ -1,7 +1,7 @@
 .PHONY: help init install update down serve serve-d stop \
         db-create db-drop db-reset db-test db-validate migrate migration migrate-rollback fixtures cache-clear \
         phpunit phpunit-coverage phpunit-coverage-text phpunit-coverage-clover phpunit-filter \
-        playwright playwright-headed playwright-ui playwright-file \
+        playwright playwright-headed playwright-file \
         phpstan php-cs-fix php-cs-check insights lint build quality clean
 .DEFAULT_GOAL := help
 
@@ -49,9 +49,10 @@ install: ## Installe les dépendances PHP, JS et Playwright
 	@echo "$(BLUE)📦 Installation des dépendances Composer...$(RESET)"
 	symfony composer install
 	symfony composer install --working-dir=tools/phpinsights
-	@echo "$(BLUE)📦 Installation des dépendances NPM + Playwright...$(RESET)"
+	@echo "$(BLUE)📦 Installation des dépendances NPM...$(RESET)"
 	npm install
-	npx playwright install chromium
+	@echo "$(BLUE)📦 Installation de Playwright (Chromium)...$(RESET)"
+	symfony php vendor/bin/playwright-install chromium
 
 update: ## Met à jour les dépendances Composer et NPM
 	@echo "$(BLUE)🔄 Mise à jour des dépendances Composer...$(RESET)"
@@ -154,24 +155,20 @@ phpunit-filter: db-test ## Lance un test par nom (ex: make phpunit-filter LoginT
 
 playwright: ## Lance les tests E2E Playwright (headless)
 	@echo "$(BLUE)🧪 Lancement des tests Playwright...$(RESET)"
-	npx playwright test
+	symfony php bin/phpunit --testsuite=e2e
 
 playwright-headed: ## Tests E2E Playwright avec navigateur visible
 	@echo "$(BLUE)🧪 Lancement des tests Playwright (mode visible)...$(RESET)"
-	npx playwright test --headed
-
-playwright-ui: ## Tests E2E Playwright en mode interactif (UI mode)
-	@echo "$(BLUE)🧪 Lancement des tests Playwright (UI mode)...$(RESET)"
-	npx playwright test --ui
+	PW_HEADLESS=0 symfony php bin/phpunit --testsuite=e2e
 
 ifeq (playwright-file,$(firstword $(MAKECMDGOALS)))
   PW_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
   $(eval $(PW_ARGS):;@:)
 endif
-playwright-file: ## Lance un test E2E ciblé. Ex: make playwright-file tests/e2e/login.spec.ts
-	@if [ -z "$(PW_ARGS)" ]; then echo "$(YELLOW)Usage: make playwright-file <chemin|pattern> [--headed|--ui|-g \"nom\"]$(RESET)"; exit 1; fi
+playwright-file: ## Lance un test E2E ciblé. Ex: make playwright-file tests/E2E/LoginTest.php
+	@if [ -z "$(PW_ARGS)" ]; then echo "$(YELLOW)Usage: make playwright-file <chemin>$(RESET)"; exit 1; fi
 	@echo "$(BLUE)🧪 Lancement du test Playwright : $(PW_ARGS)...$(RESET)"
-	@npx playwright test $(PW_ARGS)
+	@symfony php bin/phpunit $(PW_ARGS)
 
 ##
 ## QUALITÉ
@@ -208,5 +205,5 @@ quality: php-cs-fix phpstan build ## Lance toute la QA en mode dev (CS Fixer + P
 
 clean: ## Nettoie les fichiers temporaires
 	@echo "$(YELLOW)🧹 Nettoyage des fichiers temporaires...$(RESET)"
-	@rm -rf var/cache/* var/log/* var/coverage/* .phpunit.cache playwright-report test-results
+	@rm -rf var/cache/* var/log/* var/coverage/* .phpunit.cache test-failures
 	@echo "$(GREEN)✅ Nettoyage terminé!$(RESET)"
