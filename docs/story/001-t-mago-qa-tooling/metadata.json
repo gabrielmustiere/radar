@@ -34,6 +34,15 @@
       "date": "2026-10-29",
       "type": "Sync",
       "description": "9 écarts réalignés dans le plan (formatter par défaut validé par l'utilisateur), 8/8 critères cochés, 1 dette ouverte ([SECU] binaire sans checksum)."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Livraison",
+      "description": "Story livrée sur main en 8 commits, de la baseline (71991f8) à la clôture (7121b99)."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "7121b99"
+  }
 }
