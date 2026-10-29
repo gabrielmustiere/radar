@@ -44,11 +44,16 @@ final readonly class LinkManager
         return $this->create($submission, $submission->poster, $submission->postedAt, seeded: true);
     }
 
+    /** Lien déjà présent sous cette adresse, une fois normalisée (www, slash final, paramètres de suivi…). */
+    public function findDuplicate(string $url): ?Link
+    {
+        return $this->linkRepository->findOneByNormalizedUrl($this->urlAnalyzer->normalize($url));
+    }
+
     private function create(LinkSubmission $submission, User $poster, \DateTimeImmutable $postedAt, bool $seeded): Link
     {
         $url = (string) $submission->url;
-        $normalizedUrl = $this->urlAnalyzer->normalize($url);
-        $existing = $this->linkRepository->findOneByNormalizedUrl($normalizedUrl);
+        $existing = $this->findDuplicate($url);
         if (null !== $existing) {
             throw new DuplicateLinkException($existing);
         }
@@ -65,7 +70,7 @@ final readonly class LinkManager
         $context = trim($submission->context ?? '');
         $link = new Link(
             $url,
-            $normalizedUrl,
+            $this->urlAnalyzer->normalize($url),
             $categories,
             $poster,
             $postedAt,

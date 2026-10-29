@@ -29,7 +29,6 @@ final class LinkController extends AbstractController
         $form = $this->createForm(LinkType::class, $submission);
         $form->handleRequest($request);
 
-        $duplicate = null;
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $linkManager->add($submission, $user);
@@ -37,14 +36,13 @@ final class LinkController extends AbstractController
 
                 return $this->redirectToRoute('app_page');
             } catch (DuplicateLinkException $exception) {
-                $duplicate = $exception->existing;
+                // La carte existante est affichée par le composant LinkForm.
                 $form->get('url')->addError(new FormError($exception->getMessage()));
             }
         }
 
         return $this->render('link/new.html.twig', [
             'form' => $form,
-            'duplicate' => $duplicate,
         ]);
     }
 
@@ -56,7 +54,6 @@ final class LinkController extends AbstractController
         $form = $this->createForm(HistoricalLinkType::class, $submission);
         $form->handleRequest($request);
 
-        $duplicate = null;
         if ($form->isSubmitted() && $form->isValid()) {
             try {
                 $linkManager->seed($submission);
@@ -64,14 +61,13 @@ final class LinkController extends AbstractController
 
                 return $this->redirectToRoute('app_page');
             } catch (DuplicateLinkException $exception) {
-                $duplicate = $exception->existing;
+                // La carte existante est affichée par le composant LinkForm.
                 $form->get('url')->addError(new FormError($exception->getMessage()));
             }
         }
 
         return $this->render('link/seed.html.twig', [
             'form' => $form,
-            'duplicate' => $duplicate,
         ]);
     }
 

@@ -274,3 +274,14 @@
         transform: translateY(6px);
     }
 }
+
+/* Requête en cours : soumission Turbo, frame qui charge */
+form[aria-busy='true'],
+turbo-frame[aria-busy='true'] {
+    cursor: progress;
+}
+
+turbo-frame[aria-busy='true'] > * {
+    opacity: 0.6;
+    transition: opacity 150ms;
+}

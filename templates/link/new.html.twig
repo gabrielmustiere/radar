@@ -3,28 +3,13 @@
 {% block title %}Ajouter un lien · Radar{% endblock %}
 
 {% block body %}
-    <div class="mx-auto max-w-2xl">
+    {# Ouverte directement ou chargée dans la modale d'ajout (même frame) #}
+    <twig:Turbo:Frame id="link-modal-frame" class="mx-auto block max-w-2xl">
         <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Ajouter un lien</h1>
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Collez l'adresse, choisissez une ou deux catégories-besoins : c'est tout.
         </p>
 
-        {% if duplicate %}
-            {% include 'link/_duplicate.html.twig' %}
-        {% endif %}
-
-        {{ form_start(form, {attr: {class: 'mt-8 space-y-6', 'data-test': 'link-form', novalidate: 'novalidate'}}) }}
-            {% include 'link/_fields.html.twig' %}
-
-            <div class="flex items-center gap-3">
-                <button type="submit" data-test="link-submit"
-                        class="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-200 focus:outline-none dark:focus:ring-teal-900">
-                    <twig:ux:icon name="tabler:plus" class="size-4"/> Ajouter
-                </button>
-                <a href="{{ path('app_page') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Annuler</a>
-                <a href="{{ path('app_link_seed') }}" data-test="link-seed-entry"
-                   class="ml-auto text-sm font-medium text-teal-700 hover:underline dark:text-teal-400">Reprendre un lien de Chat</a>
-            </div>
-        {{ form_end(form) }}
-    </div>
+        <twig:LinkForm :form="form"/>
+    </twig:Turbo:Frame>
 {% endblock %}
