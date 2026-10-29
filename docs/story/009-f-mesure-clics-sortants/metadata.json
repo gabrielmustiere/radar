@@ -33,6 +33,15 @@
       "date": "2026-10-29",
       "type": "Sync",
       "description": "Conforme au plan, 6/6 critères d'acceptation et 3/3 critères de sortie cochés, 1 dette ouverte ([SECU] GET forgé)."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Livraison",
+      "description": "Story livrée sur main en un commit (cdd2d04)."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "cdd2d04"
+  }
 }
