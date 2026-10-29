@@ -11,19 +11,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PageController extends AbstractController
 {
-    #[Route(
-        path: '/',
-        name: 'app_page'
-    )]
+    #[Route(path: '/', name: 'app_page')]
     public function index(): Response
     {
         return $this->render('page/index.html.twig');
     }
 
-    #[Route(
-        path: '/design-system',
-        name: 'app_design_system'
-    )]
+    #[Route(path: '/design-system', name: 'app_design_system')]
     public function designSystem(): Response
     {
         return $this->render('page/design-system.html.twig');
@@ -32,11 +26,7 @@ final class PageController extends AbstractController
     /**
      * @throws TransportExceptionInterface
      */
-    #[Route(
-        path: '/test-email',
-        name: 'app_test_email',
-        env: 'dev'
-    )]
+    #[Route(path: '/test-email', name: 'app_test_email', env: 'dev')]
     public function testEmail(MailerInterface $mailer): Response
     {
         $email = new Email()
