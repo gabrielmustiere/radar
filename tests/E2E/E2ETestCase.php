@@ -53,4 +53,21 @@ abstract class E2ETestCase extends TestCase
         $this->page->click('button[type="submit"]');
         $this->expect($this->page)->toHaveURL(self::baseUrl() . '/');
     }
+
+    /** Premier vrai lien du catalogue pas encore dans Radar (la recherche porte aussi sur l'adresse). */
+    protected function freeRealLink(): string
+    {
+        foreach (RealLinks::URLS as $url) {
+            $this->page->goto('/?q=' . rawurlencode($url));
+            $this->expect(
+                $this->page->locator('[data-test="search-empty"], [data-test="link-card"]')->first(),
+            )->toBeVisible();
+
+            if (0 < $this->page->locator('[data-test="search-empty"]')->count()) {
+                return $url;
+            }
+        }
+
+        self::markTestSkipped('Catalogue de liens E2E épuisé : relancer `make db-reset`.');
+    }
 }

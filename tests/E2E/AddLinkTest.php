@@ -10,8 +10,8 @@ final class AddLinkTest extends E2ETestCase
 {
     public function testMemberAddsLinkFromTopbarModal(): void
     {
-        $url = 'https://example.com/e2e-' . uniqid();
         $this->logIn();
+        $url = $this->freeRealLink();
 
         $modal = $this->openModal();
         $this->expect($modal->locator('h1'))->toContainText('Ajouter un lien');
@@ -26,22 +26,28 @@ final class AddLinkTest extends E2ETestCase
         $this->expect($this->page->locator('[role="alert"]'))->toContainText('Lien ajouté.');
         $first = $this->page->locator('[data-test="link-card"]')->first();
         $this->expect($first->locator('[data-test="link-context"]'))->toHaveText('Repéré en E2E.');
-        $this->expect($first->locator('[data-test="link-source"]'))->toContainText('example.com');
+        $this->expect($first->locator('[data-test="link-open"]'))->toHaveAttribute('title', 'Ouvrir ' . $url);
     }
 
     public function testDuplicateIsShownAsSoonAsTheUrlIsTyped(): void
     {
-        $slug = 'e2e-dup-' . uniqid();
         $this->logIn();
+        $url = $this->freeRealLink();
         $modal = $this->openModal();
-        $modal->locator('[data-test="link-url"]')->fill('https://example.com/' . $slug);
+        $modal->locator('[data-test="link-url"]')->fill($url);
         $modal->locator('[data-test="link-categories"] > div > label')->first()->click();
         $modal->locator('[data-test="link-submit"]')->click();
         $this->expect($modal)->toBeHidden();
 
         $modal = $this->openModal();
-        // Même lien une fois normalisé (www, slash final)
-        $modal->locator('[data-test="link-url"]')->fill('https://www.example.com/' . $slug . '/');
+        // Même lien une fois normalisé (www ajouté ou retiré)
+        $modal
+            ->locator('[data-test="link-url"]')
+            ->fill(
+                str_contains($url, '://www.')
+                    ? str_replace(search: '://www.', replace: '://', subject: $url)
+                    : str_replace(search: '://', replace: '://www.', subject: $url),
+            );
 
         $this->expect($modal->locator('[data-test="link-duplicate"]'))->toContainText('Ce lien est déjà dans Radar');
         $this->expect($modal->locator('[data-test="link-submit"]'))->toBeDisabled();

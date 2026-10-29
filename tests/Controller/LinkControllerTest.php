@@ -25,7 +25,7 @@ final class LinkControllerTest extends LinkWebTestCase
 
         $this->submit($client, [
             'url' => $url,
-            'categories' => [$this->categoryId('Tester une app mobile')],
+            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
             'context' => 'Pour la recette mobile.',
         ]);
 
@@ -34,7 +34,10 @@ final class LinkControllerTest extends LinkWebTestCase
         self::assertSelectorTextContains('[role="alert"]', 'Lien ajouté.');
         self::assertSelectorTextContains(self::FIRST_CARD, $url);
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-poster"]', 'admin');
-        self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-category"]', 'Tester une app mobile');
+        self::assertSelectorTextContains(
+            self::FIRST_CARD . ' [data-test="link-category"]',
+            'Faire évoluer une app Symfony',
+        );
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-context"]', 'Pour la recette mobile.');
     }
 
@@ -57,7 +60,7 @@ final class LinkControllerTest extends LinkWebTestCase
 
         $this->submit($client, [
             'url' => 'https://example.com/two-categories',
-            'categories' => [$this->categoryId('Concevoir une interface')],
+            'categories' => [$this->categoryId('Coder avec un agent IA')],
             'newCategory' => $name,
         ]);
 
@@ -71,19 +74,21 @@ final class LinkControllerTest extends LinkWebTestCase
     {
         $client = $this->loggedClient();
 
-        $this->submit($client, ['url' => 'https://example.com/reuse', 'newCategory' => 'CHOISIR UNE LIBRAIRIE php']);
+        $this->submit($client, ['url' => 'https://example.com/reuse', 'newCategory' => 'STRUCTURER UNE architecture']);
 
         self::assertResponseRedirects('/');
         $client->followRedirect();
         self::assertSelectorTextContains(
             self::FIRST_CARD . ' [data-test="link-category"]',
-            'Choisir une librairie PHP',
+            'Structurer une architecture',
         );
         $repository = self::getContainer()->get(CategoryRepository::class);
         self::assertInstanceOf(CategoryRepository::class, $repository);
         $matching = array_filter(
             $repository->findAllOrderedByName(),
-            static fn(Category $category): bool => 'choisir une librairie php' === mb_strtolower($category->getName()),
+            static fn(Category $category): bool => 'structurer une architecture' === mb_strtolower(
+                $category->getName(),
+            ),
         );
         self::assertCount(1, $matching);
     }
@@ -104,7 +109,10 @@ final class LinkControllerTest extends LinkWebTestCase
 
         $this->submit($client, [
             'url' => 'https://example.com/three',
-            'categories' => [$this->categoryId('Tester une app mobile'), $this->categoryId('Concevoir une interface')],
+            'categories' => [
+                $this->categoryId('Faire évoluer une app Symfony'),
+                $this->categoryId('Coder avec un agent IA'),
+            ],
             'newCategory' => 'Une troisième ' . uniqid(),
         ]);
 
@@ -118,8 +126,11 @@ final class LinkControllerTest extends LinkWebTestCase
 
         $this->submit($client, [
             'url' => 'https://example.com/same-twice',
-            'categories' => [$this->categoryId('Tester une app mobile'), $this->categoryId('Concevoir une interface')],
-            'newCategory' => 'tester une app mobile',
+            'categories' => [
+                $this->categoryId('Faire évoluer une app Symfony'),
+                $this->categoryId('Coder avec un agent IA'),
+            ],
+            'newCategory' => 'faire évoluer une app symfony',
         ]);
 
         self::assertResponseRedirects('/');
@@ -131,7 +142,7 @@ final class LinkControllerTest extends LinkWebTestCase
 
         $this->submit($client, [
             'url' => 'ftp://example.com/file',
-            'categories' => [$this->categoryId('Tester une app mobile')],
+            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
         ]);
 
         self::assertResponseStatusCodeSame(422);

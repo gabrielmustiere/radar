@@ -14,7 +14,11 @@ final class SearchTest extends E2ETestCase
         $this->page->locator('[data-test="topbar-search"]')->pressSequentially('symfony', ['delay' => 30]);
 
         $this->expect($this->page->locator('[data-test="link-count"]'))->toContainText('pour « symfony »');
-        $this->expect($this->page->locator('[data-test="link-card"]')->first())->toContainText('symfony');
+        // La recherche ignore la casse, la carte peut afficher « Symfony »
+        self::assertStringContainsStringIgnoringCase(
+            'symfony',
+            (string) $this->page->locator('[data-test="link-card"]')->first()->textContent(),
+        );
         $this->expect($this->page)->toHaveURL(self::baseUrl() . '/?q=symfony');
         $this->expect($this->page->locator('[data-test="topbar-search"]'))->toBeFocused();
         self::assertTrue($this->page->evaluate('window.notReloaded === true'));

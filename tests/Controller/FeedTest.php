@@ -10,7 +10,7 @@ final class FeedTest extends LinkWebTestCase
     {
         $client = $this->loggedClient();
         $url = 'https://example.com/' . uniqid('fil-');
-        $this->submit($client, ['url' => $url, 'categories' => [$this->categoryId('Concevoir une interface')]]);
+        $this->submit($client, ['url' => $url, 'categories' => [$this->categoryId('Coder avec un agent IA')]]);
 
         $crawler = $client->request('GET', '/');
 
@@ -57,7 +57,7 @@ final class FeedTest extends LinkWebTestCase
         for ($index = 0; $index < 25; ++$index) {
             $this->submit($client, [
                 'url' => sprintf('https://example.com/%s-%d', $marker, $index),
-                'categories' => [$this->categoryId('Concevoir une interface')],
+                'categories' => [$this->categoryId('Coder avec un agent IA')],
             ]);
         }
 
