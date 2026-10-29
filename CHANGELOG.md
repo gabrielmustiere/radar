@@ -10,6 +10,19 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-29 — Interface fluide
+
+### ✨ Fonctionnel
+- **Navigation sans à-coup** — les pages se préchargent au survol et le contenu change en fondu, la barre du haut et la barre latérale restent en place.
+- **Recherche au fil de la frappe** — les résultats se mettent à jour pendant la saisie, le mot-clé reste dans l'adresse pour être partagé ; la touche « / » place le curseur dans la recherche.
+- **Ajout de lien en modale** — « Ajouter un lien » ouvre le formulaire par-dessus la page ; une fois le lien ajouté, le fil s'affiche avec la confirmation. La reprise d'un lien de Chat s'ouvre dans la même modale.
+- **Formulaire qui répond tout de suite** — un doublon est signalé dès que l'adresse est saisie, les catégories se grisent au-delà de deux, les erreurs apparaissent au fil de la saisie.
+- **Cartes qui s'enrichissent seules** — une carte dont l'aperçu est en construction se met à jour sans recharger la page.
+
+### 🔧 Technique
+- **Symfony UX en place** — Live Components pour la recherche, le formulaire d'ajout et les cartes en attente ; Turbo Frame pour la modale ; contrôleurs Stimulus pour la modale et le raccourci clavier.
+- **Rafraîchissement plafonné** — une carte en attente interroge le serveur toutes les 3 s et s'arrête au bout de 20 essais si aucun worker ne répond.
+
 ## [0.2.0] - 2026-10-29 — MVP de la veille partagée
 
 ### ✨ Fonctionnel
@@ -40,6 +53,7 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/gabrielmustiere/radar/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/gabrielmustiere/radar/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/gabrielmustiere/radar/releases/tag/v0.1.0
