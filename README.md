@@ -16,7 +16,7 @@ Outil interne de veille technologique et produit : les liens partagés (YouTube,
 - **E-mails** : Mailpit pour la capture en développement
 - **Auth** : Authentification par formulaire (email/password)
 - **Tests** : PHPUnit 13 (Unit + Functional) + Playwright PHP 1.5 (E2E, `tests/E2E/`)
-- **Qualité** : PHPStan (level 10) + PHP-CS-Fixer
+- **Qualité** : Mago (formatter, linter et analyseur statique, `mago.toml`)
 - **Async** : Symfony Messenger (transport Doctrine)
 - **AI** : Symfony AI Mate (CLI) + serveurs MCP intégrés (Playwright, Chrome DevTools)
 
@@ -52,10 +52,10 @@ Toutes les opérations courantes passent par `make`. Lancez `make help` pour la 
 | `make migration`    | Génère une migration depuis le diff d'entités              |
 | `make phpunit`      | Lance les tests PHPUnit (Unit + Functional)                |
 | `make playwright`   | Lance les tests E2E Playwright                             |
-| `make php-cs-fix`   | Corrige le code style (PHP-CS-Fixer)                       |
-| `make phpstan`      | Analyse statique PHPStan level 10                          |
-| `make lint`         | CS-Fixer (dry-run) + PHPStan                               |
-| `make quality`      | CS-Fixer + PHPStan + build (mode dev)                      |
+| `make fmt`          | Formate le code PHP (Mago)                                 |
+| `make analyze`      | Analyse statique (Mago)                                    |
+| `make lint`         | Format (vérification) + lint + analyse, en lecture seule   |
+| `make quality`      | Format + correctifs du linter + analyse + build (mode dev) |
 
 ## Accès aux services
 

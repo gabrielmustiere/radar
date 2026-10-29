@@ -58,7 +58,7 @@ Pour le multi-étapes : suivre le workflow `PLAN → ANALYZE → BUILD → TEST`
 - PHP 8.5+ (`declare(strict_types=1)` partout), SQLite (`var/data.db`), Symfony 8.1, Symfony Messenger (Doctrine)
 - Frontend : Tailwind CSS 4, Stimulus, Symfony UX (Live Components, Turbo, Icons)
 - Tests : PHPUnit 13 + Playwright PHP (E2E, `playwright-php/playwright`)
-- Qualité : PHPStan level 10 + PHP-CS-Fixer
+- Qualité : Mago (`fmt` + `lint` + `analyze`, config unique `mago.toml`, zéro finding sans baseline)
 - AI : Symfony AI Mate en CLI (`symfony php vendor/bin/mate`, voir `AGENTS.md`) configuré dans `mate/` (extensions symfony + monolog) ; extensions maison dans `Mate\` (`mate/src/`)
 
 ## Commandes
@@ -71,7 +71,8 @@ make db-reset                             # Reset DB complet (drop + migrate + f
 symfony console make:migration            # Après modif d'une entité
 make phpunit                              # PHPUnit (Unit + Functional)
 make playwright                           # Playwright (E2E)
-make quality                              # CS-Fixer + PHPStan + build
+make lint                                 # Mago en lecture seule (format, lint, analyse)
+make quality                              # Mago (format, correctifs, analyse) + build
 ```
 
 ## Règles critiques

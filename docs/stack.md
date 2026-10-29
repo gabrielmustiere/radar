@@ -58,7 +58,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **Dépôt** : GitHub, `gabrielmustiere/radar` — _source : déclaratif utilisateur_
 - **Pipeline CI** : _non en place_ (aucun `.github/workflows/`)
 - **Tests** : PHPUnit `13.3.5` (Unit + Functional) (`composer.lock`, `phpunit.dist.xml`) ; Playwright PHP `1.5.0` (E2E, testsuite `e2e` dans `tests/E2E/`) (`composer.lock`, `phpunit.dist.xml`)
-- **Analyse statique / style** : PHPStan `2.2.16` niveau 10 + extensions Doctrine/Symfony/PHPUnit/strict-rules (`composer.lock`, `phpstan.dist.neon`) ; PHP-CS-Fixer (`.php-cs-fixer.dist.php`) ; PHP Insights (`phpinsights.php`)
+- **Analyse statique / style** : Mago `1.59.0` — formatter, linter (intégrations Symfony + PHPUnit) et analyseur statique en mode strict, zéro finding sans baseline (`composer.lock`, `mago.toml`)
 - **Déploiement** : _non renseigné_
 
 ## Monitoring / observabilité
@@ -90,3 +90,4 @@ Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un 
 ## Changelog
 
 - 2026-10-29 — Création — amorcé depuis gabrielmustiere/symfony-template
+- 2026-10-29 — Qualité — PHPStan, PHP-CS-Fixer et PHP Insights remplacés par Mago (story 001)

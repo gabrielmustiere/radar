@@ -22,7 +22,7 @@ no-literal-password = { exclude = ["tests/"] }
 
 [analyzer]
 minimum-fail-level = "Note"
-# Front controller du runtime Symfony (recette) : `$context` n'est pas typé, déjà exclu de PHPStan.
+# Front controller du runtime Symfony (recette) : `$context` n'est pas typé (déjà exclu de l'analyse avant Mago).
 excludes = ["public/index.php"]
 # Propriétés initialisées par le framework : `setUp()` (PHPUnit), `setUpPlaywright()` (Playwright PHP) et `setContainer()` (AbstractController).
 class-initializers = ["setUp", "setUpPlaywright", "setContainer"]
