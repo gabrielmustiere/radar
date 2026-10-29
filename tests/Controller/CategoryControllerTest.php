@@ -57,10 +57,11 @@ final class CategoryControllerTest extends LinkWebTestCase
         $crawler = $client->request('GET', '/categories/' . $this->categoryId($name));
 
         $open = $crawler->filter('[data-test="link-open"]');
-        self::assertSame($url, $open->attr('href'));
+        self::assertMatchesRegularExpression('#^/liens/\d+/ouvrir$#', (string) $open->attr('href'));
+        self::assertSame('Ouvrir ' . $url, $open->attr('title'));
         self::assertSame('_blank', $open->attr('target'));
         self::assertSame('noopener noreferrer', $open->attr('rel'));
-        self::assertSame($url, $crawler->filter('[data-test="link-title"] a')->attr('href'));
+        self::assertSame($open->attr('href'), $crawler->filter('[data-test="link-title"] a')->attr('href'));
         $client->click($crawler->filter('[data-test="link-category"]')->link());
         self::assertSelectorTextContains('h1', $name);
     }

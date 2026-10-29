@@ -12,6 +12,7 @@ use App\Form\LinkType;
 use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
 use App\Service\LinkManager;
+use App\Service\LinkOpeningRecorder;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,5 +81,13 @@ final class LinkController extends AbstractController
         return $this->render('link/show.html.twig', [
             'link' => $link,
         ]);
+    }
+
+    #[Route(path: '/liens/{id}/ouvrir', name: 'app_link_open', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function open(Link $link, LinkOpeningRecorder $recorder, #[CurrentUser] User $user): Response
+    {
+        $recorder->record($link, $user);
+
+        return $this->redirect($link->getUrl());
     }
 }

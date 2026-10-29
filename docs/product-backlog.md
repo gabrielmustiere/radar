@@ -183,7 +183,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `008-f-annonce-google-chat` · **livrée**
   - C5.1, C5.2 · P1, P3 · dép. `ajout-lien` · Vision : principe 4 / risque « webhooks bloqués »
 - [ ] `mesure-clics-sortants` — Permettre à l'équipe de compter chaque ouverture de lien avec l'âge du lien pour mesurer la North Star dès le lancement.
-  - Pas encore cadrée
+  - Story `009-f-mesure-clics-sortants` · **clôture en cours**
   - C6.1 · P2 · dép. `exploration-categories` · Vision : North Star
 - [ ] `fil-derniers-ajouts` — Permettre à un membre de consulter le fil des derniers liens ajoutés pour nourrir la curiosité au quotidien.
   - Pas encore cadrée

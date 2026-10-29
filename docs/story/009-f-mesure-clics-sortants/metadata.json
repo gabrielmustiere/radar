@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "title": "Compter chaque ouverture de lien avec son âge",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": [
+    "mesure",
+    "north-star"
+  ],
+  "backlog": "mesure-clics-sortants",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : ouverture enregistrée (lien, moment, membre, âge en jours depuis la date d'origine), chaque clic compte, aucune vue individuelle."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Planification",
+      "description": "Plan technique rédigé : route de redirection /liens/{id}/ouvrir, entité LinkOpening avec âge stocké, LinkOpeningRecorder."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "3/3 étapes livrées, make lint/phpunit (97)/playwright (7) verts. Aucun écart avec le plan."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 1 mineur laissé en dette : [SECU] mesure gonflable par une requête GET forgée."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "Conforme au plan, 6/6 critères d'acceptation et 3/3 critères de sortie cochés, 1 dette ouverte ([SECU] GET forgé)."
+    }
+  ]
+}

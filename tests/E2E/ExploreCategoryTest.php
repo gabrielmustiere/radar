@@ -20,9 +20,9 @@ final class ExploreCategoryTest extends E2ETestCase
         );
 
         $open = $this->page->locator('[data-test="link-card"]')->first()->locator('[data-test="link-open"]');
-        $href = (string) $open->getAttribute('href');
+        $destination = substr((string) $open->getAttribute('title'), offset: strlen('Ouvrir '));
         $popup = $this->page->waitForPopup($open->click(...));
 
-        self::assertSame($href, $popup->url());
+        $this->expect($popup)->toHaveURL($destination);
     }
 }
