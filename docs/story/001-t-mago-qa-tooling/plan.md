@@ -108,13 +108,15 @@ Aucun impact modèle.
 
 Driver = simplicité, pas de métrique de couverture ni de durée retenue. Baseline mesurée le 2026-10-29 à l'étape 1, sur l'état du commit initial (dépôt initialisé à cette étape) : `make lint` vert (CS-Fixer 0/16 fichier, PHPStan 0 erreur, 6,1 s), `make phpunit` vert (8 tests, 25 assertions), `make playwright` vert (4 tests).
 
+Baseline remesurée le 2026-10-29 sur `7c57991` (après la migration des E2E vers Playwright PHP et la release `v0.1.0`) : `make lint` vert (CS-Fixer 0/21 fichier, PHPStan 0 erreur, 1,9 s), `make phpunit` vert (8 tests, 25 assertions), `make playwright` vert (4 tests PHPUnit dans `tests/E2E/`), mentions résiduelles 42 lignes dans 11 fichiers (dont 1 dans `CHANGELOG.md`, entrée `0.1.0` publiée, exclue de la cible).
+
 | Métrique | Baseline | Cible | Méthode de mesure |
 |---|---|---|---|
 | Paquets QA PHP installés | 8 (7 en `require-dev` + `nunomaduro/phpinsights` dans `tools/`) | **1** (`carthage-software/mago`) | Lecture de `composer.json` ; `test ! -d tools` |
 | Fichiers de config QA PHP | 4 (`phpstan.dist.neon`, `.php-cs-fixer.dist.php`, `phpinsights.php`, `tools/phpinsights/composer.json`) | **1** (`mago.toml`) | `ls` à la racine |
 | Arbres Composer | 2 (racine + `tools/phpinsights`) | **1** | `find . -name composer.json -not -path './vendor/*'` |
 | Findings Mago (fmt + lint + analyze) | n/a (non installé) | **0, sans baseline** | `make lint` (code retour 0, aucun fichier baseline) |
-| Mentions résiduelles de l'ancien outillage | 41 lignes dans 10 fichiers | **0 ligne** hors `phpstan/phpdoc-parser` | `grep -rniE "phpstan\|cs-fixer\|phpinsights" . --exclude-dir={vendor,node_modules,var,docs,.git,test-results,playwright-report} --exclude=composer.lock \| grep -v phpdoc-parser` |
+| Mentions résiduelles de l'ancien outillage | 41 lignes dans 10 fichiers (42 / 11 sur `7c57991`) | **0 ligne** hors `phpstan/phpdoc-parser` et `CHANGELOG.md` | `grep -rniE "phpstan\|cs-fixer\|phpinsights" . --exclude-dir={vendor,node_modules,var,docs,.git} --exclude={composer.lock,CHANGELOG.md} \| grep -v phpdoc-parser` |
 
 ## Stratégie de test
 
