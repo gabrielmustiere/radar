@@ -20,10 +20,8 @@
 /.gitattributes     export-ignore
 /.gitignore         export-ignore
 /.mcp.json          export-ignore
-/.php-cs-fixer.dist.php export-ignore
 /.symfony.local.yaml export-ignore
 /mago.toml          export-ignore
-/phpstan.dist.neon  export-ignore
 /phpunit.dist.xml   export-ignore
 /CLAUDE.md          export-ignore
 /Makefile           export-ignore

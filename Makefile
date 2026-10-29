@@ -2,7 +2,7 @@
         db-create db-drop db-reset db-test db-validate migrate migration migrate-rollback fixtures cache-clear \
         phpunit phpunit-coverage phpunit-coverage-text phpunit-coverage-clover phpunit-filter \
         playwright playwright-headed playwright-file \
-        phpstan php-cs-fix php-cs-check insights fmt fmt-check mago-lint mago-fix analyze lint build quality clean
+        fmt fmt-check mago-lint mago-fix analyze lint build quality clean
 .DEFAULT_GOAL := help
 
 # Colors
@@ -48,7 +48,6 @@ init: install db-reset ## Installation complète (deps + DB + fixtures)
 install: ## Installe les dépendances PHP, JS et Playwright
 	@echo "$(BLUE)📦 Installation des dépendances Composer...$(RESET)"
 	symfony composer install
-	symfony composer install --working-dir=tools/phpinsights
 	@echo "$(BLUE)📦 Installation des dépendances NPM...$(RESET)"
 	npm install
 	@echo "$(BLUE)📦 Installation de Playwright (Chromium)...$(RESET)"
@@ -174,22 +173,6 @@ playwright-file: ## Lance un test E2E ciblé. Ex: make playwright-file tests/E2E
 ## QUALITÉ
 ##
 
-phpstan: ## Analyse statique PHPStan (niveau 10)
-	@echo "$(BLUE)🔍 Analyse avec PHPStan...$(RESET)"
-	symfony php vendor/bin/phpstan analyse --no-progress
-
-php-cs-fix: ## Correction automatique avec PHP CS Fixer
-	@echo "$(BLUE)🔧 Correction du code style...$(RESET)"
-	symfony php vendor/bin/php-cs-fixer fix
-
-php-cs-check: ## Vérifie le code style sans modifier
-	@echo "$(BLUE)🔍 Vérification du code style...$(RESET)"
-	symfony php vendor/bin/php-cs-fixer fix --dry-run --diff
-
-insights: ## Analyse qualité PHP Insights (deps isolées dans tools/phpinsights)
-	@echo "$(BLUE)📊 Analyse PHP Insights...$(RESET)"
-	symfony php tools/phpinsights/vendor/bin/phpinsights --no-interaction
-
 fmt: ## Formate le code PHP (Mago)
 	@echo "$(BLUE)🔧 Formatage du code...$(RESET)"
 	symfony php vendor/bin/mago fmt
@@ -210,14 +193,14 @@ analyze: ## Analyse statique Mago
 	@echo "$(BLUE)🔍 Analyse statique avec Mago...$(RESET)"
 	symfony php vendor/bin/mago analyze
 
-lint: php-cs-check phpstan ## Lint en lecture seule (CS-Fixer dry-run + PHPStan)
+lint: fmt-check mago-lint analyze ## Lint en lecture seule (Mago : format, lint, analyse)
 
 build: ## Build des assets (Tailwind + AssetMapper)
 	@echo "$(BLUE)🏗️  Build des assets...$(RESET)"
 	symfony console tailwind:build --minify
 	symfony console asset-map:compile
 
-quality: php-cs-fix phpstan build ## Lance toute la QA en mode dev (CS Fixer + PHPStan + build)
+quality: fmt mago-fix analyze build ## Lance toute la QA en mode dev (Mago : format, correctifs, analyse + build)
 
 ##
 ## NETTOYAGE
