@@ -187,7 +187,7 @@ mago-lint: ## Linter Mago en lecture seule
 
 mago-fix: ## Applique les correctifs sûrs du linter Mago
 	@echo "$(BLUE)🔧 Correctifs du linter Mago...$(RESET)"
-	symfony php vendor/bin/mago lint --fix
+	symfony php vendor/bin/mago lint --fix --format-after-fix
 
 analyze: ## Analyse statique Mago
 	@echo "$(BLUE)🔍 Analyse statique avec Mago...$(RESET)"

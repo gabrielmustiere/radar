@@ -21,9 +21,9 @@ Le driver est la **simplicité de l'outillage**, pas la vitesse : sur 16 fichier
 
 ## Approche retenue
 
-Mago (`carthage-software/mago`) est ajouté en `require-dev` Composer et remplace intégralement les trois outils : `mago fmt` remplace PHP-CS-Fixer, `mago lint` remplace PHP Insights et la complexité cognitive, `mago analyze` remplace PHPStan. Un `mago.toml` unique à la racine porte la config : analyseur en mode strict maximal, linter avec intégrations `symfony` et `phpunit`, `cyclomatic-complexity` à la place de la complexité cognitive (mêmes exclusions `src/Entity`, `src/Form`, `src/Repository`), formatter réglé pour approcher `@Symfony` + `concat_space: one`. Zéro baseline : tous les findings sont corrigés au moment de la bascule.
+Mago (`carthage-software/mago`) est ajouté en `require-dev` Composer et remplace intégralement les trois outils : `mago fmt` remplace PHP-CS-Fixer, `mago lint` remplace PHP Insights et la complexité cognitive, `mago analyze` remplace PHPStan. Un `mago.toml` unique à la racine porte la config : analyseur en mode strict maximal, linter avec intégrations `symfony` et `phpunit`, `cyclomatic-complexity` à la place de la complexité cognitive (seuil par défaut de Mago, 15 par classe ; mêmes exclusions `src/Entity`, `src/Form`, `src/Repository`), formatter au preset par défaut de Mago (espaces autour de la concaténation, comme `concat_space: one`), sans réglage `@Symfony` : le reformatage n'a touché que 6 fichiers. Zéro baseline : tous les findings sont corrigés au moment de la bascule. Les fichiers générés (`migrations/`, `mate/extensions.php`) sont exclus de Mago, et `public/index.php` de l'analyse (comme sous PHPStan) ; les rares exceptions restantes sont scopées au chemin et justifiées en commentaire dans `mago.toml`.
 
-Les points d'entrée `make lint` (lecture seule) et `make quality` (corrige + build) gardent leur nom et leur rôle ; seules les cibles unitaires changent (`fmt`, `fmt-check`, `mago-lint`, `analyze`). Mago s'invoque via `symfony php vendor/bin/mago`, conformément à la règle « toutes les commandes PHP passent par `symfony` CLI » (`CLAUDE.md`).
+Les points d'entrée `make lint` (lecture seule) et `make quality` (corrige + build) gardent leur nom et leur rôle ; seules les cibles unitaires changent (`fmt`, `fmt-check`, `mago-lint`, `mago-fix`, `analyze`) ; `quality` applique les correctifs sûrs du linter via `mago-fix` (`mago lint --fix --format-after-fix`). Mago s'invoque via `symfony php vendor/bin/mago`, conformément à la règle « toutes les commandes PHP passent par `symfony` CLI » (`CLAUDE.md`).
 
 **Impact sur les clients existants** :
 
@@ -45,7 +45,7 @@ Les points d'entrée `make lint` (lecture seule) et `make quality` (corrige + bu
 | Cohabitation Mago + PHPStan puis suppression sur critère d'écart chiffré | Allonge la bascule pour un code de 16 fichiers ; aucun corpus de défauts n'est retenu comme métrique (simplicité seule). |
 | Installation Homebrew / binaire global | Version non épinglée dans le dépôt, installation séparée par poste et en CI. |
 | Image Docker `ghcr.io/carthage-software/mago` | `docker run` à chaque commande en local, plus lourd que le wrapper Composer. |
-| Style par défaut Mago (PER-CS) sans réglage | Choix utilisateur : approcher le style `@Symfony` actuel pour limiter le diff de reformatage. |
+| Formatter réglé pour approcher `@Symfony` | Écarté à la livraison (choix utilisateur) : le preset par défaut ne reformate que 6 fichiers, l'objectif « limiter le diff » est tenu sans réglage. Écarts acceptés : constructeur vide en `{}`, attributs sur une ligne, `new X()->` sans parenthèses. |
 
 ## Modèle de données
 
@@ -57,7 +57,7 @@ Aucun impact modèle.
 
 | Fichier | Rôle |
 |---|---|
-| `mago.toml` | Config unique Mago : sources et exclusions, formatter proche `@Symfony`, linter strict (intégrations `symfony` + `phpunit`, `cyclomatic-complexity` avec exclusions Entity/Form/Repository), analyseur strict. |
+| `mago.toml` | Config unique Mago : sources et exclusions, formatter au preset par défaut, linter strict (intégrations `symfony` + `phpunit`, `cyclomatic-complexity` avec exclusions Entity/Form/Repository), analyseur strict. |
 
 ### Fichiers à modifier
 
@@ -66,11 +66,11 @@ Aucun impact modèle.
 | `composer.json` | Ajouter `carthage-software/mago` en `require-dev` ; retirer `friendsofphp/php-cs-fixer`, `phpstan/phpstan`, `phpstan/phpstan-doctrine`, `phpstan/phpstan-phpunit`, `phpstan/phpstan-strict-rules`, `phpstan/phpstan-symfony`, `tomasvotruba/cognitive-complexity`. **Conserver** `phpstan/phpdoc-parser` (dépendance runtime de `require`). |
 | `composer.lock` | Régénéré par `composer require` / `composer remove`. |
 | `symfony.lock` | Entrées `friendsofphp/php-cs-fixer` et `phpstan/phpstan` retirées par Flex. |
-| `Makefile` | Remplacer les cibles `phpstan`, `php-cs-fix`, `php-cs-check`, `insights` par `fmt`, `fmt-check`, `mago-lint`, `analyze` ; `lint` = `fmt-check mago-lint analyze` ; `quality` = `fmt mago-lint analyze build`. |
+| `Makefile` | Remplacer les cibles `phpstan`, `php-cs-fix`, `php-cs-check`, `insights` par `fmt`, `fmt-check`, `mago-lint`, `mago-fix`, `analyze` ; `lint` = `fmt-check mago-lint analyze` ; `quality` = `fmt mago-fix analyze build` ; `install` ne lance plus `composer install` dans `tools/phpinsights`. |
 | `.gitignore` | Retirer les blocs `friendsofphp/php-cs-fixer`, `phpstan/phpstan` et la ligne `/tools/phpinsights/vendor/` (avec son commentaire). |
 | `.gitattributes` | Retirer `/.php-cs-fixer.dist.php` et `/phpstan.dist.neon` ; ajouter `/mago.toml export-ignore`. |
-| `src/Entity/User.php` | Supprimer `@phpstan-ignore property.unusedType` (l.18), remplacé par une suppression Mago équivalente seulement si Mago lève le même finding. |
-| `src/**`, `tests/**`, `config/**`, `bin/**`, `public/**`, `fixtures/**`, `migrations/**`, `mate/**` (`*.php`) | Reformatage `mago fmt` (style uniquement) puis corrections des findings `mago lint` / `mago analyze`. `config/bundles.php` et `config/reference.php` restent exclus, comme aujourd'hui. |
+| `src/Entity/User.php` | Supprimer `@phpstan-ignore property.unusedType` (l.18) — Mago ne lève pas de finding équivalent, rien ne le remplace ; `@mago-expect analysis:invalid-type-cast` justifié sur le cast de `__serialize()`. |
+| `src/**`, `tests/**`, `config/**`, `bin/**`, `public/**`, `fixtures/**`, `mate/**` (`*.php`) | Reformatage `mago fmt` (style uniquement) puis corrections des findings `mago lint` / `mago analyze` (dont `declare(strict_types=1)` manquant, `#[\Override]`, `#[\SensitiveParameter]`, contrôleur `final`). Exclus de Mago : `config/bundles.php`, `config/reference.php` (comme aujourd'hui), `migrations/` (générées, jamais modifiées une fois commitées — `CLAUDE.md`) et `mate/extensions.php` (géré par Mate). |
 | `README.md` | Ligne « Qualité » (l.19) et table des commandes (l.55-58) alignées sur Mago et les nouvelles cibles. |
 | `CLAUDE.md` | Stack « Qualité : PHPStan level 10 + PHP-CS-Fixer » (l.61) → Mago ; commentaire de `make quality` (l.74). |
 | `docs/stack.md` | Section DevOps « Analyse statique / style » → Mago ; entrée de changelog. |
@@ -95,7 +95,7 @@ Aucun impact modèle.
 - **Migration de données** : aucune.
 - **Impacts prod / infra** : aucun — outillage `require-dev`, absent de l'image de prod. Le premier appel à `vendor/bin/mago` nécessite un accès réseau à GitHub (téléchargement du binaire).
 - **Droits d'accès** : inchangé.
-- **Sécurité** : nouveau vecteur supply chain — binaire téléchargé depuis les releases GitHub de `carthage-software/mago` par le wrapper Composer. Version épinglée via `composer.lock`. Surface réduite par ailleurs : 8 paquets QA et un arbre Composer isolé retirés.
+- **Sécurité** : nouveau vecteur supply chain — binaire téléchargé depuis les releases GitHub de `carthage-software/mago` par le wrapper Composer. `composer.lock` épingle la version, pas le contenu : le wrapper ne vérifie aucun checksum de l'archive téléchargée (risque accepté, cf. review [SECU]). Surface réduite par ailleurs : 8 paquets QA et un arbre Composer isolé retirés.
 
 ## Rollback et kill switch
 
@@ -125,7 +125,7 @@ Aucun nouveau test : la story ne change aucun comportement. Les suites existante
 | Code | Type | Ce qu'on vérifie |
 |---|---|---|
 | `tests/` (suite complète, `make phpunit`) | unit / functional | Le reformatage `mago fmt` et les corrections `lint` / `analyze` ne changent aucun comportement. |
-| `e2e/` (`make playwright`) | E2E | Parcours existants intacts après reformatage (templates non touchés sauf `index.html.twig:101`). |
+| `tests/E2E/` (testsuite `e2e`, `make playwright`) | E2E | Parcours existants intacts après reformatage et corrections, y compris via `public/index.php` modifié (templates non touchés sauf `index.html.twig:101`). |
 | `make lint` | statique | `mago fmt --check`, `mago lint` et `mago analyze` à 0 finding, sans baseline. |
 
 **Hors scope tests** :
@@ -179,7 +179,7 @@ Aucun nouveau test : la story ne change aucun comportement. Les suites existante
 - [x] `composer.json` ne contient plus qu'un paquet QA PHP (`carthage-software/mago`) et conserve `phpstan/phpdoc-parser` en `require`.
 - [x] `mago.toml` est le seul fichier de config QA PHP ; `phpstan.dist.neon`, `.php-cs-fixer.dist.php`, `phpinsights.php` et `tools/` n'existent plus.
 - [x] Le `mago.toml` active les intégrations `symfony` et `phpunit` et `cyclomatic-complexity` avec exclusions `src/Entity`, `src/Form`, `src/Repository`.
-- [x] Aucune mention résiduelle de PHPStan / PHP-CS-Fixer / PHP Insights hors `phpstan/phpdoc-parser` et `docs/story/`.
+- [x] Aucune mention résiduelle de PHPStan / PHP-CS-Fixer / PHP Insights hors `phpstan/phpdoc-parser`, `docs/` et `CHANGELOG.md` (historiques), selon la méthode de §Métriques.
 - [x] Documentation projet alignée (`README.md`, `CLAUDE.md`, `docs/stack.md`, `templates/page/index.html.twig`).
 
 ## Risques et mitigations
@@ -196,7 +196,7 @@ Aucun nouveau test : la story ne change aucun comportement. Les suites existante
 
 ## Questions ouvertes
 
-- **Options de formatage `@Symfony` sans équivalent Mago** : selon ce que `mago fmt` expose. Options : (a) accepter le défaut Mago pour la règle concernée, (b) garder un outil de style secondaire. Recommandé : (a), le driver est la simplicité ; à trancher à l'étape 2 par `/tech-implem`.
-- **Complexité cognitive** : Mago ne semble proposer que la complexité cyclomatique. Options : (a) `cyclomatic-complexity` avec les mêmes exclusions, (b) renoncer à la métrique. Recommandé : (a), garde une limite de complexité ; seuil à fixer à l'étape 2.
-- **`make quality` lance `mago lint --fix` ou `mago lint`** : options : (a) `--fix`, (b) lecture seule. Recommandé : (a), cohérent avec le rôle « corrige » de `quality` (aujourd'hui `php-cs-fixer fix`).
-- **Dépôt Git local** : le dossier n'est pas un dépôt Git au moment du cadrage alors que `docs/stack.md` déclare `gabrielmustiere/radar` sur GitHub. Options : (a) cloner / initialiser avant l'étape 1, (b) travailler sans Git. Recommandé : (a), le rollback repose sur `git revert`.
+- **Options de formatage `@Symfony` sans équivalent Mago** : selon ce que `mago fmt` expose. Options : (a) accepter le défaut Mago pour la règle concernée, (b) garder un outil de style secondaire. Recommandé : (a), le driver est la simplicité ; à trancher à l'étape 2 par `/tech-implem`. **Tranché : (a)**, et plus largement le preset par défaut sans aucun réglage `@Symfony`.
+- **Complexité cognitive** : Mago ne semble proposer que la complexité cyclomatique. Options : (a) `cyclomatic-complexity` avec les mêmes exclusions, (b) renoncer à la métrique. Recommandé : (a), garde une limite de complexité ; seuil à fixer à l'étape 2. **Tranché : (a)**, seuil par défaut de Mago (15 par classe).
+- **`make quality` lance `mago lint --fix` ou `mago lint`** : options : (a) `--fix`, (b) lecture seule. Recommandé : (a), cohérent avec le rôle « corrige » de `quality` (aujourd'hui `php-cs-fixer fix`). **Tranché : (a)**, via la cible `mago-fix` (`--format-after-fix`, review [ROBUSTESSE]).
+- **Dépôt Git local** : le dossier n'est pas un dépôt Git au moment du cadrage alors que `docs/stack.md` déclare `gabrielmustiere/radar` sur GitHub. Options : (a) cloner / initialiser avant l'étape 1, (b) travailler sans Git. Recommandé : (a), le rollback repose sur `git revert`. **Tranché : (a)**, dépôt versionné et poussé avant l'étape 1.

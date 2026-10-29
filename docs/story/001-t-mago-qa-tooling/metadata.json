@@ -19,6 +19,21 @@
       "date": "2026-10-29",
       "type": "Implémentation",
       "description": "6/6 étapes livrées, make lint/quality/phpunit/playwright verts, 0 finding Mago sans baseline. Écarts : baseline remesurée sur 7c57991 (E2E passés en PHP après le cadrage) ; migrations/ et mate/extensions.php exclus de Mago (fichiers générés, migration commitée intouchable) ; cible mago-fix ajoutée pour que quality applique lint --fix ; public/index.php exclu de l'analyse comme sous PHPStan ; missing-constructor ignoré dans tests/E2E/ (faux positif sur setUp hérité) ; no-literal-password exclu de tests/ (identifiants de fixtures) ; assertion-style réglé sur self:: (convention du projet) ; formatter au preset par défaut, sans réglage @Symfony ; CHANGELOG.md exclu du comptage des mentions (entrée 0.1.0 publiée)."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 bloquant, 0 important, 2 mineurs ouverts : [ROBUSTESSE] ordre fmt / mago-fix dans make quality, [SECU] binaire Mago sans checksum."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 1 mineur corrigé : [ROBUSTESSE] --format-after-fix sur mago-fix ; 1 mineur laissé en dette : [SECU] binaire Mago sans checksum."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "9 écarts réalignés dans le plan (formatter par défaut validé par l'utilisateur), 8/8 critères cochés, 1 dette ouverte ([SECU] binaire sans checksum)."
     }
   ]
 }
