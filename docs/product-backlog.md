@@ -159,7 +159,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 
 > Les cases sont **dérivées** de `docs/story/*/metadata.json` (champ `backlog` + `delivery`) — ne les coche pas à la main, la prochaine passe les recalculerait. Une case est cochée quand la story est **livrée** (`delivery.commit` renseigné) ; les états intermédiaires se lisent sur la ligne « Story ».
 
-### MVP — Lancement initial · `2/9 livrées`
+### MVP — Lancement initial · `3/9 livrées`
 
 - [x] `ajout-lien` — Permettre à un membre d'ajouter un lien en moins de 15 secondes (URL, une ou deux catégories existantes ou nouvelles, contexte facultatif) pour que la veille entre dans Radar plutôt que dans Chat.
   - Story `002-f-ajout-lien` · **livrée**
@@ -167,8 +167,8 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [x] `carte-apercu` — Permettre à un membre de juger un lien sans cliquer grâce à une carte (aperçu générique, type de source, posteur, date, catégories) et à une carte de repli soignée.
   - Story `003-f-carte-apercu` · **livrée**
   - C2.1, C2.3, C2.4 · P1, P2, P3, P4 · dép. `ajout-lien` · Vision : principe 2 / risque « sources fermées aux aperçus »
-- [ ] `doublon-lien` — Permettre à un membre d'être averti qu'un lien existe déjà et d'atteindre sa carte pour éviter deux cartes classées différemment.
-  - Story `004-f-doublon-lien` · **clôture en cours**
+- [x] `doublon-lien` — Permettre à un membre d'être averti qu'un lien existe déjà et d'atteindre sa carte pour éviter deux cartes classées différemment.
+  - Story `004-f-doublon-lien` · **livrée**
   - C1.3 · P1, P6 · dép. `ajout-lien` · Vision : hypothèse 3 / règle R6
 - [ ] `amorcage-historique` — Permettre aux contributeurs habituels de reprendre un lien de l'historique Chat avec sa date et son posteur d'origine, sans annonce, pour amorcer la base avant l'ouverture.
   - Pas encore cadrée
@@ -229,7 +229,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 
 ### Capacités par horizon
 
-- **MVP** — livrées : C1.1, C1.2, C2.1, C2.3, C2.4, C3.1 · planifiées : C1.3, C1.4, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1
+- **MVP** — livrées : C1.1, C1.2, C1.3, C2.1, C2.3, C2.4, C3.1 · planifiées : C1.4, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1
 - **V2** — livrées : — · planifiées : C1.5, C2.2, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
