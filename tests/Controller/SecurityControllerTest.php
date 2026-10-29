@@ -40,7 +40,7 @@ final class SecurityControllerTest extends WebTestCase
 
         self::assertResponseRedirects('/');
         $client->followRedirect();
-        self::assertSelectorTextContains('h1', 'Tableau de bord');
+        self::assertSelectorTextContains('h1', 'Tous les liens');
     }
 
     public function testLoginWithInvalidCredentials(): void

@@ -17,6 +17,6 @@ final class LoginTest extends E2ETestCase
         $this->page->click('button[type="submit"]');
 
         $this->expect($this->page)->toHaveURL(self::baseUrl() . '/');
-        $this->expect($this->page->locator('body'))->toContainText('Tableau de bord');
+        $this->expect($this->page->locator('body'))->toContainText('Tous les liens');
     }
 }

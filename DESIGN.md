@@ -1,55 +1,55 @@
 ---
-name: Paper
+name: Radar
+inspiration: "Markit - Bookmark Manager (Marcos Costa, Dribbble) — https://dribbble.com/shots/27796580-Markit-Bookmark-Manager"
 colors:
-  primary: "#111111"
-  secondary: "#8B5CF6"
+  primary: "#009689"   # teal-600
+  neutral: "#FAFAF9"   # stone-50
   success: "#16A34A"
   warning: "#D97706"
   danger: "#DC2626"
   surface: "#FFFFFF"
-  text: "#111827"
-  neutral: "#FFFFFF"
+  text: "#1C1917"      # stone-900
 typography:
-  h1:
-    fontFamily: "Montserrat"
-    fontSize: 2.5rem
-  body-md:
-    fontFamily: "Roboto"
-    fontSize: 1rem
-  label-caps:
-    fontFamily: "PT Mono"
-    fontSize: 0.875rem
-  sourceScale: "14/16/18/24/32/40"
-  weights: "100, 200, 300, 400, 500, 600, 700, 800, 900"
+  family: "Inter"
+  mono: "ui-monospace (police système)"
+  weights: "400, 500, 600, 700"
 rounded:
-  sm: 4px
-  md: 8px
-spacing:
-  sm: 4px
-  md: 8px
-  sourceScale: "4/8/12/16/24/32"
+  control: 12px        # rounded-xl : champs, boutons, items de navigation
+  card: 16px           # rounded-2xl : cartes, menus
+  panel: 32px          # rounded-4xl : panneau de contenu, carte de connexion (rounded-3xl)
 ---
 
-## Overview
+## Vue d'ensemble
 
-Paper-textured, print-inspired design with minimal colors, clean serif/sans typography, and tactile surface qualities.
+Interface calme et lumineuse, très inspirée de Markit : fond blanc cassé chaud, une seule couleur d'accent (sarcelle), coins généreusement arrondis, bordures fines plutôt qu'ombres, et quelques illustrations dessinées à la main pour la personnalité.
 
-## Style Foundations
+Contrainte permanente : **simplicité**. On reprend le langage visuel de Markit, pas ses fonctionnalités (pas de « Read Later » ni de signets privés — anti-objectifs de `docs/vision.md`).
 
-- **Visual style:** minimal, clean
-- **Typography scale:** 14/16/18/24/32/40
-- **Typography fonts:** primary=Roboto, display=Montserrat, mono=PT Mono
-- **Typography weights:** 100, 200, 300, 400, 500, 600, 700, 800, 900
-- **Color palette:** primary, neutral, success, warning, danger
-- **Spacing scale:** 4/8/12/16/24/32
+## Tokens
 
-## Colors
+Définis dans `assets/styles/app.css` (`@theme`) :
 
-- **Primary (#111111):** Token from style foundations.
-- **Secondary (#8B5CF6):** Token from style foundations.
-- **Success (#16A34A):** Token from style foundations.
-- **Warning (#D97706):** Token from style foundations.
-- **Danger (#DC2626):** Token from style foundations.
-- **Surface (#FFFFFF):** Token from style foundations.
-- **Text (#111827):** Token from style foundations.
-- **Neutral (#FFFFFF):** Derived from the surface token for official format compatibility.
+- **Neutres** : la palette Tailwind `gray-*` pointe sur `stone-*`. Écrire `gray-*` dans les templates donne donc un gris chaud.
+- **Accent** : `teal` — `teal-600` (boutons, actif), `teal-700` (texte d'accent), `teal-50/100` (fonds légers). Les tokens Flowbite `brand-*` pointent dessus, donc les composants Twig (`<twig:Button>`…) suivent.
+- **Police** : Inter partout (`font-sans`, `font-body`, `font-display`), monospace système pour le code.
+- **Mode sombre** : suit la préférence système (`prefers-color-scheme`), aucun bouton de bascule. Chaque écran porte ses variantes `dark:`.
+
+## Layout
+
+- Fond de page `gray-50`, sans bordure entre topbar et sidebar.
+- Topbar : logo à gauche, recherche centrée (blanche, `rounded-xl`), avatar à droite.
+- Sidebar : items `rounded-xl` ; l'item actif est une pastille blanche, texte `teal-700`, `shadow-xs`.
+- Contenu : panneau blanc arrondi en haut à gauche (`md:rounded-tl-4xl`).
+- En-tête de page : titre en gras, puce, compteur discret (« Tous les liens · 0 lien »).
+
+## Illustrations
+
+Open Doodles (CC0, https://www.opendoodles.com), dans `assets/icons/doodles/`, rendues via `<twig:ux:icon name="doodles:…">`. Le trait suit `currentColor`, l'accent est `teal-200` / `dark:teal-800`.
+Usage réservé aux moments vides ou d'accueil (connexion, état vide) — jamais décoratif dans une liste.
+
+## Écrans à venir (repères tirés de Markit)
+
+- **Carte de lien** : enveloppe Markit (`rounded-2xl`, bordure fine), mais enrichie — aperçu, icône de la source, posteur, date (principe « une carte se lit sans clic »).
+- **Ajout** : modale en deux temps — coller l'URL → chargement → titre / contexte facultatif / catégories.
+- **Détail** : panneau latéral (aperçu, URL copiable, contexte, catégories, « Ouvrir le lien »).
+- **Catégories** : listées dans la sidebar, à la place des « Collections » de Markit.

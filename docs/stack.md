@@ -35,7 +35,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **Rendu** : Twig + Symfony UX — Live Component `v3.5.1`, Stimulus bundle `v3.5.1`, Turbo `v3.5.1`, UX Icons, UX Toolkit (`composer.lock`, `importmap.php`)
 - **Assets** : AssetMapper + importmap, sans bundler JS (`config/packages/asset_mapper.yaml`, `importmap.php`)
 - **CSS** : Tailwind CSS `4.3.3` via `symfonycasts/tailwind-bundle` (`config/packages/symfonycasts_tailwind.yaml`, `package-lock.json`) ; Flowbite `4.0.2` (`package-lock.json`, `importmap.php`)
-- **Design system** : « Paper » — tokens `@theme` (`DESIGN.md`, `assets/styles/app.css`), composants Twig (`templates/components/`)
+- **Design system** : « Radar », inspiré de Markit — tokens `@theme` (`DESIGN.md`, `assets/styles/app.css`), composants Twig (`templates/components/`)
 - **TypeScript** : non
 
 ## Données & stockage

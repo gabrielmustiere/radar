@@ -11,7 +11,7 @@ Outil interne de veille technologique et produit : les liens partagés (YouTube,
 - **Framework** : Symfony 8.1 / PHP 8.5+
 - **Serveur local** : Symfony CLI (proxy HTTPS `*.wip`)
 - **Base de données** : SQLite (fichier local, zéro infra)
-- **Design system** : "Paper" (voir [`DESIGN.md`](DESIGN.md)) — Tailwind CSS 4.3, Flowbite 4 (drawer, toasts, datepicker), Symfony UX Toolkit (`<twig:Button>`, `tailwind_merge`)
+- **Design system** : "Radar", inspiré de Markit (voir [`DESIGN.md`](DESIGN.md)) — Tailwind CSS 4.3, Flowbite 4 (drawer, toasts, datepicker), Symfony UX Toolkit (`<twig:Button>`, `tailwind_merge`)
 - **Assets** : Tailwind CSS 4 + Symfony UX (Stimulus, Icons, Live Component, Turbo)
 - **E-mails** : Mailpit pour la capture en développement
 - **Auth** : Authentification par formulaire (email/password)
@@ -70,7 +70,7 @@ Toutes les opérations courantes passent par `make`. Lancez `make help` pour la 
 
 ## Design system & composants
 
-Le template embarque le design system **"Paper"** — tokens (couleurs, typographies Roboto/Montserrat/PT Mono, radius, spacing) documentés dans [`DESIGN.md`](DESIGN.md), variables `@theme` exposées dans `assets/styles/app.css`.
+Le design system **"Radar"** (inspiré du shot Dribbble Markit) — tokens (neutres stone, accent teal, Inter, mode sombre système, illustrations Open Doodles) documentés dans [`DESIGN.md`](DESIGN.md), variables `@theme` exposées dans `assets/styles/app.css`.
 
 Stack front retenue (voir [`docs/adr/0001-stack-front-paper-flowbite-ux-toolkit.md`](docs/adr/0001-stack-front-paper-flowbite-ux-toolkit.md)) :
 

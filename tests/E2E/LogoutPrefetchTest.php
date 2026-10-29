@@ -17,6 +17,6 @@ final class LogoutPrefetchTest extends E2ETestCase
 
         $this->page->reload();
         $this->expect($this->page)->toHaveURL(self::baseUrl() . '/');
-        $this->expect($this->page->locator('body'))->toContainText('Tableau de bord');
+        $this->expect($this->page->locator('body'))->toContainText('Tous les liens');
     }
 }

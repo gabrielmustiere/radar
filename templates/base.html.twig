@@ -8,132 +8,116 @@
     <title>{% block title %}Radar{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=PT+Mono&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><rect width=%22128%22 height=%22128%22 rx=%2224%22 fill=%22%23111111%22/><text y=%221.05em%22 x=%220.5em%22 text-anchor=%22middle%22 font-family=%22sans-serif%22 font-size=%2272%22 font-weight=%22700%22 fill=%22%238B5CF6%22>sf</text></svg>">
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><rect width=%22128%22 height=%22128%22 rx=%2228%22 fill=%22%231c1917%22/><circle cx=%2264%22 cy=%2264%22 r=%2234%22 fill=%22none%22 stroke=%22%232dd4bf%22 stroke-width=%2210%22/><circle cx=%2264%22 cy=%2264%22 r=%2210%22 fill=%22%232dd4bf%22/></svg>">
     {% block stylesheets %}{% endblock %}
 
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
-<body class="antialiased bg-gray-50 dark:bg-gray-900">
+<body class="antialiased bg-gray-50 font-body text-gray-800 dark:bg-gray-950 dark:text-gray-200">
 
 {# Topbar #}
-<nav class="bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
-    <div class="flex flex-wrap justify-between items-center">
-        <div class="flex justify-start items-center">
-            <button data-drawer-target="paper-sidebar" data-drawer-toggle="paper-sidebar"
-                    aria-controls="paper-sidebar" type="button"
-                    class="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                <twig:ux:icon name="tabler:menu-2" class="w-6 h-6"/>
-                <span class="sr-only">Ouvrir le menu</span>
-            </button>
-            <a href="{{ path('app_page') }}" class="flex items-center gap-2.5 mr-4">
-                <span class="grid size-8 place-items-center rounded-md bg-gray-900 font-display text-sm font-bold text-violet-400 dark:bg-violet-500 dark:text-gray-900">sf</span>
-                <span class="self-center text-xl font-semibold whitespace-nowrap font-display dark:text-white">Paper</span>
-            </a>
-            <form action="#" method="GET" class="hidden md:block md:pl-2">
-                <label for="topbar-search" class="sr-only">Rechercher</label>
-                <div class="relative md:w-64 lg:w-96">
-                    <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                        <twig:ux:icon name="tabler:search" class="w-5 h-5 text-gray-500 dark:text-gray-400"/>
-                    </div>
-                    <input type="text" name="search" id="topbar-search"
-                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-violet-500 focus:border-violet-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                           placeholder="Rechercher…"/>
-                </div>
-            </form>
-        </div>
-        <div class="flex items-center lg:order-2 gap-1">
-            <button type="button" data-dropdown-toggle="notification-dropdown"
-                    class="p-2 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
-                <span class="sr-only">Notifications</span>
-                <twig:ux:icon name="tabler:bell" class="w-6 h-6"/>
-            </button>
-            <div class="hidden overflow-hidden z-50 my-4 max-w-sm text-base list-none bg-white rounded-xl divide-y divide-gray-100 shadow-lg dark:divide-gray-600 dark:bg-gray-700"
-                 id="notification-dropdown">
-                <div class="block py-2 px-4 text-base font-medium text-center text-gray-700 bg-gray-50 dark:bg-gray-600 dark:text-gray-300">
-                    Notifications
-                </div>
-                <div class="py-6 px-4 text-sm text-center text-gray-500 dark:text-gray-400">
-                    Aucune notification
-                </div>
-            </div>
+<nav class="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between gap-4 bg-gray-50 px-4 dark:bg-gray-950 md:px-6">
+    <div class="flex items-center md:w-58">
+        <button data-drawer-target="radar-sidebar" data-drawer-toggle="radar-sidebar"
+                aria-controls="radar-sidebar" type="button"
+                class="mr-2 rounded-lg p-2 text-gray-600 hover:bg-white hover:text-gray-900 md:hidden dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
+            <twig:ux:icon name="tabler:menu-2" class="size-6"/>
+            <span class="sr-only">Ouvrir le menu</span>
+        </button>
+        <a href="{{ path('app_page') }}">
+            {% include 'common/logo.html.twig' %}
+        </a>
+    </div>
 
-            {% if app.user %}
-                <button type="button" data-dropdown-toggle="paper-topbar-user-menu" data-test="user-menu-toggle"
-                        class="flex mx-3 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
-                    <span class="grid size-8 place-items-center rounded-full bg-gray-900 text-sm font-semibold text-white dark:bg-violet-500">
-                        {{ app.user.userIdentifier|first|upper }}
-                    </span>
-                </button>
-                <div class="hidden z-50 my-4 w-56 text-base list-none bg-white rounded-xl divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                     id="paper-topbar-user-menu">
-                    <div class="py-3 px-4">
-                        <span class="block text-sm font-semibold text-gray-900 dark:text-white">{{ app.user.userIdentifier }}</span>
-                        <span class="block text-xs text-gray-500 truncate dark:text-gray-400">Compte utilisateur</span>
-                    </div>
-                    <ul class="py-1 text-gray-700 dark:text-gray-300">
-                        <li>
-                            <a href="#" class="flex items-center gap-2 py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                <twig:ux:icon name="tabler:user" class="w-4 h-4"/> Mon profil
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center gap-2 py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                <twig:ux:icon name="tabler:settings" class="w-4 h-4"/> Paramètres
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="py-1">
-                        <li>
-                            <a href="{{ path('app_logout') }}" data-test="logout-link"
-                               class="flex items-center gap-2 py-2 px-4 text-sm text-rose-700 hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-900/30">
-                                <twig:ux:icon name="tabler:logout" class="w-4 h-4"/> Déconnexion
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            {% else %}
-                <a href="{{ path('app_login') }}"
-                   class="flex items-center gap-2 mx-3 px-3 py-2 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-800 dark:bg-violet-500 dark:hover:bg-violet-400">
-                    <twig:ux:icon name="tabler:login" class="w-4 h-4"/> Se connecter
-                </a>
-            {% endif %}
+    <form action="#" method="GET" class="hidden flex-1 justify-center md:flex">
+        <label for="topbar-search" class="sr-only">Rechercher</label>
+        <div class="relative w-full max-w-sm">
+            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <twig:ux:icon name="tabler:search" class="size-4 text-gray-400"/>
+            </div>
+            <input type="text" name="search" id="topbar-search"
+                   class="block w-full rounded-xl border-0 bg-white py-2.5 pl-9 text-sm text-gray-900 shadow-xs ring-1 ring-gray-200/70 placeholder:text-gray-400 focus:ring-2 focus:ring-teal-500 focus:outline-none dark:bg-gray-900 dark:text-white dark:ring-gray-800"
+                   placeholder="Rechercher un lien…"/>
         </div>
+    </form>
+
+    <div class="flex items-center">
+        {% if app.user %}
+            <button type="button" data-dropdown-toggle="radar-topbar-user-menu" data-test="user-menu-toggle"
+                    class="flex rounded-full focus:ring-4 focus:ring-teal-100 dark:focus:ring-teal-900">
+                <span class="grid size-9 place-items-center rounded-full bg-white text-sm font-semibold text-teal-700 shadow-xs ring-1 ring-gray-200 dark:bg-gray-900 dark:text-teal-400 dark:ring-gray-800">
+                    {{ app.user.userIdentifier|first|upper }}
+                </span>
+            </button>
+            <div class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-2xl bg-white text-base shadow-lg ring-1 ring-gray-200/70 dark:divide-gray-800 dark:bg-gray-900 dark:ring-gray-800"
+                 id="radar-topbar-user-menu">
+                <div class="px-4 py-3">
+                    <span class="block text-sm font-semibold text-gray-900 dark:text-white">{{ app.user.userIdentifier }}</span>
+                    <span class="block truncate text-xs text-gray-500 dark:text-gray-400">Compte utilisateur</span>
+                </div>
+                <ul class="py-1 text-gray-700 dark:text-gray-300">
+                    <li>
+                        <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-white">
+                            <twig:ux:icon name="tabler:user" class="size-4"/> Mon profil
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-white">
+                            <twig:ux:icon name="tabler:settings" class="size-4"/> Paramètres
+                        </a>
+                    </li>
+                </ul>
+                <ul class="py-1">
+                    <li>
+                        <a href="{{ path('app_logout') }}" data-test="logout-link"
+                           class="flex items-center gap-2 px-4 py-2 text-sm text-rose-700 hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-900/30">
+                            <twig:ux:icon name="tabler:logout" class="size-4"/> Déconnexion
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {% else %}
+            <a href="{{ path('app_login') }}"
+               class="flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-700">
+                <twig:ux:icon name="tabler:login" class="size-4"/> Se connecter
+            </a>
+        {% endif %}
     </div>
 </nav>
 
 {# Sidebar #}
-<aside id="paper-sidebar"
-       class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+{% set nav_item = 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition' %}
+{% set nav_idle = nav_item ~ ' text-gray-700 hover:bg-white hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white' %}
+{% set nav_active = nav_item ~ ' bg-white font-semibold text-teal-700 shadow-xs ring-1 ring-gray-200/70 dark:bg-gray-900 dark:text-teal-400 dark:ring-gray-800' %}
+<aside id="radar-sidebar"
+       class="fixed top-0 left-0 z-40 h-screen w-64 -translate-x-full bg-gray-50 pt-16 transition-transform md:translate-x-0 dark:bg-gray-950"
        aria-label="Sidebar">
-    <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
-        <ul class="space-y-2">
+    <div class="h-full overflow-y-auto px-4 py-4">
+        <ul class="space-y-1">
             <li>
-                <a href="{{ path('app_page') }}"
-                   class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                    <twig:ux:icon name="tabler:layout-dashboard" class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
-                    <span class="ml-3">Tableau de bord</span>
+                <a href="{{ path('app_page') }}" class="{{ app.current_route == 'app_page' ? nav_active : nav_idle }}">
+                    <twig:ux:icon name="tabler:bookmarks" class="size-5"/>
+                    <span>Tous les liens</span>
                 </a>
             </li>
         </ul>
-        <ul class="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
+        <ul class="mt-4 space-y-1 border-t border-gray-200 pt-4 dark:border-gray-800">
             <li>
-                <a href="{{ path('app_design_system') }}"
-                   class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
-                    <twig:ux:icon name="tabler:palette" class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
-                    <span class="ml-3">Design System</span>
+                <a href="{{ path('app_design_system') }}" class="{{ app.current_route == 'app_design_system' ? nav_active : nav_idle }}">
+                    <twig:ux:icon name="tabler:palette" class="size-5"/>
+                    <span>Design System</span>
                 </a>
             </li>
             {# La route app_test_email n'existe qu'en dev (env: 'dev') #}
             {% if app.environment == 'dev' %}
             <li>
-                <a href="{{ path('app_test_email') }}"
-                   class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
-                    <twig:ux:icon name="tabler:mail" class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"/>
-                    <span class="ml-3">Tester l'email</span>
+                <a href="{{ path('app_test_email') }}" class="{{ nav_idle }}">
+                    <twig:ux:icon name="tabler:mail" class="size-5"/>
+                    <span>Tester l'email</span>
                 </a>
             </li>
             {% endif %}
@@ -141,8 +125,10 @@
     </div>
 </aside>
 
-<main class="p-4 md:ml-64 h-auto pt-20">
-    {% block body %}{% endblock %}
+<main class="pt-16 md:ml-64">
+    <div class="min-h-[calc(100vh-4rem)] bg-white p-4 sm:p-6 md:rounded-tl-4xl md:p-10 dark:bg-gray-900">
+        {% block body %}{% endblock %}
+    </div>
 </main>
 
 {% include 'common/flash-messages.html.twig' %}
