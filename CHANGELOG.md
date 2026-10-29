@@ -10,6 +10,17 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-10-29 — Recherche intégrée à la liste
+
+### ✨ Fonctionnel
+- **Une seule barre de recherche** — la barre du haut filtre directement la liste affichée pendant la frappe, sans changer de page ; les cartes qui restent dans les résultats ne bougent pas, et le mot-clé reste dans l'adresse pour être partagé.
+- **Recherche dans une catégorie** — sur la page d'une catégorie, la recherche ne porte que sur ses liens.
+- **Recherche sur mobile** — la barre est désormais accessible sur petit écran.
+- **Page « Recherche » retirée** — remplacée par le filtre de la liste ; les anciennes adresses `/recherche` ne fonctionnent plus.
+
+### 🔧 Technique
+- **Liste en Live Component** — le fil et les catégories partagent un composant `LinkList`, piloté par la barre du haut ; la recherche est intégrée aux requêtes du fil et des catégories.
+
 ## [0.3.0] - 2026-10-29 — Interface fluide
 
 ### ✨ Fonctionnel
@@ -53,7 +64,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/gabrielmustiere/radar/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/gabrielmustiere/radar/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/gabrielmustiere/radar/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/gabrielmustiere/radar/releases/tag/v0.1.0
