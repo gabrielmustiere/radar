@@ -34,6 +34,15 @@
       "date": "2026-10-29",
       "type": "Sync",
       "description": "4 écarts réalignés dans le plan, 7/7 critères d'acceptation et 4/4 critères de sortie cochés, aucune dette."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Livraison",
+      "description": "Story livrée sur main en un commit (cfc0341)."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "cfc0341"
+  }
 }
