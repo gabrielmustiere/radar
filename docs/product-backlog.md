@@ -180,7 +180,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `007-f-recherche-mot-cle` · **livrée**
   - C4.2 · P2 · dép. `carte-apercu` · Vision : problème central / audience principale
 - [ ] `annonce-google-chat` — Permettre à l'équipe de voir chaque nouveau lien annoncé dans Google Chat, avec un accès direct à sa carte Radar, pour que Chat reste le haut-parleur.
-  - Pas encore cadrée
+  - Story `008-f-annonce-google-chat` · **clôture en cours**
   - C5.1, C5.2 · P1, P3 · dép. `ajout-lien` · Vision : principe 4 / risque « webhooks bloqués »
 - [ ] `mesure-clics-sortants` — Permettre à l'équipe de compter chaque ouverture de lien avec l'âge du lien pour mesurer la North Star dès le lancement.
   - Pas encore cadrée

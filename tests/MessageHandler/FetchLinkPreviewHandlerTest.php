@@ -11,13 +11,17 @@ use App\Enum\Type\SourceType;
 use App\Message\FetchLinkPreview;
 use App\MessageHandler\FetchLinkPreviewHandler;
 use App\Repository\LinkRepository;
+use App\Service\LinkAnnouncer;
 use App\Service\Preview\LinkPreviewFetcher;
 use App\Service\Preview\LinkPreviewParser;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
+use Symfony\Component\Clock\MockClock;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class FetchLinkPreviewHandlerTest extends TestCase
 {
@@ -32,6 +36,7 @@ final class FetchLinkPreviewHandlerTest extends TestCase
 
         self::assertSame(PreviewStatus::Ready, $link->getPreviewStatus());
         self::assertSame('Titre', $link->getTitle());
+        self::assertNotNull($link->getAnnouncedAt());
     }
 
     public function testMarksPreviewUnavailableWhenSourceFails(): void
@@ -64,7 +69,9 @@ final class FetchLinkPreviewHandlerTest extends TestCase
         $entityManager->expects($this->never())->method('flush');
         $client = new MockHttpClient();
 
-        new FetchLinkPreviewHandler($repository, $this->fetcher($client), $entityManager)(new FetchLinkPreview(1));
+        new FetchLinkPreviewHandler($repository, $this->fetcher($client), $entityManager, $this->announcer())(
+            new FetchLinkPreview(1),
+        );
 
         self::assertSame(0, $client->getRequestsCount());
     }
@@ -78,6 +85,16 @@ final class FetchLinkPreviewHandlerTest extends TestCase
             $repository,
             $this->fetcher($client),
             $this->createStub(EntityManagerInterface::class),
+            $this->announcer(),
+        );
+    }
+
+    private function announcer(): LinkAnnouncer
+    {
+        return new LinkAnnouncer(
+            $this->createStub(ChatterInterface::class),
+            $this->createStub(UrlGeneratorInterface::class),
+            new MockClock(),
         );
     }
 

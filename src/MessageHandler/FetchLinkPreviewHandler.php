@@ -7,6 +7,7 @@ namespace App\MessageHandler;
 use App\Enum\Type\SourceType;
 use App\Message\FetchLinkPreview;
 use App\Repository\LinkRepository;
+use App\Service\LinkAnnouncer;
 use App\Service\Preview\LinkPreviewFetcher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -18,6 +19,7 @@ final readonly class FetchLinkPreviewHandler
         private LinkRepository $linkRepository,
         private LinkPreviewFetcher $fetcher,
         private EntityManagerInterface $entityManager,
+        private LinkAnnouncer $announcer,
     ) {}
 
     public function __invoke(FetchLinkPreview $message): void
@@ -33,6 +35,8 @@ final readonly class FetchLinkPreviewHandler
             ? $link->markPreviewUnavailable()
             : $link->applyPreview($preview->title, $preview->description, $preview->imageUrl, $preview->siteName);
 
+        // L'annonce attend l'aperçu pour porter le vrai titre.
+        $this->announcer->announce($link);
         $this->entityManager->flush();
     }
 }

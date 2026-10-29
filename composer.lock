@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c98feb9aab4633d1fbf3dc783eaec3f1",
+    "content-hash": "28e93efd45a3ca99e54c19a7938ff880",
     "packages": [
         {
             "name": "composer/semver",
@@ -3717,6 +3717,79 @@
                 }
             ],
             "time": "2026-09-14T09:21:44+00:00"
+        },
+        {
+            "name": "symfony/google-chat-notifier",
+            "version": "v8.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/google-chat-notifier.git",
+                "reference": "70521a2602d4fd8f898b48a18d4fb94e354a8183"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/google-chat-notifier/zipball/70521a2602d4fd8f898b48a18d4fb94e354a8183",
+                "reference": "70521a2602d4fd8f898b48a18d4fb94e354a8183",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4.1",
+                "symfony/http-client": "^7.4|^8.0",
+                "symfony/notifier": "^7.4|^8.0"
+            },
+            "type": "symfony-notifier-bridge",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Notifier\\Bridge\\GoogleChat\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Google Chat Notifier Bridge",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "Google-Chat",
+                "chat",
+                "google",
+                "notifier"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/google-chat-notifier/tree/v8.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2026-05-29T05:06:50+00:00"
         },
         {
             "name": "symfony/http-client",

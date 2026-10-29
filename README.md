@@ -64,6 +64,15 @@ Toutes les opérations courantes passent par `make`. Lancez `make help` pour la 
 - **Base SQLite (dev)** : `var/data.db` — accessible via `sqlite3 var/data.db`
 - **Base SQLite (test)** : `var/data_test.db`
 
+## Annonces Google Chat
+
+Chaque lien ajouté est annoncé une fois dans l'espace Google Chat de l'équipe (les liens repris de l'historique ne le sont jamais). Sans configuration, rien n'est envoyé (`GOOGLE_CHAT_DSN=null://null` dans `.env`).
+
+1. Vérifier auprès de l'administrateur Workspace que les webhooks entrants sont autorisés sur l'espace.
+2. Créer un webhook entrant sur l'espace : son adresse a la forme `https://chat.googleapis.com/v1/spaces/SPACE/messages?key=KEY&token=TOKEN`.
+3. Renseigner, hors dépôt (`.env.local` ou variables d'environnement de production) : `GOOGLE_CHAT_DSN=googlechat://KEY:TOKEN@default/SPACE`.
+4. Laisser tourner le worker Messenger (`messenger:consume async`) : l'annonce part après la construction de l'aperçu.
+
 ## Identifiants de test
 
 - `admin@example.com` / `password` (ROLE_USER)

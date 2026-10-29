@@ -25,7 +25,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **Framework** : Symfony `8.1.*`, résolu `v8.1.7` (`composer.json`, `composer.lock`)
 - **ORM / données** : Doctrine ORM `^3.7.2` (résolu `3.7.2`) + Doctrine Migrations (`composer.json`, `composer.lock`)
 - **Async** : Symfony Messenger, transport Doctrine (`.env` → `MESSENGER_TRANSPORT_DSN=doctrine://default`) ; `sync://` en test (`.env.test`)
-- **Notifications** : Symfony Notifier, `ChatMessage` routé en `async` (`config/packages/messenger.yaml`) — aucun bridge de chat installé
+- **Notifications** : Symfony Notifier, `ChatMessage` routé en `async` (`config/packages/messenger.yaml`) ; bridge Google Chat `symfony/google-chat-notifier` 8.1, transport `googlechat` sur `GOOGLE_CHAT_DSN` (`null://null` par défaut) (`composer.json`, `config/packages/notifier.yaml`, `.env`)
 - **HTTP sortant** : Symfony HttpClient `8.1.*`, résolu `v8.1.7` (`composer.lock`)
 - **Auth** : Security bundle, `form_login` email / mot de passe, provider entité `User` (`config/packages/security.yaml`, `src/Entity/User.php`)
 - **Mail** : Symfony Mailer (`composer.json`)
@@ -91,3 +91,4 @@ Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un 
 
 - 2026-10-29 — Création — amorcé depuis gabrielmustiere/symfony-template
 - 2026-10-29 — Qualité — PHPStan, PHP-CS-Fixer et PHP Insights remplacés par Mago (story 001)
+- 2026-10-29 — Enrichir — Backend (notifications) — sync post-livraison de la story 008-f-annonce-google-chat

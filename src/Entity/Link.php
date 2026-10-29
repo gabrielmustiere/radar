@@ -59,6 +59,9 @@ class Link
     #[ORM\Column(options: ['default' => false])]
     private bool $seeded;
 
+    #[ORM\Column(name: 'announced_at', nullable: true)]
+    private ?\DateTimeImmutable $announcedAt = null;
+
     /** @var Collection<int, Category> */
     #[ORM\ManyToMany(targetEntity: Category::class)]
     #[ORM\JoinTable(name: 'link_category')]
@@ -127,6 +130,16 @@ class Link
     public function isSeeded(): bool
     {
         return $this->seeded;
+    }
+
+    public function getAnnouncedAt(): ?\DateTimeImmutable
+    {
+        return $this->announcedAt;
+    }
+
+    public function markAnnounced(\DateTimeImmutable $announcedAt): void
+    {
+        $this->announcedAt = $announcedAt;
     }
 
     public function getSourceType(): SourceType

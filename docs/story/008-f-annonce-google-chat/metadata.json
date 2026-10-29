@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "title": "Annoncer chaque nouveau lien dans Google Chat",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": [
+    "diffusion",
+    "google-chat",
+    "notifier"
+  ],
+  "backlog": "annonce-google-chat",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : annonce unique après l'aperçu, liens repris exclus, lien vers la carte, inactif sans espace configuré."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Planification",
+      "description": "Plan technique rédigé : bridge Notifier Google Chat inactif par défaut, LinkAnnouncer appelé après l'aperçu, garde announcedAt."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "3/3 étapes livrées, make lint/phpunit (89)/playwright (7) verts. Aucun écart avec le plan ; recette Flex du bridge appliquée (.env, notifier.yaml)."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 finding ; 1 point hors review conservé : envoi réel vers un webhook Google Chat autorisé."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "Conforme au plan (2 précisions de périmètre), 6/6 critères d'acceptation et 3/3 critères de sortie cochés, 1 vérification en environnement réel ouverte."
+    }
+  ]
+}
