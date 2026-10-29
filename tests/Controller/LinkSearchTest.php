@@ -6,7 +6,7 @@ namespace App\Tests\Controller;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 
-final class SearchControllerTest extends LinkWebTestCase
+final class LinkSearchTest extends LinkWebTestCase
 {
     /** @param array<string, string> $values */
     #[DataProvider('searchableFields')]
@@ -20,10 +20,14 @@ final class SearchControllerTest extends LinkWebTestCase
             ...array_map(static fn(string $value): string => str_replace('{mk}', $marker, $value), $values),
         ]);
 
-        $client->request('GET', '/recherche', ['q' => str_replace('{mk}', $marker, $search)]);
+        $client->request('GET', '/', ['q' => str_replace('{mk}', $marker, $search)]);
 
         self::assertResponseIsSuccessful();
         self::assertSelectorCount(1, '[data-test="link-card"]');
+        self::assertSelectorTextContains(
+            '[data-test="link-count"]',
+            '1 lien pour « ' . str_replace('{mk}', $marker, $search) . ' »',
+        );
     }
 
     /** @return \Generator<string, array{string, array<string, string>}> */
@@ -44,7 +48,7 @@ final class SearchControllerTest extends LinkWebTestCase
             'categories' => [$this->categoryId('Tester une app mobile')],
         ]);
 
-        $client->request('GET', '/recherche', ['q' => $marker . ' article savoir']);
+        $client->request('GET', '/', ['q' => $marker . ' article savoir']);
         self::assertSelectorCount(1, '[data-test="link-card"]');
     }
 
@@ -63,7 +67,7 @@ final class SearchControllerTest extends LinkWebTestCase
             'context' => 'beta',
         ]);
 
-        $client->request('GET', '/recherche', ['q' => $marker . ' beta']);
+        $client->request('GET', '/', ['q' => $marker . ' beta']);
 
         self::assertSelectorCount(1, '[data-test="link-card"]');
         self::assertSelectorTextContains('[data-test="link-card"]', $marker . '-b');
@@ -73,7 +77,7 @@ final class SearchControllerTest extends LinkWebTestCase
     {
         $client = $this->loggedClient();
 
-        $client->request('GET', '/recherche', ['q' => 'introuvable' . uniqid()]);
+        $client->request('GET', '/', ['q' => 'introuvable' . uniqid()]);
 
         self::assertSelectorTextContains('[data-test="search-empty"]', 'Aucun lien ne contient tous ces mots.');
         self::assertInputValueSame('q', $client->getRequest()->query->getString('q'));
@@ -83,18 +87,51 @@ final class SearchControllerTest extends LinkWebTestCase
     {
         $client = $this->loggedClient();
 
-        $client->request('GET', '/recherche', ['q' => '%%']);
+        $client->request('GET', '/', ['q' => '%%']);
 
         self::assertSelectorExists('[data-test="search-empty"]');
     }
 
-    public function testEmptyQueryShowsHint(): void
+    public function testEmptyQueryListsAllLinks(): void
     {
         $client = $this->loggedClient();
 
-        $client->request('GET', '/recherche');
+        $client->request('GET', '/', ['q' => ' a ']);
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorExists('[data-test="search-hint"]');
+        self::assertSelectorNotExists('[data-test="search-empty"]');
+        self::assertSelectorTextNotContains('[data-test="link-count"]', 'pour');
+    }
+
+    public function testCategorySearchStaysWithinTheCategory(): void
+    {
+        $client = $this->loggedClient();
+        $marker = uniqid('cat');
+        $name = 'Filtre ' . uniqid();
+        $this->submit($client, ['url' => 'https://example.com/' . $marker . '-dedans', 'newCategory' => $name]);
+        $this->submit($client, [
+            'url' => 'https://example.com/autre-' . uniqid(),
+            'categories' => [$this->categoryId($name)],
+        ]);
+        $this->submit($client, [
+            'url' => 'https://example.com/' . $marker . '-dehors',
+            'categories' => [$this->categoryId('Tester une app mobile')],
+        ]);
+
+        $client->request('GET', '/categories/' . $this->categoryId($name), ['q' => $marker]);
+
+        self::assertSelectorCount(1, '[data-test="link-card"]');
+        self::assertSelectorTextContains('[data-test="link-card"]', $marker . '-dedans');
+    }
+
+    public function testSearchFormFiltersTheCurrentListOrLeadsToTheFeed(): void
+    {
+        $client = $this->loggedClient();
+
+        $client->request('GET', '/categories/' . $this->categoryId('Tester une app mobile'));
+        self::assertSelectorExists('form[role="search"][data-controller~="search-filter"]');
+
+        $client->request('GET', '/design-system');
+        self::assertSelectorExists('form[role="search"][action="/"]:not([data-controller~="search-filter"])');
     }
 }

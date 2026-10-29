@@ -20,8 +20,8 @@
 <body class="antialiased bg-gray-50 font-body text-gray-800 dark:bg-gray-950 dark:text-gray-200">
 
 {# Topbar #}
-<nav class="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between gap-4 bg-gray-50 px-4 dark:bg-gray-950 md:px-6">
-    <div class="flex items-center md:w-58">
+<nav class="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between gap-2 bg-gray-50 px-4 sm:gap-4 dark:bg-gray-950 md:px-6">
+    <div class="flex shrink-0 items-center md:w-58">
         <button data-drawer-target="radar-sidebar" data-drawer-toggle="radar-sidebar"
                 aria-controls="radar-sidebar" type="button"
                 class="mr-2 rounded-lg p-2 text-gray-600 hover:bg-white hover:text-gray-900 md:hidden dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
@@ -29,28 +29,31 @@
             <span class="sr-only">Ouvrir le menu</span>
         </button>
         <a href="{{ path('app_page') }}">
-            {% include 'common/logo.html.twig' %}
+            {% include 'common/logo.html.twig' with {compact: true} %}
         </a>
     </div>
 
-    <form action="{{ path('app_search') }}" method="GET" role="search" class="hidden flex-1 justify-center md:flex"
-          data-controller="search-shortcut" data-action="keydown@window->search-shortcut#focus">
+    {# Sur une liste (fil, catégorie), la recherche la filtre au fil de la frappe ; ailleurs, elle mène au fil filtré #}
+    {% set filters_list = app.current_route in ['app_page', 'app_category_show'] %}
+    <form action="{{ path('app_page') }}" method="GET" role="search" class="flex min-w-0 flex-1 justify-center"
+          data-controller="search-shortcut{{ filters_list ? ' search-filter' }}"
+          data-action="keydown@window->search-shortcut#focus{{ filters_list ? ' input->search-filter#filter submit->search-filter#filter:prevent' }}">
         <label for="topbar-search" class="sr-only">Rechercher</label>
         <div class="group relative w-full max-w-sm">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <twig:ux:icon name="tabler:search" class="size-4 text-gray-400"/>
             </div>
             <input type="search" name="q" id="topbar-search" value="{{ app.request.query.get('q') }}" data-test="topbar-search"
-                   data-search-shortcut-target="input" aria-keyshortcuts="/"
-                   class="block w-full rounded-xl border-0 bg-white py-2.5 pr-10 pl-9 text-sm text-gray-900 shadow-xs ring-1 ring-gray-200/70 placeholder:text-gray-400 focus:ring-2 focus:ring-teal-500 focus:outline-none dark:bg-gray-900 dark:text-white dark:ring-gray-800"
+                   data-search-shortcut-target="input" aria-keyshortcuts="/" autocomplete="off"
+                   class="block w-full rounded-xl border-0 bg-white py-2.5 pr-3 pl-9 text-sm text-gray-900 shadow-xs ring-1 ring-gray-200/70 placeholder:text-gray-400 focus:ring-2 focus:ring-teal-500 focus:outline-none md:pr-10 dark:bg-gray-900 dark:text-white dark:ring-gray-800"
                    placeholder="Rechercher un lien…"/>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 group-focus-within:hidden">
+            <div class="pointer-events-none absolute inset-y-0 right-0 hidden items-center pr-2.5 group-focus-within:hidden md:flex">
                 <twig:Kbd class="px-1.5 py-0.5">/</twig:Kbd>
             </div>
         </div>
     </form>
 
-    <div class="flex items-center gap-3">
+    <div class="flex shrink-0 items-center gap-2 sm:gap-3">
         {% if app.user %}
             <a href="{{ path('app_link_new') }}" data-test="add-link" data-turbo-frame="link-modal-frame"
                class="flex items-center gap-2 rounded-xl bg-teal-600 px-3 py-2.5 text-sm font-medium text-white hover:bg-teal-700 sm:px-4">

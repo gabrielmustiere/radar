@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Repository\LinkRepository;
+use App\Search\SearchQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -18,16 +19,20 @@ final class PageController extends AbstractController
     #[Route(path: '/', name: 'app_page')]
     public function index(
         LinkRepository $linkRepository,
+        #[MapQueryParameter]
+        string $q = '',
         #[MapQueryParameter(options: ['min_range' => 1])]
         int $page = 1,
     ): Response {
-        $links = $linkRepository->findLatest($page);
+        $links = $linkRepository->findLatest(SearchQuery::fromString($q), $page);
         if ($links->getPageNumber() > 1 && 0 === $links->count()) {
             throw $this->createNotFoundException();
         }
 
         return $this->render('page/index.html.twig', [
             'links' => $links,
+            'q' => $q,
+            'page' => $page,
         ]);
     }
 

@@ -7,7 +7,7 @@
 } %}
 {% set source = link.sourceType %}
 {% set host = link.url|link_host %}
-<article class="flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200/70 transition hover:shadow-md hover:shadow-gray-900/5 dark:bg-gray-950 dark:ring-gray-800"
+<article id="link-card-{{ link.id }}" class="flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200/70 transition hover:shadow-md hover:shadow-gray-900/5 dark:bg-gray-950 dark:ring-gray-800"
          data-test="link-card" data-preview-status="{{ link.previewStatus.value }}">
     <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"
        class="relative block aspect-[1.91/1] overflow-hidden" {% if link.imageUrl %}data-controller="image-fallback"{% endif %}>

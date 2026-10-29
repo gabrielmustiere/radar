@@ -1,0 +1,48 @@
+{% set query = this.query %}
+{% set links = this.results %}
+<div {{ attributes.defaults({class: 'transition-opacity duration-200'}) }} data-loading="delay|addClass(opacity-60)">
+    <div class="flex items-center gap-3">
+        <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ category ? category.name : 'Tous les liens' }}</h1>
+        <span class="size-1 rounded-full bg-gray-400"></span>
+        {% include 'link/_count.html.twig' %}
+    </div>
+
+    {% if links.items is empty and not query.empty %}
+        {% include 'link/_search_empty.html.twig' %}
+    {% elseif links.items is empty and category %}
+        <p class="py-16 text-center text-sm text-gray-700 dark:text-gray-300">Aucun lien dans cette catégorie pour l'instant.</p>
+    {% elseif links.items is empty %}
+        <div class="flex flex-col items-center py-16 text-center md:py-24">
+            <twig:ux:icon name="doodles:laying" class="h-auto w-full max-w-md text-gray-900 dark:text-gray-200" aria-hidden="true"/>
+            <p class="mt-6 text-sm text-gray-700 dark:text-gray-300">
+                Rien ici pour l'instant : les liens repérés par l'équipe apparaîtront ici.
+            </p>
+        </div>
+    {% elseif category %}
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-test="link-list">
+            {% for link in links.items %}
+                {% include 'link/_list_card.html.twig' %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div data-test="link-list">
+            {% for day_links in links.items|by_day %}
+                <section class="mt-8" data-test="feed-day">
+                    <h2 class="mb-4 text-sm font-semibold text-gray-500 dark:text-gray-400" data-test="feed-day-label">{{ day_links|first.postedAt|day_label }}</h2>
+                    <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                        {% for link in day_links %}
+                            {% include 'link/_list_card.html.twig' %}
+                        {% endfor %}
+                    </div>
+                </section>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if links.items is not empty %}
+        {# Rendu live, la requête courante est celle du composant : route et paramètres passés au pager #}
+        {% include 'link/_pager.html.twig' with {
+            pager_route: category ? 'app_category_show' : 'app_page',
+            pager_params: (category ? {id: category.id} : {})|merge(q is empty ? {} : {q: q}),
+        } %}
+    {% endif %}
+</div>

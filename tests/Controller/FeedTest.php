@@ -61,7 +61,7 @@ final class FeedTest extends LinkWebTestCase
             ]);
         }
 
-        $client->request('GET', '/recherche', ['q' => $marker]);
+        $client->request('GET', '/', ['q' => $marker]);
         self::assertSelectorCount(24, '[data-test="link-card"]');
 
         $client->clickLink('Plus anciens');

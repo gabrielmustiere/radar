@@ -1,0 +1,4 @@
+{# Attend `links` (`WindowPage` de Doctrine) et `query` (`SearchQuery`) #}
+<span class="text-sm text-gray-500 dark:text-gray-400" data-test="link-count">
+    {{- links.totalCount }} lien{{ links.totalCount > 1 ? 's' }}{{ query.empty ? '' : ' pour « ' ~ query.words|join(' ') ~ ' »' -}}
+</span>

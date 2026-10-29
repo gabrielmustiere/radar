@@ -26,17 +26,20 @@ class LinkRepository extends ServiceEntityRepository
         parent::__construct($registry, Link::class);
     }
 
-    /** @return WindowPage<Link> */
-    public function findLatest(int $page = 1): WindowPage
+    /** @return WindowPage<Link> liens contenant chacun des mots recherchés */
+    public function findLatest(SearchQuery $query, int $page = 1): WindowPage
     {
         return $this->paginate(
-            $this
-                ->createQueryBuilder('l')
-                ->addSelect('u', 'c')
-                ->join('l.postedBy', 'u')
-                ->leftJoin('l.categories', 'c')
-                ->orderBy('l.postedAt', 'DESC')
-                ->addOrderBy('l.id', 'DESC'),
+            $this->filter(
+                $this
+                    ->createQueryBuilder('l')
+                    ->addSelect('u', 'c')
+                    ->join('l.postedBy', 'u')
+                    ->leftJoin('l.categories', 'c')
+                    ->orderBy('l.postedAt', 'DESC')
+                    ->addOrderBy('l.id', 'DESC'),
+                $query,
+            ),
             $page,
         );
     }
@@ -52,19 +55,22 @@ class LinkRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    /** @return WindowPage<Link> liens de la catégorie, chacun avec toutes ses catégories */
-    public function findByCategory(Category $category, int $page = 1): WindowPage
+    /** @return WindowPage<Link> liens de la catégorie contenant chacun des mots recherchés, chacun avec toutes ses catégories */
+    public function findByCategory(Category $category, SearchQuery $query, int $page = 1): WindowPage
     {
         return $this->paginate(
-            $this
-                ->createQueryBuilder('l')
-                ->addSelect('u', 'c')
-                ->join('l.postedBy', 'u')
-                ->join('l.categories', 'filter', 'WITH', 'filter = :category')
-                ->leftJoin('l.categories', 'c')
-                ->setParameter('category', $category)
-                ->orderBy('l.postedAt', 'DESC')
-                ->addOrderBy('l.id', 'DESC'),
+            $this->filter(
+                $this
+                    ->createQueryBuilder('l')
+                    ->addSelect('u', 'c')
+                    ->join('l.postedBy', 'u')
+                    ->join('l.categories', 'filter', 'WITH', 'filter = :category')
+                    ->leftJoin('l.categories', 'c')
+                    ->setParameter('category', $category)
+                    ->orderBy('l.postedAt', 'DESC')
+                    ->addOrderBy('l.id', 'DESC'),
+                $query,
+            ),
             $page,
         );
     }
@@ -91,22 +97,9 @@ class LinkRepository extends ServiceEntityRepository
         return $categories;
     }
 
-    /** @return WindowPage<Link> liens contenant chacun des mots, dans un de leurs champs texte ou une de leurs catégories */
-    public function search(SearchQuery $query, int $page = 1): WindowPage
+    /** Chaque mot doit se retrouver dans un des champs texte du lien ou une de ses catégories. */
+    private function filter(QueryBuilder $builder, SearchQuery $query): QueryBuilder
     {
-        if ($query->isEmpty()) {
-            return new WindowPage([], 0, Window::fromPageNumberAndSize(1, self::PER_PAGE));
-        }
-
-        $builder = $this
-            ->createQueryBuilder('l')
-            ->addSelect('u', 'c')
-            ->join('l.postedBy', 'u')
-            ->leftJoin('l.categories', 'c')
-            ->orderBy('l.postedAt', 'DESC')
-            ->addOrderBy('l.id', 'DESC')
-            ->addOrderBy('c.name', 'ASC');
-
         foreach ($query->words as $index => $word) {
             $parameter = 'word' . $index;
             $categoryMatch = $this
@@ -126,7 +119,7 @@ class LinkRepository extends ServiceEntityRepository
             ))->setParameter($parameter, '%' . str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $word) . '%');
         }
 
-        return $this->paginate($builder, $page);
+        return $builder;
     }
 
     /**

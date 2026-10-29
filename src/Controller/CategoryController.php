@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Repository\LinkRepository;
+use App\Search\SearchQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
@@ -17,10 +18,12 @@ final class CategoryController extends AbstractController
     public function show(
         Category $category,
         LinkRepository $linkRepository,
+        #[MapQueryParameter]
+        string $q = '',
         #[MapQueryParameter(options: ['min_range' => 1])]
         int $page = 1,
     ): Response {
-        $links = $linkRepository->findByCategory($category, $page);
+        $links = $linkRepository->findByCategory($category, SearchQuery::fromString($q), $page);
         if ($links->getPageNumber() > 1 && 0 === $links->count()) {
             throw $this->createNotFoundException();
         }
@@ -28,6 +31,8 @@ final class CategoryController extends AbstractController
         return $this->render('category/show.html.twig', [
             'category' => $category,
             'links' => $links,
+            'q' => $q,
+            'page' => $page,
         ]);
     }
 }

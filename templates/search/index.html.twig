@@ -1,7 +1,0 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}{{ q is empty ? 'Recherche' : 'Recherche « ' ~ q ~ ' »' }} · Radar{% endblock %}
-
-{% block body %}
-    <twig:LinkSearch :q="q" :page="page"/>
-{% endblock %}

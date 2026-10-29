@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Twig\Components;
 
+use App\Entity\Category;
 use App\Entity\Link;
 use App\Repository\LinkRepository;
 use App\Search\SearchQuery;
@@ -13,10 +14,10 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
 /**
- * Recherche au fil de la frappe : `q` et `page` restent dans l'URL (partage, retour arrière).
+ * Liste de cartes (fil ou catégorie) filtrée par la recherche de la topbar : `q` et `page` restent dans l'URL.
  */
 #[AsLiveComponent]
-final class LinkSearch
+final class LinkList
 {
     use DefaultActionTrait;
 
@@ -27,8 +28,15 @@ final class LinkSearch
     #[LiveProp(url: true)]
     public ?int $page = null;
 
-    /** @var WindowPage<Link>|null */
-    private ?WindowPage $links = null;
+    #[LiveProp]
+    public ?Category $category = null;
+
+    /**
+     * Fournie au premier rendu par le contrôleur (qui a vérifié la page), recalculée aux rendus suivants.
+     *
+     * @var WindowPage<Link>|null
+     */
+    public ?WindowPage $links = null;
 
     public function __construct(
         private readonly LinkRepository $linkRepository,
@@ -45,8 +53,10 @@ final class LinkSearch
     }
 
     /** @return WindowPage<Link> */
-    public function getLinks(): WindowPage
+    public function getResults(): WindowPage
     {
-        return $this->links ??= $this->linkRepository->search($this->getQuery(), $this->page ?? 1);
+        return $this->links ??= null === $this->category
+            ? $this->linkRepository->findLatest($this->getQuery(), $this->page ?? 1)
+            : $this->linkRepository->findByCategory($this->category, $this->getQuery(), $this->page ?? 1);
     }
 }
