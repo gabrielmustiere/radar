@@ -39,10 +39,15 @@
       "date": "2026-10-29",
       "type": "Livraison",
       "description": "Story livrée sur main en un commit (5bfd713)."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Release",
+      "description": "Embarquée dans la release v0.2.0 « MVP de la veille partagée »."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v0.2.0",
     "commit": "5bfd713"
   }
 }

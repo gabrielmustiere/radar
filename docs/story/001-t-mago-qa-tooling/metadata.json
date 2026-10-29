@@ -39,10 +39,15 @@
       "date": "2026-10-29",
       "type": "Livraison",
       "description": "Story livrée sur main en 8 commits, de la baseline (71991f8) à la clôture (7121b99)."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Release",
+      "description": "Embarquée dans la release v0.2.0 « MVP de la veille partagée »."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v0.2.0",
     "commit": "7121b99"
   }
 }

@@ -162,31 +162,31 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 ### MVP — Lancement initial · `9/9 livrées`
 
 - [x] `ajout-lien` — Permettre à un membre d'ajouter un lien en moins de 15 secondes (URL, une ou deux catégories existantes ou nouvelles, contexte facultatif) pour que la veille entre dans Radar plutôt que dans Chat.
-  - Story `002-f-ajout-lien` · **livrée**
+  - Story `002-f-ajout-lien` · **livrée** v0.2.0
   - C1.1, C1.2, C3.1 · P1, P6 · dép. — · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
 - [x] `carte-apercu` — Permettre à un membre de juger un lien sans cliquer grâce à une carte (aperçu générique, type de source, posteur, date, catégories) et à une carte de repli soignée.
-  - Story `003-f-carte-apercu` · **livrée**
+  - Story `003-f-carte-apercu` · **livrée** v0.2.0
   - C2.1, C2.3, C2.4 · P1, P2, P3, P4 · dép. `ajout-lien` · Vision : principe 2 / risque « sources fermées aux aperçus »
 - [x] `doublon-lien` — Permettre à un membre d'être averti qu'un lien existe déjà et d'atteindre sa carte pour éviter deux cartes classées différemment.
-  - Story `004-f-doublon-lien` · **livrée**
+  - Story `004-f-doublon-lien` · **livrée** v0.2.0
   - C1.3 · P1, P6 · dép. `ajout-lien` · Vision : hypothèse 3 / règle R6
 - [x] `amorcage-historique` — Permettre aux contributeurs habituels de reprendre un lien de l'historique Chat avec sa date et son posteur d'origine, sans annonce, pour amorcer la base avant l'ouverture.
-  - Story `005-f-amorcage-historique` · **livrée**
+  - Story `005-f-amorcage-historique` · **livrée** v0.2.0
   - C1.4 · P6 · dép. `ajout-lien` · Vision : horizon 3-6 mois (amorçage) / anti-objectif « importer tout l'historique »
 - [x] `exploration-categories` — Permettre à un membre de parcourir les liens d'une catégorie-besoin et d'ouvrir le lien d'origine pour retrouver ce que l'équipe a repéré sur un sujet.
-  - Story `006-f-exploration-categories` · **livrée**
+  - Story `006-f-exploration-categories` · **livrée** v0.2.0
   - C4.1, C4.3 · P2 · dép. `carte-apercu` · Vision : problème central / principe 3
 - [x] `recherche-mot-cle` — Permettre à un membre de rechercher par mot dans les titres, descriptions, contextes et catégories pour retrouver un lien dont il se souvient vaguement.
-  - Story `007-f-recherche-mot-cle` · **livrée**
+  - Story `007-f-recherche-mot-cle` · **livrée** v0.2.0
   - C4.2 · P2 · dép. `carte-apercu` · Vision : problème central / audience principale
 - [x] `annonce-google-chat` — Permettre à l'équipe de voir chaque nouveau lien annoncé dans Google Chat, avec un accès direct à sa carte Radar, pour que Chat reste le haut-parleur.
-  - Story `008-f-annonce-google-chat` · **livrée**
+  - Story `008-f-annonce-google-chat` · **livrée** v0.2.0
   - C5.1, C5.2 · P1, P3 · dép. `ajout-lien` · Vision : principe 4 / risque « webhooks bloqués »
 - [x] `mesure-clics-sortants` — Permettre à l'équipe de compter chaque ouverture de lien avec l'âge du lien pour mesurer la North Star dès le lancement.
-  - Story `009-f-mesure-clics-sortants` · **livrée**
+  - Story `009-f-mesure-clics-sortants` · **livrée** v0.2.0
   - C6.1 · P2 · dép. `exploration-categories` · Vision : North Star
 - [x] `fil-derniers-ajouts` — Permettre à un membre de consulter le fil des derniers liens ajoutés pour nourrir la curiosité au quotidien.
-  - Story `010-f-fil-derniers-ajouts` · **livrée**
+  - Story `010-f-fil-derniers-ajouts` · **livrée** v0.2.0
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
 ### V2 — Court terme post-lancement · `0/9 livrées`
