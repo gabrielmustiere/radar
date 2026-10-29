@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "title": "Ajouter un lien en moins de 15 secondes",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": [
+    "contribution",
+    "lien",
+    "categorie"
+  ],
+  "backlog": "ajout-lien",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : ajout par URL + 1 ou 2 catégories (création à la volée), contexte facultatif, page dédiée."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Planification",
+      "description": "Plan technique rédigé : entités Link/Category, formulaire sur DTO, LinkManager, locale fr, liste sur « Tous les liens »."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "4/4 étapes livrées, make lint/phpunit/playwright verts. Écarts : adresse cliquable dans la liste (lecture naturelle d'une URL) ; date au format jj/mm/aaaa (twig/intl-extra absent) ; formulaire en novalidate pour des messages serveur en français."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 1 mineur corrigé : [BUG] une catégorie saisie identique à une catégorie cochée était comptée deux fois dans la limite de deux."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "3 écarts réalignés dans le plan, 8/8 critères d'acceptation et 5/5 critères de sortie cochés, aucune dette."
+    }
+  ]
+}

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DataFixtures;
 
+use App\Entity\Category;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -24,6 +25,11 @@ class AppFixtures extends Fixture
         $user->setRoles(['ROLE_USER']);
 
         $manager->persist($user);
+
+        foreach (['Tester une app mobile', 'Choisir une librairie PHP', 'Concevoir une interface'] as $name) {
+            $manager->persist(new Category($name, new \DateTimeImmutable()));
+        }
+
         $manager->flush();
     }
 }

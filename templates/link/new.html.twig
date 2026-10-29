@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter un lien · Radar{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-2xl">
+        <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Ajouter un lien</h1>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Collez l'adresse, choisissez une ou deux catégories-besoins : c'est tout.
+        </p>
+
+        {{ form_start(form, {attr: {class: 'mt-8 space-y-6', 'data-test': 'link-form', novalidate: 'novalidate'}}) }}
+            {{ form_row(form.url) }}
+
+            <fieldset data-test="link-categories">
+                <legend class="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100">{{ form.categories.vars.label }}</legend>
+                {% if form.categories|length > 0 %}
+                    <div class="flex flex-wrap gap-2">
+                        {% for choice in form.categories %}
+                            <label class="cursor-pointer">
+                                {{ form_widget(choice, {attr: {class: 'peer sr-only'}, label: false}) }}
+                                <span class="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm text-gray-700 ring-1 ring-gray-200 transition hover:ring-gray-300 peer-checked:bg-teal-50 peer-checked:font-medium peer-checked:text-teal-800 peer-checked:ring-teal-500 peer-focus-visible:ring-2 dark:bg-gray-950 dark:text-gray-300 dark:ring-gray-800 dark:peer-checked:bg-teal-500/10 dark:peer-checked:text-teal-300">
+                                    {{ choice.vars.label }}
+                                </span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Aucune catégorie pour l'instant : créez la première ci-dessous.</p>
+                {% endif %}
+                {{ form_errors(form.categories) }}
+            </fieldset>
+
+            {{ form_row(form.newCategory) }}
+            {{ form_row(form.context) }}
+
+            <div class="flex items-center gap-3">
+                <button type="submit" data-test="link-submit"
+                        class="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-200 focus:outline-none dark:focus:ring-teal-900">
+                    <twig:ux:icon name="tabler:plus" class="size-4"/> Ajouter
+                </button>
+                <a href="{{ path('app_page') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Annuler</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

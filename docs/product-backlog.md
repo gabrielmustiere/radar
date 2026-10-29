@@ -162,7 +162,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 ### MVP — Lancement initial · `0/9 livrées`
 
 - [ ] `ajout-lien` — Permettre à un membre d'ajouter un lien en moins de 15 secondes (URL, une ou deux catégories existantes ou nouvelles, contexte facultatif) pour que la veille entre dans Radar plutôt que dans Chat.
-  - Pas encore cadrée
+  - Story `002-f-ajout-lien` · **clôture en cours**
   - C1.1, C1.2, C3.1 · P1, P6 · dép. — · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
 - [ ] `carte-apercu` — Permettre à un membre de juger un lien sans cliquer grâce à une carte (aperçu générique, type de source, posteur, date, catégories) et à une carte de repli soignée.
   - Pas encore cadrée

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\LinkRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -14,9 +15,11 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PageController extends AbstractController
 {
     #[Route(path: '/', name: 'app_page')]
-    public function index(): Response
+    public function index(LinkRepository $linkRepository): Response
     {
-        return $this->render('page/index.html.twig');
+        return $this->render('page/index.html.twig', [
+            'links' => $linkRepository->findLatest(),
+        ]);
     }
 
     #[Route(path: '/design-system', name: 'app_design_system')]

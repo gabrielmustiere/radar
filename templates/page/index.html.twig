@@ -6,13 +6,21 @@
     <div class="flex items-center gap-3">
         <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Tous les liens</h1>
         <span class="size-1 rounded-full bg-gray-400"></span>
-        <span class="text-sm text-gray-500 dark:text-gray-400">0 lien</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400" data-test="link-count">{{ links|length }} lien{{ links|length > 1 ? 's' }}</span>
     </div>
 
-    <div class="flex flex-col items-center py-16 text-center md:py-24">
-        <twig:ux:icon name="doodles:laying" class="h-auto w-full max-w-md text-gray-900 dark:text-gray-200" aria-hidden="true"/>
-        <p class="mt-6 text-sm text-gray-700 dark:text-gray-300">
-            Rien ici pour l'instant : les liens repérés par l'équipe apparaîtront ici.
-        </p>
-    </div>
+    {% if links is empty %}
+        <div class="flex flex-col items-center py-16 text-center md:py-24">
+            <twig:ux:icon name="doodles:laying" class="h-auto w-full max-w-md text-gray-900 dark:text-gray-200" aria-hidden="true"/>
+            <p class="mt-6 text-sm text-gray-700 dark:text-gray-300">
+                Rien ici pour l'instant : les liens repérés par l'équipe apparaîtront ici.
+            </p>
+        </div>
+    {% else %}
+        <ul class="mt-8 space-y-3" data-test="link-list">
+            {% for link in links %}
+                {% include 'link/_item.html.twig' %}
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}

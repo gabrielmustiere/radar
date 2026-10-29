@@ -59,6 +59,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->email ?? throw new \LogicException('User email is not set.');
     }
 
+    public function getDisplayName(): string
+    {
+        $identifier = $this->getUserIdentifier();
+        $localPart = strstr($identifier, needle: '@', before_needle: true);
+
+        return false === $localPart ? $identifier : $localPart;
+    }
+
     /**
      * @see UserInterface
      */
