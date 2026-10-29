@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "title": "Remplacer PHPStan, PHP-CS-Fixer et PHP Insights par Mago",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": ["tooling", "qualite", "mago", "static-analysis"],
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Plan technique rédigé : remplacement complet de l'outillage QA PHP par Mago, config stricte sans baseline, métrique de simplicité."
+    }
+  ]
+}
