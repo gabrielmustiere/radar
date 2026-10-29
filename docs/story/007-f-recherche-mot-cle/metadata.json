@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "title": "Retrouver un lien par mot",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": [
+    "exploration",
+    "recherche"
+  ],
+  "backlog": "recherche-mot-cle",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : recherche multi-mots (ET) sur titre, description, contexte, adresse et catégories, casse ignorée, accents stricts."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Planification",
+      "description": "Plan technique rédigé : SearchQuery, LIKE échappé par mot combinés en ET, EXISTS sur les catégories, page /recherche et topbar."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "3/3 étapes livrées, make lint/phpunit (84)/playwright (7) verts. Écart : ni LOWER() ni minuscules sur la saisie — LIKE SQLite ignore déjà la casse ASCII, et LOWER() ne gère pas les accents (une majuscule accentuée ne correspondait plus)."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 bloquant, 0 important, 0 mineur."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "1 écart réaligné dans le pitch et le plan, 7/7 critères d'acceptation et 3/3 critères de sortie cochés, aucune dette."
+    }
+  ]
+}

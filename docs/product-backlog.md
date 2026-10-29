@@ -177,7 +177,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `006-f-exploration-categories` · **livrée**
   - C4.1, C4.3 · P2 · dép. `carte-apercu` · Vision : problème central / principe 3
 - [ ] `recherche-mot-cle` — Permettre à un membre de rechercher par mot dans les titres, descriptions, contextes et catégories pour retrouver un lien dont il se souvient vaguement.
-  - Pas encore cadrée
+  - Story `007-f-recherche-mot-cle` · **clôture en cours**
   - C4.2 · P2 · dép. `carte-apercu` · Vision : problème central / audience principale
 - [ ] `annonce-google-chat` — Permettre à l'équipe de voir chaque nouveau lien annoncé dans Google Chat, avec un accès direct à sa carte Radar, pour que Chat reste le haut-parleur.
   - Pas encore cadrée

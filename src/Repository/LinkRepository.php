@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Link;
+use App\Search\SearchQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -84,5 +85,44 @@ class LinkRepository extends ServiceEntityRepository
         }
 
         return $categories;
+    }
+
+    /** @return list<Link> liens contenant chacun des mots, dans un de leurs champs texte ou une de leurs catégories */
+    public function search(SearchQuery $query): array
+    {
+        if ($query->isEmpty()) {
+            return [];
+        }
+
+        $builder = $this
+            ->createQueryBuilder('l')
+            ->addSelect('u', 'c')
+            ->join('l.postedBy', 'u')
+            ->leftJoin('l.categories', 'c')
+            ->orderBy('l.postedAt', 'DESC')
+            ->addOrderBy('l.id', 'DESC')
+            ->addOrderBy('c.name', 'ASC');
+
+        foreach ($query->words as $index => $word) {
+            $parameter = 'word' . $index;
+            $categoryMatch = $this
+                ->getEntityManager()
+                ->createQueryBuilder()
+                ->select('1')
+                ->from(Link::class, 'l' . $index)
+                ->join('l' . $index . '.categories', 'c' . $index)
+                ->where(sprintf('l%1$d = l AND c%1$d.name LIKE :%2$s ESCAPE \'!\'', $index, $parameter))
+                ->getDQL();
+
+            $builder->andWhere(sprintf(
+                "l.title LIKE :%1\$s ESCAPE '!' OR l.description LIKE :%1\$s ESCAPE '!'"
+                . " OR l.context LIKE :%1\$s ESCAPE '!' OR l.url LIKE :%1\$s ESCAPE '!' OR EXISTS(%2\$s)",
+                $parameter,
+                $categoryMatch,
+            ))->setParameter($parameter, '%' . str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $word) . '%');
+        }
+
+        /** @var list<Link> */
+        return $builder->getQuery()->getResult();
     }
 }

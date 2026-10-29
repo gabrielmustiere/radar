@@ -33,13 +33,13 @@
         </a>
     </div>
 
-    <form action="#" method="GET" class="hidden flex-1 justify-center md:flex">
+    <form action="{{ path('app_search') }}" method="GET" role="search" class="hidden flex-1 justify-center md:flex">
         <label for="topbar-search" class="sr-only">Rechercher</label>
         <div class="relative w-full max-w-sm">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <twig:ux:icon name="tabler:search" class="size-4 text-gray-400"/>
             </div>
-            <input type="text" name="search" id="topbar-search"
+            <input type="search" name="q" id="topbar-search" value="{{ app.request.query.get('q') }}" data-test="topbar-search"
                    class="block w-full rounded-xl border-0 bg-white py-2.5 pl-9 text-sm text-gray-900 shadow-xs ring-1 ring-gray-200/70 placeholder:text-gray-400 focus:ring-2 focus:ring-teal-500 focus:outline-none dark:bg-gray-900 dark:text-white dark:ring-gray-800"
                    placeholder="Rechercher un lien…"/>
         </div>
