@@ -2,7 +2,7 @@
         db-create db-drop db-reset db-test db-validate migrate migration migrate-rollback fixtures cache-clear \
         phpunit phpunit-coverage phpunit-coverage-text phpunit-coverage-clover phpunit-filter \
         playwright playwright-headed playwright-file \
-        phpstan php-cs-fix php-cs-check insights lint build quality clean
+        phpstan php-cs-fix php-cs-check insights fmt fmt-check mago-lint mago-fix analyze lint build quality clean
 .DEFAULT_GOAL := help
 
 # Colors
@@ -189,6 +189,26 @@ php-cs-check: ## Vérifie le code style sans modifier
 insights: ## Analyse qualité PHP Insights (deps isolées dans tools/phpinsights)
 	@echo "$(BLUE)📊 Analyse PHP Insights...$(RESET)"
 	symfony php tools/phpinsights/vendor/bin/phpinsights --no-interaction
+
+fmt: ## Formate le code PHP (Mago)
+	@echo "$(BLUE)🔧 Formatage du code...$(RESET)"
+	symfony php vendor/bin/mago fmt
+
+fmt-check: ## Vérifie le formatage sans modifier (Mago)
+	@echo "$(BLUE)🔍 Vérification du formatage...$(RESET)"
+	symfony php vendor/bin/mago fmt --check
+
+mago-lint: ## Linter Mago en lecture seule
+	@echo "$(BLUE)🔍 Lint avec Mago...$(RESET)"
+	symfony php vendor/bin/mago lint
+
+mago-fix: ## Applique les correctifs sûrs du linter Mago
+	@echo "$(BLUE)🔧 Correctifs du linter Mago...$(RESET)"
+	symfony php vendor/bin/mago lint --fix
+
+analyze: ## Analyse statique Mago
+	@echo "$(BLUE)🔍 Analyse statique avec Mago...$(RESET)"
+	symfony php vendor/bin/mago analyze
 
 lint: php-cs-check phpstan ## Lint en lecture seule (CS-Fixer dry-run + PHPStan)
 
