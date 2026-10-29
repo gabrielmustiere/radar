@@ -20,8 +20,8 @@ final class AddLinkTest extends E2ETestCase
         $this->page->click('[data-test="link-submit"]');
 
         $this->expect($this->page)->toHaveURL(self::baseUrl() . '/');
-        $first = $this->page->locator('[data-test="link-item"]')->first();
-        $this->expect($first)->toContainText($url);
-        $this->expect($first)->toContainText('Repéré en E2E.');
+        $first = $this->page->locator('[data-test="link-card"]')->first();
+        $this->expect($first->locator('[data-test="link-context"]'))->toHaveText('Repéré en E2E.');
+        $this->expect($first->locator('[data-test="link-source"]'))->toContainText('example.com');
     }
 }

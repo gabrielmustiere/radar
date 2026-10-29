@@ -24,3 +24,21 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Aperçus : les sources sont des URLs saisies par les membres, jamais le réseau interne.
+    app.preview_http_client:
+        class: Symfony\Component\HttpClient\NoPrivateNetworkHttpClient
+        arguments: ['@http_client']
+
+    App\Service\Preview\LinkPreviewFetcher:
+        arguments:
+            $httpClient: '@app.preview_http_client'
+
+when@test:
+    services:
+        App\Tests\Http\PreviewMockResponseFactory: ~
+
+        # En test, les sources sont simulées : aucun appel réseau, aucune résolution DNS.
+        app.preview_http_client:
+            class: Symfony\Component\HttpClient\MockHttpClient
+            arguments: ['@App\Tests\Http\PreviewMockResponseFactory']

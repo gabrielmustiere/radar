@@ -165,7 +165,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `002-f-ajout-lien` · **livrée**
   - C1.1, C1.2, C3.1 · P1, P6 · dép. — · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
 - [ ] `carte-apercu` — Permettre à un membre de juger un lien sans cliquer grâce à une carte (aperçu générique, type de source, posteur, date, catégories) et à une carte de repli soignée.
-  - Pas encore cadrée
+  - Story `003-f-carte-apercu` · **clôture en cours**
   - C2.1, C2.3, C2.4 · P1, P2, P3, P4 · dép. `ajout-lien` · Vision : principe 2 / risque « sources fermées aux aperçus »
 - [ ] `doublon-lien` — Permettre à un membre d'être averti qu'un lien existe déjà et d'atteindre sa carte pour éviter deux cartes classées différemment.
   - Pas encore cadrée

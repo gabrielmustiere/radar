@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "title": "Juger un lien sans cliquer grâce à sa carte",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": [
+    "cartes",
+    "apercu",
+    "messenger"
+  ],
+  "backlog": "carte-apercu",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : carte enrichie (OpenGraph), type de source déduit de l'adresse, carte de repli, aperçu construit après l'ajout, X en repli direct."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Planification",
+      "description": "Plan technique rédigé : type de source à la création, aperçu OpenGraph en Messenger async, client sans réseau privé, carte Twig avec repli."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "4/4 étapes livrées, make lint/phpunit (45)/playwright (5) verts, aperçu réel vérifié en dev. Écarts : mock HTTP limité au client d'aperçu (le mock global cassait UX Icons) ; HtmlMetadata extrait du parser (seuil de complexité Mago) ; tests de carte scindés avec base LinkWebTestCase (too-many-methods) ; règles de taille Mago exclues de src/Entity/."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 bloquant, 0 important, 0 mineur."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "4 écarts réalignés dans le plan, 7/7 critères d'acceptation et 4/4 critères de sortie cochés, aucune dette."
+    }
+  ]
+}

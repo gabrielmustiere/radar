@@ -6,11 +6,8 @@ namespace App\Tests\Controller;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
-use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-final class LinkControllerTest extends WebTestCase
+final class LinkControllerTest extends LinkWebTestCase
 {
     public function testAnonymousUserIsRedirectedToLogin(): void
     {
@@ -35,14 +32,14 @@ final class LinkControllerTest extends WebTestCase
         self::assertResponseRedirects('/');
         $client->followRedirect();
         self::assertSelectorTextContains('[role="alert"]', 'Lien ajouté.');
-        self::assertSelectorTextContains('[data-test="link-item"]:first-child', $url);
-        self::assertSelectorTextContains('[data-test="link-item"]:first-child [data-test="link-poster"]', 'admin');
+        self::assertSelectorTextContains('[data-test="link-card"]:first-child', $url);
+        self::assertSelectorTextContains('[data-test="link-card"]:first-child [data-test="link-poster"]', 'admin');
         self::assertSelectorTextContains(
-            '[data-test="link-item"]:first-child [data-test="link-category"]',
+            '[data-test="link-card"]:first-child [data-test="link-category"]',
             'Tester une app mobile',
         );
         self::assertSelectorTextContains(
-            '[data-test="link-item"]:first-child [data-test="link-context"]',
+            '[data-test="link-card"]:first-child [data-test="link-context"]',
             'Pour la recette mobile.',
         );
     }
@@ -72,8 +69,8 @@ final class LinkControllerTest extends WebTestCase
 
         self::assertResponseRedirects('/');
         $client->followRedirect();
-        self::assertSelectorCount(2, '[data-test="link-item"]:first-child [data-test="link-category"]');
-        self::assertSelectorTextContains('[data-test="link-item"]:first-child', $name);
+        self::assertSelectorCount(2, '[data-test="link-card"]:first-child [data-test="link-category"]');
+        self::assertSelectorTextContains('[data-test="link-card"]:first-child', $name);
     }
 
     public function testExistingCategoryNameIsReusedWhateverTheCase(): void
@@ -85,7 +82,7 @@ final class LinkControllerTest extends WebTestCase
         self::assertResponseRedirects('/');
         $client->followRedirect();
         self::assertSelectorTextContains(
-            '[data-test="link-item"]:first-child [data-test="link-category"]',
+            '[data-test="link-card"]:first-child [data-test="link-category"]',
             'Choisir une librairie PHP',
         );
         $repository = self::getContainer()->get(CategoryRepository::class);
@@ -145,39 +142,5 @@ final class LinkControllerTest extends WebTestCase
 
         self::assertResponseStatusCodeSame(422);
         self::assertSelectorTextContains('[data-test="link-form"]', 'Cette valeur n\'est pas une URL valide.');
-    }
-
-    private function loggedClient(): KernelBrowser
-    {
-        $client = self::createClient();
-        $repository = self::getContainer()->get(UserRepository::class);
-        self::assertInstanceOf(UserRepository::class, $repository);
-        $user = $repository->findOneBy(['email' => 'admin@example.com']);
-        self::assertNotNull($user);
-        $client->loginUser($user);
-
-        return $client;
-    }
-
-    /** @param array<string, mixed> $values */
-    private function submit(KernelBrowser $client, array $values): void
-    {
-        $crawler = $client->request('GET', '/liens/ajouter');
-        $token = $crawler->filter('input[name="link[_token]"]')->attr('value');
-
-        $client->request('POST', '/liens/ajouter', ['link' => [...$values, '_token' => $token]]);
-    }
-
-    private function categoryId(string $name): int
-    {
-        $repository = self::getContainer()->get(CategoryRepository::class);
-        self::assertInstanceOf(CategoryRepository::class, $repository);
-        foreach ($repository->findAllOrderedByName() as $category) {
-            if ($category->getName() === $name) {
-                return (int) $category->getId();
-            }
-        }
-
-        self::fail(sprintf('Catégorie « %s » absente des fixtures.', $name));
     }
 }

@@ -6,12 +6,17 @@ namespace App\Tests\Service;
 
 use App\Entity\Category;
 use App\Entity\User;
+use App\Enum\Type\SourceType;
 use App\Form\Model\LinkSubmission;
+use App\Message\FetchLinkPreview;
 use App\Repository\CategoryRepository;
 use App\Service\LinkManager;
+use App\Service\Preview\SourceTypeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final class LinkManagerTest extends TestCase
 {
@@ -63,15 +68,40 @@ final class LinkManagerTest extends TestCase
         self::assertSame('https://example.com/article', $link->getUrl());
     }
 
-    private function manager(): LinkManager
+    public function testResolvesSourceTypeAndDispatchesPreviewFetch(): void
+    {
+        $submission = $this->submission(newCategory: 'Choisir un ORM');
+        $submission->url = 'https://github.com/symfony/symfony';
+        $bus = $this->createMock(MessageBusInterface::class);
+        $bus
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with(self::isInstanceOf(FetchLinkPreview::class))
+            ->willReturnCallback(static fn(object $message): Envelope => new Envelope($message));
+
+        $link = $this->manager($bus)->add($submission, $this->user());
+
+        self::assertSame(SourceType::GitHub, $link->getSourceType());
+    }
+
+    private function manager(?MessageBusInterface $bus = null): LinkManager
     {
         $repository = $this->createStub(CategoryRepository::class);
         $repository->method('findAllOrderedByName')->willReturn([$this->existing]);
+
+        if (null === $bus) {
+            $bus = $this->createStub(MessageBusInterface::class);
+            $bus->method('dispatch')->willReturnCallback(
+                static fn(object $message): Envelope => new Envelope($message),
+            );
+        }
 
         return new LinkManager(
             $this->createStub(EntityManagerInterface::class),
             $repository,
             new MockClock('2026-10-29 10:00:00', 'Europe/Paris'),
+            new SourceTypeResolver(),
+            $bus,
         );
     }
 

@@ -8,9 +8,12 @@ use App\Entity\Category;
 use App\Entity\Link;
 use App\Entity\User;
 use App\Form\Model\LinkSubmission;
+use App\Message\FetchLinkPreview;
 use App\Repository\CategoryRepository;
+use App\Service\Preview\SourceTypeResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Clock\ClockInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 final readonly class LinkManager
 {
@@ -18,6 +21,8 @@ final readonly class LinkManager
         private EntityManagerInterface $entityManager,
         private CategoryRepository $categoryRepository,
         private ClockInterface $clock,
+        private SourceTypeResolver $sourceTypeResolver,
+        private MessageBusInterface $messageBus,
     ) {}
 
     public function add(LinkSubmission $submission, User $poster): Link
@@ -32,16 +37,20 @@ final readonly class LinkManager
         }
 
         $context = trim($submission->context ?? '');
+        $url = (string) $submission->url;
         $link = new Link(
-            (string) $submission->url,
+            $url,
             $categories,
             $poster,
             $this->clock->now(),
+            $this->sourceTypeResolver->resolve($url),
             '' === $context ? null : $context,
         );
 
         $this->entityManager->persist($link);
         $this->entityManager->flush();
+
+        $this->messageBus->dispatch(new FetchLinkPreview((int) $link->getId()));
 
         return $link;
     }

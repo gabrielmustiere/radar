@@ -17,10 +17,10 @@
             </p>
         </div>
     {% else %}
-        <ul class="mt-8 space-y-3" data-test="link-list">
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-test="link-list">
             {% for link in links %}
-                {% include 'link/_item.html.twig' %}
+                {% include 'link/_card.html.twig' %}
             {% endfor %}
-        </ul>
+        </div>
     {% endif %}
 {% endblock %}
