@@ -186,7 +186,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `009-f-mesure-clics-sortants` · **livrée**
   - C6.1 · P2 · dép. `exploration-categories` · Vision : North Star
 - [ ] `fil-derniers-ajouts` — Permettre à un membre de consulter le fil des derniers liens ajoutés pour nourrir la curiosité au quotidien.
-  - Pas encore cadrée
+  - Story `010-f-fil-derniers-ajouts` · **clôture en cours**
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
 ### V2 — Court terme post-lancement · `0/9 livrées`

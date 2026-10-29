@@ -32,16 +32,10 @@ final class LinkControllerTest extends LinkWebTestCase
         self::assertResponseRedirects('/');
         $client->followRedirect();
         self::assertSelectorTextContains('[role="alert"]', 'Lien ajouté.');
-        self::assertSelectorTextContains('[data-test="link-card"]:first-child', $url);
-        self::assertSelectorTextContains('[data-test="link-card"]:first-child [data-test="link-poster"]', 'admin');
-        self::assertSelectorTextContains(
-            '[data-test="link-card"]:first-child [data-test="link-category"]',
-            'Tester une app mobile',
-        );
-        self::assertSelectorTextContains(
-            '[data-test="link-card"]:first-child [data-test="link-context"]',
-            'Pour la recette mobile.',
-        );
+        self::assertSelectorTextContains(self::FIRST_CARD, $url);
+        self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-poster"]', 'admin');
+        self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-category"]', 'Tester une app mobile');
+        self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-context"]', 'Pour la recette mobile.');
     }
 
     public function testAddLinkCreatesNewCategoryOfferedOnNextAdd(): void
@@ -69,8 +63,8 @@ final class LinkControllerTest extends LinkWebTestCase
 
         self::assertResponseRedirects('/');
         $client->followRedirect();
-        self::assertSelectorCount(2, '[data-test="link-card"]:first-child [data-test="link-category"]');
-        self::assertSelectorTextContains('[data-test="link-card"]:first-child', $name);
+        self::assertSelectorCount(2, self::FIRST_CARD . ' [data-test="link-category"]');
+        self::assertSelectorTextContains(self::FIRST_CARD, $name);
     }
 
     public function testExistingCategoryNameIsReusedWhateverTheCase(): void
@@ -82,7 +76,7 @@ final class LinkControllerTest extends LinkWebTestCase
         self::assertResponseRedirects('/');
         $client->followRedirect();
         self::assertSelectorTextContains(
-            '[data-test="link-card"]:first-child [data-test="link-category"]',
+            self::FIRST_CARD . ' [data-test="link-category"]',
             'Choisir une librairie PHP',
         );
         $repository = self::getContainer()->get(CategoryRepository::class);

@@ -16,7 +16,7 @@ final class LinkCardTest extends LinkWebTestCase
         ]);
 
         $client->followRedirect();
-        $card = '[data-test="link-card"]:first-child';
+        $card = self::FIRST_CARD;
         self::assertSelectorTextContains($card . ' [data-test="link-title"]', 'Un article de test');
         self::assertSelectorTextContains(
             $card . ' [data-test="link-description"]',
@@ -35,7 +35,7 @@ final class LinkCardTest extends LinkWebTestCase
         $this->submit($client, ['url' => $url, 'categories' => [$this->categoryId('Concevoir une interface')]]);
 
         $client->followRedirect();
-        $card = '[data-test="link-card"]:first-child';
+        $card = self::FIRST_CARD;
         self::assertSelectorExists($card . '[data-preview-status="unavailable"]');
         self::assertSelectorTextContains($card . ' [data-test="link-title"]', $url);
         self::assertSelectorTextContains($card . ' [data-test="link-source"]', 'Dépôt GitHub');

@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Repository\LinkRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -15,10 +16,18 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PageController extends AbstractController
 {
     #[Route(path: '/', name: 'app_page')]
-    public function index(LinkRepository $linkRepository): Response
-    {
+    public function index(
+        LinkRepository $linkRepository,
+        #[MapQueryParameter(options: ['min_range' => 1])]
+        int $page = 1,
+    ): Response {
+        $links = $linkRepository->findLatest($page);
+        if ($links->getPageNumber() > 1 && 0 === $links->count()) {
+            throw $this->createNotFoundException();
+        }
+
         return $this->render('page/index.html.twig', [
-            'links' => $linkRepository->findLatest(),
+            'links' => $links,
         ]);
     }
 

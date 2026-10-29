@@ -6,16 +6,17 @@
     <div class="flex items-center gap-3">
         <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ category.name }}</h1>
         <span class="size-1 rounded-full bg-gray-400"></span>
-        <span class="text-sm text-gray-500 dark:text-gray-400" data-test="link-count">{{ links|length }} lien{{ links|length > 1 ? 's' }}</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400" data-test="link-count">{{ links.totalCount }} lien{{ links.totalCount > 1 ? 's' }}</span>
     </div>
 
-    {% if links is empty %}
+    {% if links.items is empty %}
         <p class="py-16 text-center text-sm text-gray-700 dark:text-gray-300">Aucun lien dans cette catégorie pour l'instant.</p>
     {% else %}
         <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-test="link-list">
-            {% for link in links %}
+            {% for link in links.items %}
                 {% include 'link/_card.html.twig' %}
             {% endfor %}
         </div>
+    {% include 'link/_pager.html.twig' %}
     {% endif %}
 {% endblock %}

@@ -8,6 +8,10 @@ use App\Entity\Category;
 use App\Entity\Link;
 use App\Search\SearchQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\OffsetPaginator;
+use Doctrine\ORM\Tools\Pagination\Window;
+use Doctrine\ORM\Tools\Pagination\WindowPage;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,25 +19,26 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class LinkRepository extends ServiceEntityRepository
 {
+    public const int PER_PAGE = 24;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Link::class);
     }
 
-    /** @return list<Link> */
-    public function findLatest(): array
+    /** @return WindowPage<Link> */
+    public function findLatest(int $page = 1): WindowPage
     {
-        /** @var list<Link> */
-        return $this
-            ->createQueryBuilder('l')
-            ->addSelect('u', 'c')
-            ->join('l.postedBy', 'u')
-            ->leftJoin('l.categories', 'c')
-            ->orderBy('l.postedAt', 'DESC')
-            ->addOrderBy('l.id', 'DESC')
-            ->addOrderBy('c.name', 'ASC')
-            ->getQuery()
-            ->getResult();
+        return $this->paginate(
+            $this
+                ->createQueryBuilder('l')
+                ->addSelect('u', 'c')
+                ->join('l.postedBy', 'u')
+                ->leftJoin('l.categories', 'c')
+                ->orderBy('l.postedAt', 'DESC')
+                ->addOrderBy('l.id', 'DESC'),
+            $page,
+        );
     }
 
     public function findOneByNormalizedUrl(string $normalizedUrl): ?Link
@@ -47,22 +52,21 @@ class LinkRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    /** @return list<Link> liens de la catégorie, chacun avec toutes ses catégories */
-    public function findByCategory(Category $category): array
+    /** @return WindowPage<Link> liens de la catégorie, chacun avec toutes ses catégories */
+    public function findByCategory(Category $category, int $page = 1): WindowPage
     {
-        /** @var list<Link> */
-        return $this
-            ->createQueryBuilder('l')
-            ->addSelect('u', 'c')
-            ->join('l.postedBy', 'u')
-            ->join('l.categories', 'filter', 'WITH', 'filter = :category')
-            ->leftJoin('l.categories', 'c')
-            ->setParameter('category', $category)
-            ->orderBy('l.postedAt', 'DESC')
-            ->addOrderBy('l.id', 'DESC')
-            ->addOrderBy('c.name', 'ASC')
-            ->getQuery()
-            ->getResult();
+        return $this->paginate(
+            $this
+                ->createQueryBuilder('l')
+                ->addSelect('u', 'c')
+                ->join('l.postedBy', 'u')
+                ->join('l.categories', 'filter', 'WITH', 'filter = :category')
+                ->leftJoin('l.categories', 'c')
+                ->setParameter('category', $category)
+                ->orderBy('l.postedAt', 'DESC')
+                ->addOrderBy('l.id', 'DESC'),
+            $page,
+        );
     }
 
     /** @return list<array{id: int, name: string, linkCount: int}> catégories portant au moins un lien, par nom */
@@ -87,11 +91,11 @@ class LinkRepository extends ServiceEntityRepository
         return $categories;
     }
 
-    /** @return list<Link> liens contenant chacun des mots, dans un de leurs champs texte ou une de leurs catégories */
-    public function search(SearchQuery $query): array
+    /** @return WindowPage<Link> liens contenant chacun des mots, dans un de leurs champs texte ou une de leurs catégories */
+    public function search(SearchQuery $query, int $page = 1): WindowPage
     {
         if ($query->isEmpty()) {
-            return [];
+            return new WindowPage([], 0, Window::fromPageNumberAndSize(1, self::PER_PAGE));
         }
 
         $builder = $this
@@ -122,7 +126,19 @@ class LinkRepository extends ServiceEntityRepository
             ))->setParameter($parameter, '%' . str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $word) . '%');
         }
 
-        /** @var list<Link> */
-        return $builder->getQuery()->getResult();
+        return $this->paginate($builder, $page);
+    }
+
+    /**
+     * La pagination par sous-requête garde des cartes complètes : un LIMIT brut tronquerait la collection de catégories jointe.
+     *
+     * @return WindowPage<Link>
+     */
+    private function paginate(QueryBuilder $builder, int $page): WindowPage
+    {
+        /** @var OffsetPaginator<Link> $paginator */
+        $paginator = new OffsetPaginator(fetchJoinCollection: true);
+
+        return $paginator->paginate($builder, Window::fromPageNumberAndSize($page, self::PER_PAGE));
     }
 }

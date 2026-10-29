@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "title": "Consulter le fil des derniers liens ajoutés",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": [
+    "exploration",
+    "fil",
+    "pagination"
+  ],
+  "backlog": "fil-derniers-ajouts",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : fil regroupé par jour, pages de 24 liens, pagination étendue aux pages de catégorie et de recherche."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Planification",
+      "description": "Plan technique rédigé : listes paginées par 24 via Paginator Doctrine, filtre day_label, pager partagé par l'accueil, la catégorie et la recherche."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "4/4 étapes livrées, make lint/phpunit (106)/playwright (7) verts. Écarts : OffsetPaginator/WindowPage au lieu de Paginator (déprécié) et du value object LinkPage ; filtre by_day (Twig n'a pas de group_by) ; tri des catégories déplacé dans le mapping (OrderBy) ; sélecteur FIRST_CARD dans les tests."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 bloquant, 0 important, 0 mineur."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "4 écarts réalignés dans le plan, 7/7 critères d'acceptation et 2/2 critères de sortie cochés, aucune dette."
+    }
+  ]
+}

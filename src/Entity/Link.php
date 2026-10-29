@@ -65,6 +65,7 @@ class Link
     /** @var Collection<int, Category> */
     #[ORM\ManyToMany(targetEntity: Category::class)]
     #[ORM\JoinTable(name: 'link_category')]
+    #[ORM\OrderBy(['name' => 'ASC'])]
     private Collection $categories;
 
     /** @param iterable<Category> $categories */
