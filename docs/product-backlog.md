@@ -159,7 +159,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 
 > Les cases sont **dérivées** de `docs/story/*/metadata.json` (champ `backlog` + `delivery`) — ne les coche pas à la main, la prochaine passe les recalculerait. Une case est cochée quand la story est **livrée** (`delivery.commit` renseigné) ; les états intermédiaires se lisent sur la ligne « Story ».
 
-### MVP — Lancement initial · `8/9 livrées`
+### MVP — Lancement initial · `9/9 livrées`
 
 - [x] `ajout-lien` — Permettre à un membre d'ajouter un lien en moins de 15 secondes (URL, une ou deux catégories existantes ou nouvelles, contexte facultatif) pour que la veille entre dans Radar plutôt que dans Chat.
   - Story `002-f-ajout-lien` · **livrée**
@@ -185,8 +185,8 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [x] `mesure-clics-sortants` — Permettre à l'équipe de compter chaque ouverture de lien avec l'âge du lien pour mesurer la North Star dès le lancement.
   - Story `009-f-mesure-clics-sortants` · **livrée**
   - C6.1 · P2 · dép. `exploration-categories` · Vision : North Star
-- [ ] `fil-derniers-ajouts` — Permettre à un membre de consulter le fil des derniers liens ajoutés pour nourrir la curiosité au quotidien.
-  - Story `010-f-fil-derniers-ajouts` · **clôture en cours**
+- [x] `fil-derniers-ajouts` — Permettre à un membre de consulter le fil des derniers liens ajoutés pour nourrir la curiosité au quotidien.
+  - Story `010-f-fil-derniers-ajouts` · **livrée**
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
 ### V2 — Court terme post-lancement · `0/9 livrées`
@@ -229,7 +229,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 
 ### Capacités par horizon
 
-- **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C5.1, C5.2, C6.1 · planifiées : C4.4
+- **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1 · planifiées : —
 - **V2** — livrées : — · planifiées : C1.5, C2.2, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
