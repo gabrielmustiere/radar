@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace DataFixtures;
 
 use App\Entity\User;
@@ -13,6 +15,7 @@ class AppFixtures extends Fixture
         private readonly UserPasswordHasherInterface $passwordHasher,
     ) {}
 
+    #[\Override]
     public function load(ObjectManager $manager): void
     {
         $user = new User();

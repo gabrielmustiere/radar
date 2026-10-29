@@ -5,7 +5,8 @@ php-version = "8.5"
 [source]
 paths = ["bin", "config", "fixtures", "mate", "migrations", "public", "src", "tests"]
 includes = ["vendor"]
-excludes = ["config/bundles.php", "config/reference.php"]
+# Fichiers générés : les migrations (make:migration, jamais modifiées une fois commitées) et le registre géré par Mate.
+excludes = ["config/bundles.php", "config/reference.php", "migrations/", "mate/extensions.php"]
 
 [linter]
 integrations = ["symfony", "phpunit"]
@@ -14,9 +15,19 @@ minimum-fail-level = "Note"
 [linter.rules]
 # Mêmes exclusions que l'ancienne complexité cognitive : entités, FormTypes et repositories sont déclaratifs.
 cyclomatic-complexity = { exclude = ["src/Entity/", "src/Form/", "src/Repository/"] }
+# Convention du projet : assertions PHPUnit appelées en `self::`.
+assertion-style = { style = "self_" }
+# Les tests utilisent les identifiants des fixtures (`admin@example.com` / `password`).
+no-literal-password = { exclude = ["tests/"] }
 
 [analyzer]
 minimum-fail-level = "Note"
+# Front controller du runtime Symfony (recette) : `$context` n'est pas typé, déjà exclu de PHPStan.
+excludes = ["public/index.php"]
+# Propriétés initialisées par le framework : `setUp()` (PHPUnit), `setUpPlaywright()` (Playwright PHP) et `setContainer()` (AbstractController).
+class-initializers = ["setUp", "setUpPlaywright", "setContainer"]
+# Faux positif : les sous-classes héritent du `setUp()` d'`E2ETestCase`, que l'analyseur ne suit pas depuis une classe abstraite.
+ignore = [{ code = "missing-constructor", in = ["tests/E2E/"] }]
 find-unused-definitions = true
 find-unused-expressions = true
 find-overly-wide-return-types = true

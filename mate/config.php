@@ -3,6 +3,8 @@
 // User's service configuration file
 // This file is loaded into the Symfony DI container
 
+declare(strict_types=1);
+
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $container): void {

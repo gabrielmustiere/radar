@@ -24,14 +24,17 @@ final class ModalTest extends E2ETestCase
         $this->page->click('[data-test="modal-cancel"]');
         $this->expect($this->page->locator('#modal-modal-confirm'))->toBeHidden();
 
-        $errors = $this->page->evaluate('window.__pageErrors');
-        self::assertIsArray($errors);
+        self::assertSame([], $this->page->evaluate('window.__pageErrors'));
+
+        $consoleErrors = [];
         foreach ($this->page->consoleMessages(['filter' => 'all']) as $message) {
-            if ('error' === $message->type() && !str_starts_with($message->text(), 'Failed to load resource')) {
-                $errors[] = $message->text();
+            if ('error' !== $message->type() || str_starts_with($message->text(), 'Failed to load resource')) {
+                continue;
             }
+
+            $consoleErrors[] = $message->text();
         }
 
-        self::assertSame([], $errors);
+        self::assertSame([], $consoleErrors);
     }
 }

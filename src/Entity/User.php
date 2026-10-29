@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
@@ -15,7 +17,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    /** @phpstan-ignore property.unusedType (assigned by Doctrine) */
     private ?int $id = null;
 
     /** @var non-empty-string|null */
@@ -52,6 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function getUserIdentifier(): string
     {
         return $this->email ?? throw new \LogicException('User email is not set.');
@@ -60,6 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -81,12 +84,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
+    #[\Override]
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(#[\SensitiveParameter] string $password): static
     {
         $this->password = $password;
 
@@ -95,9 +99,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
+     *
+     * @return array<array-key, mixed>
      */
     public function __serialize(): array
     {
+        // Le cast garde les clés de propriétés privées préfixées, attendues par la désérialisation native.
+        // @mago-expect analysis:invalid-type-cast
         $data = (array) $this;
         $data["\0" . self::class . "\0password"] = null !== $this->password ? hash('crc32c', $this->password) : null;
 

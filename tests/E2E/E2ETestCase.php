@@ -15,6 +15,7 @@ abstract class E2ETestCase extends TestCase
 {
     use PlaywrightTestCaseTrait;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,6 +31,7 @@ abstract class E2ETestCase extends TestCase
         $this->page = $this->context->newPage();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         $this->tearDownPlaywright();
@@ -40,7 +42,7 @@ abstract class E2ETestCase extends TestCase
     {
         $baseUrl = getenv('PLAYWRIGHT_BASE_URL');
 
-        return false === $baseUrl || '' === $baseUrl ? 'https://radar.wip' : rtrim($baseUrl, '/');
+        return false === $baseUrl || '' === $baseUrl ? 'https://radar.wip' : rtrim($baseUrl, characters: '/');
     }
 
     protected function logIn(): void
