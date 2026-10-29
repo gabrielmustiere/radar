@@ -34,6 +34,15 @@
       "date": "2026-10-29",
       "type": "Sync",
       "description": "Conforme au plan (2 précisions de périmètre), 6/6 critères d'acceptation et 3/3 critères de sortie cochés, 1 vérification en environnement réel ouverte."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Livraison",
+      "description": "Story livrée sur main en un commit (f6e22c2)."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "f6e22c2"
+  }
 }
