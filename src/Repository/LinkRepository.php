@@ -33,4 +33,15 @@ class LinkRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findOneByNormalizedUrl(string $normalizedUrl): ?Link
+    {
+        return $this->findOneBy(['normalizedUrl' => $normalizedUrl]);
+    }
+
+    public function save(Link $link): void
+    {
+        $this->getEntityManager()->persist($link);
+        $this->getEntityManager()->flush();
+    }
 }

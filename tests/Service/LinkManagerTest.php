@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Tests\Service;
 
 use App\Entity\Category;
+use App\Entity\Link;
 use App\Entity\User;
 use App\Enum\Type\SourceType;
+use App\Exception\DuplicateLinkException;
 use App\Form\Model\LinkSubmission;
 use App\Message\FetchLinkPreview;
 use App\Repository\CategoryRepository;
+use App\Repository\LinkRepository;
+use App\Service\CategoryResolver;
 use App\Service\LinkManager;
-use App\Service\Preview\SourceTypeResolver;
+use App\Service\LinkUrlAnalyzer;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
@@ -84,8 +88,38 @@ final class LinkManagerTest extends TestCase
         self::assertSame(SourceType::GitHub, $link->getSourceType());
     }
 
-    private function manager(?MessageBusInterface $bus = null): LinkManager
+    public function testRefusesDuplicateWithoutPersistingAnything(): void
     {
+        $existing = new Link(
+            'https://example.com/article',
+            'https://example.com/article',
+            [],
+            $this->user(),
+            new \DateTimeImmutable(),
+            SourceType::Article,
+        );
+        $linkRepository = $this->createMock(LinkRepository::class);
+        $linkRepository->method('findOneByNormalizedUrl')->willReturn($existing);
+        $linkRepository->expects($this->never())->method('save');
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->never())->method('persist');
+
+        try {
+            $this->manager(entityManager: $entityManager, linkRepository: $linkRepository)->add(
+                $this->submission(newCategory: 'Choisir un ORM'),
+                $this->user(),
+            );
+            self::fail('Le doublon aurait dû être refusé.');
+        } catch (DuplicateLinkException $exception) {
+            self::assertSame($existing, $exception->existing);
+        }
+    }
+
+    private function manager(
+        ?MessageBusInterface $bus = null,
+        ?EntityManagerInterface $entityManager = null,
+        ?LinkRepository $linkRepository = null,
+    ): LinkManager {
         $repository = $this->createStub(CategoryRepository::class);
         $repository->method('findAllOrderedByName')->willReturn([$this->existing]);
 
@@ -96,11 +130,17 @@ final class LinkManagerTest extends TestCase
             );
         }
 
+        $clock = new MockClock('2026-10-29 10:00:00', 'Europe/Paris');
+
         return new LinkManager(
-            $this->createStub(EntityManagerInterface::class),
-            $repository,
-            new MockClock('2026-10-29 10:00:00', 'Europe/Paris'),
-            new SourceTypeResolver(),
+            $linkRepository ?? $this->createStub(LinkRepository::class),
+            new LinkUrlAnalyzer(),
+            new CategoryResolver(
+                $entityManager ?? $this->createStub(EntityManagerInterface::class),
+                $repository,
+                $clock,
+            ),
+            $clock,
             $bus,
         );
     }

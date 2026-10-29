@@ -36,6 +36,7 @@ class AppFixtures extends Fixture
 
         $symfony = new Link(
             'https://github.com/symfony/symfony',
+            'https://github.com/symfony/symfony',
             [$categories['Choisir une librairie PHP']],
             $user,
             new \DateTimeImmutable('-3 days'),
@@ -51,6 +52,7 @@ class AppFixtures extends Fixture
         $manager->persist($symfony);
 
         $maestro = new Link(
+            'https://x.com/mobile_dev/status/1',
             'https://x.com/mobile_dev/status/1',
             [$categories['Tester une app mobile']],
             $user,

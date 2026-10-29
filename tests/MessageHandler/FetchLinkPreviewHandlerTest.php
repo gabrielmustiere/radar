@@ -88,6 +88,13 @@ final class FetchLinkPreviewHandlerTest extends TestCase
 
     private function link(string $url, SourceType $sourceType): Link
     {
-        return new Link($url, [], new User()->setEmail('marie@example.com'), new \DateTimeImmutable(), $sourceType);
+        return new Link(
+            $url,
+            $url,
+            [],
+            new User()->setEmail('marie@example.com'),
+            new \DateTimeImmutable(),
+            $sourceType,
+        );
     }
 }

@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ link.title ?? link.url|link_host }} · Radar{% endblock %}
+
+{% block body %}
+    <a href="{{ path('app_page') }}" class="inline-flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+        <twig:ux:icon name="tabler:arrow-left" class="size-4"/> Tous les liens
+    </a>
+    <div class="mt-6 max-w-md">
+        {% include 'link/_card.html.twig' %}
+    </div>
+{% endblock %}

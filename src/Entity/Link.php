@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LinkRepository::class)]
 #[ORM\Index(name: 'IDX_LINK_POSTED_AT', fields: ['postedAt'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_LINK_NORMALIZED_URL', fields: ['normalizedUrl'])]
 class Link
 {
     #[ORM\Id]
@@ -22,6 +23,10 @@ class Link
 
     #[ORM\Column(length: 2048)]
     private string $url;
+
+    // Le défaut n'existe que parce que SQLite refuse ADD COLUMN NOT NULL sans défaut : la valeur est toujours posée au constructeur.
+    #[ORM\Column(name: 'normalized_url', length: 2048, options: ['default' => ''])]
+    private string $normalizedUrl;
 
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $context;
@@ -59,6 +64,7 @@ class Link
     /** @param iterable<Category> $categories */
     public function __construct(
         string $url,
+        string $normalizedUrl,
         iterable $categories,
         User $postedBy,
         \DateTimeImmutable $postedAt,
@@ -66,6 +72,7 @@ class Link
         ?string $context = null,
     ) {
         $this->url = $url;
+        $this->normalizedUrl = $normalizedUrl;
         $this->sourceType = $sourceType;
         $this->categories = new ArrayCollection();
         foreach ($categories as $category) {
@@ -84,6 +91,11 @@ class Link
     public function getUrl(): string
     {
         return $this->url;
+    }
+
+    public function getNormalizedUrl(): string
+    {
+        return $this->normalizedUrl;
     }
 
     public function getContext(): ?string

@@ -1,0 +1,39 @@
+{
+  "version": 2,
+  "title": "Être averti qu'un lien existe déjà dans Radar",
+  "created": "2026-10-29",
+  "updated": "2026-10-29",
+  "tags": [
+    "contribution",
+    "doublon",
+    "lien"
+  ],
+  "backlog": "doublon-lien",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : doublon refusé avec la carte existante, règles d'équivalence d'adresses, page propre à chaque carte."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Planification",
+      "description": "Plan technique rédigé : forme canonique d'adresse avec index unique, exception métier portant le lien existant, page de carte /liens/{id}."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "3/3 étapes livrées, make lint/phpunit (62)/playwright (5) verts. Écarts : UrlNormalizer et SourceTypeResolver fusionnés en LinkUrlAnalyzer, CategoryResolver extrait et LinkRepository::save() ajouté (seuil Mago de 5 paramètres) ; reconstruction SQLite de la table link par DBAL (FK posted_by en NO ACTION)."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 bloquant, 0 important, 0 mineur."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Sync",
+      "description": "3 écarts réalignés dans le plan, 6/6 critères d'acceptation et 3/3 critères de sortie cochés, aucune dette."
+    }
+  ]
+}

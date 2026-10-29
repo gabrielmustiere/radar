@@ -168,7 +168,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `003-f-carte-apercu` · **livrée**
   - C2.1, C2.3, C2.4 · P1, P2, P3, P4 · dép. `ajout-lien` · Vision : principe 2 / risque « sources fermées aux aperçus »
 - [ ] `doublon-lien` — Permettre à un membre d'être averti qu'un lien existe déjà et d'atteindre sa carte pour éviter deux cartes classées différemment.
-  - Pas encore cadrée
+  - Story `004-f-doublon-lien` · **clôture en cours**
   - C1.3 · P1, P6 · dép. `ajout-lien` · Vision : hypothèse 3 / règle R6
 - [ ] `amorcage-historique` — Permettre aux contributeurs habituels de reprendre un lien de l'historique Chat avec sa date et son posteur d'origine, sans annonce, pour amorcer la base avant l'ouverture.
   - Pas encore cadrée
