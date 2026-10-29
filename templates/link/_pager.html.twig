@@ -1,9 +1,11 @@
-{# Attend `links` (`WindowPage` de Doctrine) ; conserve les paramètres de la route courante (`q` de la recherche). #}
+{# Attend `links` (`WindowPage` de Doctrine) ; conserve les paramètres de la route courante.
+   Rendu dans un composant live, la requête courante est celle du composant : passer alors `pager_route` et `pager_params`. #}
 {% if links.hasPreviousPage or links.hasNextPage %}
-    {% set params = app.request.attributes.get('_route_params')|merge(app.request.query.all) %}
+    {% set pager_route = pager_route ?? app.current_route %}
+    {% set params = pager_params ?? app.request.attributes.get('_route_params')|merge(app.request.query.all) %}
     <nav class="mt-10 flex items-center justify-between border-t border-gray-100 pt-6 dark:border-gray-800" aria-label="Pagination" data-test="pager">
         {% if links.hasPreviousPage %}
-            <a href="{{ path(app.current_route, params|merge({page: links.pageNumber - 1})) }}" data-test="pager-previous"
+            <a href="{{ path(pager_route, params|merge({page: links.pageNumber - 1})) }}" data-test="pager-previous"
                class="inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium text-gray-700 ring-1 ring-gray-200 hover:bg-gray-50 dark:text-gray-300 dark:ring-gray-800 dark:hover:bg-gray-800">
                 <twig:ux:icon name="tabler:arrow-left" class="size-4"/> Plus récents
             </a>
@@ -12,7 +14,7 @@
         {% endif %}
         <span class="text-xs text-gray-500 dark:text-gray-400">Page {{ links.pageNumber }}</span>
         {% if links.hasNextPage %}
-            <a href="{{ path(app.current_route, params|merge({page: links.pageNumber + 1})) }}" data-test="pager-next"
+            <a href="{{ path(pager_route, params|merge({page: links.pageNumber + 1})) }}" data-test="pager-next"
                class="inline-flex items-center gap-1 rounded-xl px-3 py-2 text-sm font-medium text-gray-700 ring-1 ring-gray-200 hover:bg-gray-50 dark:text-gray-300 dark:ring-gray-800 dark:hover:bg-gray-800">
                 Plus anciens <twig:ux:icon name="tabler:arrow-right" class="size-4"/>
             </a>
