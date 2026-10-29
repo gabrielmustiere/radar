@@ -141,31 +141,31 @@ Aucun nouveau test : la story ne change aucun comportement. Les suites existante
    - Vérification : `git rev-parse HEAD` OK ; `make lint` et `make phpunit` code retour 0.
    - Commitable seule : oui (rien à commiter si déjà vert).
 
-2. [ ] **Ajouter Mago en cohabitation**
+2. [x] **Ajouter Mago en cohabitation**
    - Objectif : `composer require --dev carthage-software/mago:^1.59`, `mago.toml` strict (via `mago init` puis durci), nouvelles cibles `fmt`, `fmt-check`, `mago-lint`, `analyze`. Ancien outillage encore présent, `lint` / `quality` inchangés à ce stade.
    - Fichiers : `composer.json`, `composer.lock`, `mago.toml`, `Makefile`, `.gitattributes`.
    - Vérification : `symfony php vendor/bin/mago --version` répond ; `make analyze` et `make mago-lint` s'exécutent (findings attendus).
    - Commitable seule : oui.
 
-3. [ ] **Reformater le code avec `mago fmt`**
+3. [x] **Reformater le code avec `mago fmt`**
    - Objectif : commit dédié au style seul, pour un diff lisible et isolable dans `git blame`.
    - Fichiers : `*.php` des dossiers listés en §Périmètre.
    - Vérification : `make fmt-check` vert ; `make phpunit` et `make playwright` verts.
    - Commitable seule : oui.
 
-4. [ ] **Corriger les findings `lint` et `analyze` jusqu'à zéro**
+4. [x] **Corriger les findings `lint` et `analyze` jusqu'à zéro**
    - Objectif : 0 finding sans baseline ; migrer ou supprimer l'annotation `src/Entity/User.php:18`.
    - Fichiers : fichiers PHP concernés par les findings, `mago.toml` si une règle doit être exclue sur un chemin (justifiée en commentaire).
    - Vérification : `make mago-lint` et `make analyze` verts ; `make phpunit` vert.
    - Commitable seule : oui.
 
-5. [ ] **Retirer l'ancien outillage et basculer `lint` / `quality`**
+5. [x] **Retirer l'ancien outillage et basculer `lint` / `quality`**
    - Objectif : `composer remove` des 7 paquets (pas `phpstan/phpdoc-parser`), suppression des configs et de `tools/`, `lint` et `quality` recâblés sur Mago, anciennes cibles supprimées.
    - Fichiers : `composer.json`, `composer.lock`, `symfony.lock`, `Makefile`, `.gitignore`, `.gitattributes`, suppression de `phpstan.dist.neon`, `.php-cs-fixer.dist.php`, `phpinsights.php`, `tools/phpinsights/`.
    - Vérification : `make lint` et `make quality` verts ; `make phpunit` vert ; `composer validate` OK.
    - Commitable seule : oui.
 
-6. [ ] **Aligner la documentation**
+6. [x] **Aligner la documentation**
    - Objectif : plus aucune mention de l'ancien outillage dans la doc projet et l'UI.
    - Fichiers : `README.md`, `CLAUDE.md`, `docs/stack.md`, `templates/page/index.html.twig`.
    - Vérification : commande de §Métriques « mentions résiduelles » à 0 ; `make playwright` vert.
@@ -173,14 +173,14 @@ Aucun nouveau test : la story ne change aucun comportement. Les suites existante
 
 ## Critères de sortie
 
-- [ ] `make phpunit` et `make playwright` verts après la bascule.
-- [ ] `make lint` vert : `mago fmt --check`, `mago lint`, `mago analyze` à 0 finding, sans fichier de baseline.
-- [ ] `make quality` vert.
-- [ ] `composer.json` ne contient plus qu'un paquet QA PHP (`carthage-software/mago`) et conserve `phpstan/phpdoc-parser` en `require`.
-- [ ] `mago.toml` est le seul fichier de config QA PHP ; `phpstan.dist.neon`, `.php-cs-fixer.dist.php`, `phpinsights.php` et `tools/` n'existent plus.
-- [ ] Le `mago.toml` active les intégrations `symfony` et `phpunit` et `cyclomatic-complexity` avec exclusions `src/Entity`, `src/Form`, `src/Repository`.
-- [ ] Aucune mention résiduelle de PHPStan / PHP-CS-Fixer / PHP Insights hors `phpstan/phpdoc-parser` et `docs/story/`.
-- [ ] Documentation projet alignée (`README.md`, `CLAUDE.md`, `docs/stack.md`, `templates/page/index.html.twig`).
+- [x] `make phpunit` et `make playwright` verts après la bascule.
+- [x] `make lint` vert : `mago fmt --check`, `mago lint`, `mago analyze` à 0 finding, sans fichier de baseline.
+- [x] `make quality` vert.
+- [x] `composer.json` ne contient plus qu'un paquet QA PHP (`carthage-software/mago`) et conserve `phpstan/phpdoc-parser` en `require`.
+- [x] `mago.toml` est le seul fichier de config QA PHP ; `phpstan.dist.neon`, `.php-cs-fixer.dist.php`, `phpinsights.php` et `tools/` n'existent plus.
+- [x] Le `mago.toml` active les intégrations `symfony` et `phpunit` et `cyclomatic-complexity` avec exclusions `src/Entity`, `src/Form`, `src/Repository`.
+- [x] Aucune mention résiduelle de PHPStan / PHP-CS-Fixer / PHP Insights hors `phpstan/phpdoc-parser` et `docs/story/`.
+- [x] Documentation projet alignée (`README.md`, `CLAUDE.md`, `docs/stack.md`, `templates/page/index.html.twig`).
 
 ## Risques et mitigations
 

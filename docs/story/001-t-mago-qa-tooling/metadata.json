@@ -3,12 +3,22 @@
   "title": "Remplacer PHPStan, PHP-CS-Fixer et PHP Insights par Mago",
   "created": "2026-10-29",
   "updated": "2026-10-29",
-  "tags": ["tooling", "qualite", "mago", "static-analysis"],
+  "tags": [
+    "tooling",
+    "qualite",
+    "mago",
+    "static-analysis"
+  ],
   "changelog": [
     {
       "date": "2026-10-29",
       "type": "Création",
       "description": "Plan technique rédigé : remplacement complet de l'outillage QA PHP par Mago, config stricte sans baseline, métrique de simplicité."
+    },
+    {
+      "date": "2026-10-29",
+      "type": "Implémentation",
+      "description": "6/6 étapes livrées, make lint/quality/phpunit/playwright verts, 0 finding Mago sans baseline. Écarts : baseline remesurée sur 7c57991 (E2E passés en PHP après le cadrage) ; migrations/ et mate/extensions.php exclus de Mago (fichiers générés, migration commitée intouchable) ; cible mago-fix ajoutée pour que quality applique lint --fix ; public/index.php exclu de l'analyse comme sous PHPStan ; missing-constructor ignoré dans tests/E2E/ (faux positif sur setUp hérité) ; no-literal-password exclu de tests/ (identifiants de fixtures) ; assertion-style réglé sur self:: (convention du projet) ; formatter au preset par défaut, sans réglage @Symfony ; CHANGELOG.md exclu du comptage des mentions (entrée 0.1.0 publiée)."
     }
   ]
 }
