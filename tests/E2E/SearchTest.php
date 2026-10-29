@@ -17,4 +17,13 @@ final class SearchTest extends E2ETestCase
         $this->expect($this->page->locator('[data-test="link-card"]')->first())->toContainText('symfony');
         $this->expect($this->page->locator('[data-test="topbar-search"]'))->toHaveValue('symfony');
     }
+
+    public function testSlashFocusesTheTopbarSearch(): void
+    {
+        $this->logIn();
+
+        $this->page->keyboard()->press('/');
+
+        $this->expect($this->page->locator('[data-test="topbar-search"]'))->toBeFocused();
+    }
 }

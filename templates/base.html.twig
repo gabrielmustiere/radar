@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {# Turbo 8 : pas de préchargement au survol (évite notamment un GET /logout au survol) #}
-    <meta name="turbo-prefetch" content="false">
+    {# Turbo 8 : fondu du contenu entre deux pages (navigateurs compatibles, mouvement réduit respecté) #}
+    <meta name="view-transition" content="same-origin">
     <title>{% block title %}Radar{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,15 +33,20 @@
         </a>
     </div>
 
-    <form action="{{ path('app_search') }}" method="GET" role="search" class="hidden flex-1 justify-center md:flex">
+    <form action="{{ path('app_search') }}" method="GET" role="search" class="hidden flex-1 justify-center md:flex"
+          data-controller="search-shortcut" data-action="keydown@window->search-shortcut#focus">
         <label for="topbar-search" class="sr-only">Rechercher</label>
-        <div class="relative w-full max-w-sm">
+        <div class="group relative w-full max-w-sm">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <twig:ux:icon name="tabler:search" class="size-4 text-gray-400"/>
             </div>
             <input type="search" name="q" id="topbar-search" value="{{ app.request.query.get('q') }}" data-test="topbar-search"
-                   class="block w-full rounded-xl border-0 bg-white py-2.5 pl-9 text-sm text-gray-900 shadow-xs ring-1 ring-gray-200/70 placeholder:text-gray-400 focus:ring-2 focus:ring-teal-500 focus:outline-none dark:bg-gray-900 dark:text-white dark:ring-gray-800"
+                   data-search-shortcut-target="input" aria-keyshortcuts="/"
+                   class="block w-full rounded-xl border-0 bg-white py-2.5 pr-10 pl-9 text-sm text-gray-900 shadow-xs ring-1 ring-gray-200/70 placeholder:text-gray-400 focus:ring-2 focus:ring-teal-500 focus:outline-none dark:bg-gray-900 dark:text-white dark:ring-gray-800"
                    placeholder="Rechercher un lien…"/>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2.5 group-focus-within:hidden">
+                <twig:Kbd class="px-1.5 py-0.5">/</twig:Kbd>
+            </div>
         </div>
     </form>
 
@@ -77,7 +82,8 @@
                 </ul>
                 <ul class="py-1">
                     <li>
-                        <a href="{{ path('app_logout') }}" data-test="logout-link"
+                        {# Turbo 8 précharge les liens au survol : jamais celui-ci, un GET /logout déconnecte #}
+                        <a href="{{ path('app_logout') }}" data-test="logout-link" data-turbo-prefetch="false"
                            class="flex items-center gap-2 px-4 py-2 text-sm text-rose-700 hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-900/30">
                             <twig:ux:icon name="tabler:logout" class="size-4"/> Déconnexion
                         </a>
@@ -130,7 +136,7 @@
     </div>
 </aside>
 
-<main class="pt-16 md:ml-64">
+<main class="pt-16 [view-transition-name:main] md:ml-64">
     <div class="min-h-[calc(100vh-4rem)] bg-white p-4 sm:p-6 md:rounded-tl-4xl md:p-10 dark:bg-gray-900">
         {% block body %}{% endblock %}
     </div>

@@ -246,3 +246,31 @@
         --color-dark-backdrop: var(--color-gray-950);
     }
 }
+
+/* Navigation Turbo : barre de progression aux couleurs de Radar */
+.turbo-progress-bar {
+    height: 3px;
+    background-color: var(--color-teal-500);
+}
+
+/* View Transitions : seul le contenu (<main>) glisse en fondu, topbar et sidebar restent en place */
+::view-transition-old(main) {
+    animation: 120ms ease-in both radar-fade-out;
+}
+
+::view-transition-new(main) {
+    animation: 200ms ease-out both radar-fade-in;
+}
+
+@keyframes radar-fade-out {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes radar-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+}
