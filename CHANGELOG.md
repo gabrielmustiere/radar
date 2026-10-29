@@ -10,6 +10,12 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-10-29 — Jeu de données réaliste
+
+### 🔧 Technique
+- **Fixtures réalistes** — l'installation locale démarre avec 20 vrais liens (dépôts GitHub, vidéos YouTube, posts X, articles) sur Symfony, l'IA, Claude Code et l'architecture logicielle, avec leurs aperçus réels, classés dans 4 catégories-besoins.
+- **Tests E2E sur de vrais liens** — l'ajout de lien est testé avec un catalogue de 20 autres liens réels plutôt qu'avec des adresses fictives ; le catalogue se renouvelle avec `make db-reset`.
+
 ## [0.4.0] - 2026-10-29 — Recherche intégrée à la liste
 
 ### ✨ Fonctionnel
@@ -64,7 +70,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/gabrielmustiere/radar/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/gabrielmustiere/radar/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/gabrielmustiere/radar/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/gabrielmustiere/radar/compare/v0.1.0...v0.2.0
