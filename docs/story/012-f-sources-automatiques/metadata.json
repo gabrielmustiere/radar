@@ -51,6 +51,15 @@
       "date": "2026-10-30",
       "type": "Sync",
       "description": "14 écarts réalignés dans le pitch et le plan (relève à la demande, ancres conservées, fixtures, Schedule), 12/12 critères d'acceptation et 8/8 critères de sortie cochés (schema:validate, debug:scheduler, make playwright 22/22 verts), 3 dettes dont 1 critique ; stack et backlog mis à jour."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Livraison",
+      "description": "Commit ba28258 poussé sur main."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "ba28258"
+  }
 }
