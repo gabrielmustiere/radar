@@ -11,6 +11,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | Date | Nature | Éléments | Motif |
 |------|--------|----------|-------|
 | 2026-10-29 | Création | — | Backlog initial dérivé de la vision |
+| 2026-10-30 | Enrichir | C1.6, C1.7, C1.8, P8, R13, `sources-automatiques` | Sources suivies publiées automatiquement (édition ciblée du principe 4) |
 
 ## Domaines fonctionnels
 
@@ -32,6 +33,9 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **C1.3** — Le système peut signaler qu'un lien existe déjà et renvoyer vers sa carte (pour éviter deux cartes classées différemment).
 - **C1.4** — Un contributeur peut reprendre un lien de l'historique Chat en conservant sa date et son posteur d'origine (pour amorcer la base avant l'ouverture).
 - **C1.5** — Le posteur peut corriger le contexte de son lien ou retirer ce lien.
+- **C1.6** — Un admin peut enregistrer ou retirer une source (flux RSS ou Atom) avec une ou deux catégories, et consulter son état de relève.
+- **C1.7** — Le système peut publier automatiquement, avec les catégories de la source et un marqueur « auto », chaque nouvel article d'une source suivie.
+- **C1.8** — Un admin peut gérer la liste des emails admin (pour partager la gestion des sources).
 
 ### D2 — Cartes
 
@@ -125,6 +129,14 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **État final** : les seuils et le signal d'arrêt sont évalués.
 - **Fréquence** : une fois par mois.
 
+### P8 — Suivre une source
+
+- **Acteur** : un admin.
+- **Déclencheur** : une source publie régulièrement des articles utiles à l'équipe (blog, notes de version).
+- **Étapes** : C1.6 → C1.7 → C2.1 / C2.2 → C5.1.
+- **État final** : chaque nouvel article de la source entre dans Radar, classé, et est annoncé dans Chat.
+- **Fréquence** : quelques sources au total ; chacune publie de quelques articles par semaine à quelques-uns par jour.
+
 ## Règles métier transverses
 
 ### Permissions et rôles
@@ -133,6 +145,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **R2 — Pas de curateur** : tous les membres ont les mêmes droits pour ajouter, classer, reclasser, créer, renommer ou fusionner une catégorie.
 - **R3 — Attribution** : chaque lien porte son posteur, affiché sur la carte.
 - **R12 — Retrait réservé au posteur** : seul le posteur corrige ou retire son lien ; un lien problématique se signale au posteur dans Chat.
+- **R13 — Admins des sources** : seuls les admins (liste d'emails, plus un admin permanent par configuration) gèrent les sources et la liste des admins ; c'est la seule exception à R2. Les liens des sources ont pour posteur le compte système « Radar » (R3).
 
 ### Workflows et états
 
@@ -189,7 +202,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `010-f-fil-derniers-ajouts` · **livrée** v0.2.0
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
-### V2 — Court terme post-lancement · `1/9 livrées`
+### V2 — Court terme post-lancement · `1/10 livrées`
 
 - [ ] `indicateurs-mensuels` — Permettre au porteur du projet de consulter les indicateurs agrégés du mois pour évaluer les seuils et le signal d'arrêt à 3 mois.
   - Pas encore cadrée
@@ -218,6 +231,9 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [ ] `nouveautes-depuis-derniere-visite` — Permettre à un membre de voir ce qui a été ajouté depuis sa dernière visite pour rattraper la veille sans tout relire.
   - Pas encore cadrée
   - C4.6 · P4 · dép. `fil-derniers-ajouts` · Vision : « la curiosité est le moteur de l'usage »
+- [ ] `sources-automatiques` — Permettre à un admin de faire suivre une source (flux RSS ou Atom) dont chaque nouvel article est publié automatiquement, classé et annoncé, pour que la veille des sources suivies entre dans Radar sans effort.
+  - Story `012-f-sources-automatiques` · cadrée
+  - C1.6, C1.7, C1.8 · P8 · dép. `cartes-par-source`, `annonce-google-chat` · Vision : principe 4 (édition ciblée du 2026-10-30)
 
 ### V3 — Long terme
 
@@ -230,7 +246,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 ### Capacités par horizon
 
 - **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1 · planifiées : —
-- **V2** — livrées : C2.2 · planifiées : C1.5, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
+- **V2** — livrées : C2.2 · planifiées : C1.5, C1.6, C1.7, C1.8, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
 ### Capacités non couvertes (à challenger)
@@ -246,6 +262,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 - **P5** : non supporté en MVP (C3.2, C3.3, C3.4 en V2).
 - **P6** : entièrement supporté en MVP (description de catégorie C3.3 reportée en V2).
 - **P7** : non supporté en MVP (C6.2 en V2) ; les données sont collectées dès le MVP par C6.1.
+- **P8** : non supporté en MVP (C1.6, C1.7, C1.8 en V2).
 
 ## Notes pour `/feature-pitch`
 
@@ -258,3 +275,4 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 - Écarté : filtre « liens d'un posteur » (porte d'entrée du reporting, règle R9).
 - À reconsidérer si le classement collectif dérape : historique des reclassements d'un lien.
 - Piste conditionnée à la revue à 1 an : radar techno (statut adopté / écarté, et pourquoi).
+- `correction-retrait-lien` : les liens de `sources-automatiques` ont pour posteur le compte « Radar », qui ne se connecte pas ; décider qui peut retirer un lien automatique (R12).

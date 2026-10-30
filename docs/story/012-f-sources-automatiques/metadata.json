@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "title": "Publier automatiquement les articles des sources suivies",
+  "created": "2026-10-30",
+  "updated": "2026-10-30",
+  "tags": [
+    "contribution",
+    "rss",
+    "scheduler",
+    "admin",
+    "google-chat"
+  ],
+  "backlog": "sources-automatiques",
+  "changelog": [
+    {
+      "date": "2026-10-30",
+      "type": "Création",
+      "description": "Pitch rédigé : sources RSS/Atom gérées par les admins (liste d'emails en IHM + admin permanent par configuration), relève horaire, publication directe avec les catégories de la source, posteur « Radar », marqueur « auto » sans filtre, annonce Chat, historique du flux ignoré, liens conservés au retrait. Édition ciblée du principe 4 de la vision."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Planification",
+      "description": "Plan technique rédigé : voter RADAR_ADMIN, Source/SourceItem avec retrait logique et réactivation, parseur RSS/Atom maison, Scheduler horaire → un message par source, badge et annonce avec le nom de la source, 4 étapes."
+    }
+  ]
+}
