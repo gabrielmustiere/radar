@@ -42,6 +42,15 @@
       "date": "2026-10-30",
       "type": "Sync",
       "description": "25 écarts réalignés (plan, 4 règles du pitch), 11/11 critères d'acceptation et 7/8 critères de sortie cochés, 8 dettes dont 2 critiques au déploiement ; stack.md enrichi (Flysystem, rate-limiter)."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Livraison",
+      "description": "Story livrée sur main en un commit (5e24b28)."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "5e24b28"
+  }
 }
