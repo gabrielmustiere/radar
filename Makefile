@@ -208,5 +208,5 @@ quality: fmt mago-fix analyze build ## Lance toute la QA en mode dev (Mago : for
 
 clean: ## Nettoie les fichiers temporaires
 	@echo "$(YELLOW)🧹 Nettoyage des fichiers temporaires...$(RESET)"
-	@rm -rf var/cache/* var/log/* var/coverage/* .phpunit.cache test-failures
+	@rm -rf var/cache/* var/log/* var/coverage/* .phpunit.cache test-failures public/assets
 	@echo "$(GREEN)✅ Nettoyage terminé!$(RESET)"
