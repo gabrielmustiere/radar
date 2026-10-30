@@ -30,6 +30,7 @@ final class LinkUrlAnalyzerTest extends TestCase
             'https://example.com/post?utm_source=chat&fbclid=x&gclid=y',
             'https://example.com/post',
         ];
+        yield 'référent' => ['https://example.com/post?ref=producthunt', 'https://example.com/post'];
         yield 'paramètre significatif conservé' => [
             'https://example.com/list?page=2&utm_medium=x',
             'https://example.com/list?page=2',

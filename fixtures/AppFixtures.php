@@ -8,8 +8,12 @@ use App\Entity\Category;
 use App\Entity\Link;
 use App\Entity\User;
 use App\Service\LinkUrlAnalyzer;
+use App\Service\Preview\LinkPreview;
+use App\Service\Preview\PreviewImageStore;
+use App\Service\Preview\TextTruncator;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -289,6 +293,8 @@ class AppFixtures extends Fixture
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly LinkUrlAnalyzer $urlAnalyzer,
+        private readonly TextTruncator $truncator,
+        private readonly FilesystemOperator $mediaStorage,
     ) {}
 
     #[\Override]
@@ -333,21 +339,43 @@ class AppFixtures extends Fixture
             $manager->persist($link);
 
             if (null === $data['preview']) {
-                $link->markPreviewUnavailable();
+                $link->markPreviewUnavailable(new \DateTimeImmutable());
                 continue;
             }
 
             [$title, $description, $imageUrl, $siteName] = $data['preview'];
-            // Mêmes longueurs maximales que le parser d'aperçu
+            // Mêmes troncatures que l'enrichissement
             $link->applyPreview(
-                mb_substr($title, start: 0, length: 255),
-                null === $description ? null : mb_substr($description, start: 0, length: 500),
-                $imageUrl,
-                $siteName,
+                new LinkPreview(
+                    $this->truncator->truncate($title, 100),
+                    $this->truncator->truncate($description, 250),
+                    $imageUrl,
+                    $siteName,
+                ),
+                null === $imageUrl ? null : $this->storedVisual($imageUrl),
+                null,
+                new \DateTimeImmutable(),
             );
         }
 
         $manager->flush();
+    }
+
+    /**
+     * Visuel recadré une fois depuis la source (`fixtures/images/`), comme l'enrichissement l'aurait conservé.
+     * Absent pour les images que la source refusait de servir : la carte affiche alors son repli.
+     */
+    private function storedVisual(string $imageUrl): ?string
+    {
+        $path = PreviewImageStore::previewPath($imageUrl);
+        $file = __DIR__ . '/images/' . basename($path);
+        if (!is_file($file)) {
+            return null;
+        }
+
+        $this->mediaStorage->write($path, (string) file_get_contents($file));
+
+        return $path;
     }
 
     /** @param non-empty-string $email */

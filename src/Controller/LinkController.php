@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 
 final class LinkController extends AbstractController
 {
@@ -85,5 +86,15 @@ final class LinkController extends AbstractController
         $recorder->record($link, $user);
 
         return $this->redirect($link->getUrl());
+    }
+
+    /** Une vidéo lancée dans sa carte est une ouverture du lien, comptée comme un clic sur « Ouvrir ». */
+    #[Route(path: '/liens/{id}/lecture', name: 'app_link_play', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[IsCsrfTokenValid('link-play')]
+    public function play(Link $link, LinkOpeningRecorder $recorder, #[CurrentUser] User $user): Response
+    {
+        $recorder->record($link, $user);
+
+        return new Response(status: Response::HTTP_NO_CONTENT);
     }
 }

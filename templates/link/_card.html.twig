@@ -1,27 +1,31 @@
-{% set fallback_styles = {
-    github: 'bg-gradient-to-br from-gray-800 to-gray-950 text-white',
-    youtube: 'bg-gradient-to-br from-rose-50 to-rose-100 text-rose-600 dark:from-rose-500/10 dark:to-rose-500/20 dark:text-rose-300',
-    x: 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900 dark:from-gray-800 dark:to-gray-900 dark:text-white',
-    image: 'bg-gradient-to-br from-amber-50 to-amber-100 text-amber-600 dark:from-amber-500/10 dark:to-amber-500/20 dark:text-amber-300',
-    article: 'bg-gradient-to-br from-teal-50 to-teal-100 text-teal-600 dark:from-teal-500/10 dark:to-teal-500/20 dark:text-teal-300',
-} %}
 {% set source = link.sourceType %}
 {% set host = link.url|link_host %}
+{% set video_id = source.value == 'youtube' ? link.url|youtube_id : null %}
 <article id="link-card-{{ link.id }}" class="flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200/70 transition hover:shadow-md hover:shadow-gray-900/5 dark:bg-gray-950 dark:ring-gray-800"
          data-test="link-card" data-preview-status="{{ link.previewStatus.value }}">
-    <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"
-       class="relative block aspect-[1.91/1] overflow-hidden" {% if link.imageUrl %}data-controller="image-fallback"{% endif %}>
-        <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 {{ fallback_styles[source.value] }}"
-             data-test="link-card-fallback" {% if link.imageUrl %}data-image-fallback-target="fallback" hidden{% endif %}>
-            <twig:ux:icon name="{{ source.icon }}" class="size-10 opacity-90"/>
-            <span class="max-w-[80%] truncate text-sm font-medium opacity-80">{{ host }}</span>
+    {% if video_id %}
+        {# Façade : rien de YouTube ne se charge avant le clic, et la lecture compte comme une ouverture du lien #}
+        <div class="relative aspect-[1.91/1] overflow-hidden" data-test="link-video"
+             data-controller="video-facade{{ link.imagePath ? ' image-fallback' }}"
+             data-video-facade-video-id-value="{{ video_id }}"
+             data-video-facade-play-url-value="{{ path('app_link_play', {id: link.id}) }}"
+             data-video-facade-token-value="{{ csrf_token('link-play') }}"
+             data-video-facade-title-value="{{ link.title ?? link.url }}">
+            {% include 'link/_card_visual.html.twig' %}
+            <button type="button" data-action="video-facade#play" data-test="link-video-play"
+                    aria-label="Lire la vidéo « {{ link.title ?? host }} »"
+                    class="group absolute inset-0 grid cursor-pointer place-items-center">
+                <span class="grid size-14 place-items-center rounded-full bg-gray-950/75 text-white shadow-lg transition group-hover:scale-105 group-hover:bg-rose-600">
+                    <twig:ux:icon name="tabler:player-play-filled" class="size-7"/>
+                </span>
+            </button>
         </div>
-        {% if link.imageUrl %}
-            <img src="{{ link.imageUrl }}" alt="" loading="lazy" referrerpolicy="no-referrer"
-                 class="absolute inset-0 size-full object-cover" data-test="link-card-image"
-                 data-image-fallback-target="image" data-action="error->image-fallback#fallback">
-        {% endif %}
-    </a>
+    {% else %}
+        <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"
+           class="relative block aspect-[1.91/1] overflow-hidden" {% if link.imagePath %}data-controller="image-fallback"{% endif %}>
+            {% include 'link/_card_visual.html.twig' %}
+        </a>
+    {% endif %}
 
     <div class="flex flex-1 flex-col p-4">
         <p class="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400" data-test="link-source">
@@ -34,6 +38,32 @@
         <h2 class="mt-2 line-clamp-2 font-display text-base font-semibold leading-snug text-gray-900 dark:text-white" data-test="link-title">
             <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" class="hover:text-teal-700 dark:hover:text-teal-400">{{ link.title ?? link.url }}</a>
         </h2>
+
+        {% if link.githubStars is not null or link.githubLanguage %}
+            <p class="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600 dark:text-gray-400" data-test="link-repository">
+                {% if link.githubStars is not null %}
+                    <span class="inline-flex items-center gap-1" title="Étoiles sur GitHub" data-test="link-stars">
+                        <twig:ux:icon name="tabler:star" class="size-3.5"/> {{ link.githubStars|number_format(0, ',', ' ') }}
+                    </span>
+                {% endif %}
+                {% if link.githubLanguage %}
+                    <span class="inline-flex items-center gap-1.5" title="Langage principal" data-test="link-language">
+                        <span class="size-2 rounded-full bg-teal-500"></span> {{ link.githubLanguage }}
+                    </span>
+                {% endif %}
+            </p>
+        {% endif %}
+
+        {% if link.author or link.publishedAt %}
+            <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400" data-test="link-byline">
+                {%- if link.author -%}
+                    Par <span class="font-medium text-gray-700 dark:text-gray-300" data-test="link-author">{{ link.author }}</span>
+                {%- endif -%}
+                {%- if link.publishedAt -%}
+                    {{ link.author ? ' · publié le ' : 'Publié le ' }}<time datetime="{{ link.publishedAt|date('c') }}" data-test="link-published-at">{{ link.publishedAt|date('d/m/Y', 'Europe/Paris') }}</time>
+                {%- endif -%}
+            </p>
+        {% endif %}
 
         {% if link.description %}
             <p class="mt-1.5 line-clamp-2 text-sm text-gray-600 dark:text-gray-400" data-test="link-description">{{ link.description }}</p>

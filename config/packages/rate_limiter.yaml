@@ -1,0 +1,7 @@
+framework:
+    rate_limiter:
+        # Aperçus : un même domaine cible n'est pas sollicité en rafale (une requête toutes les 2 s, rafale de 3).
+        preview_host:
+            policy: token_bucket
+            limit: 3
+            rate: { interval: '2 seconds', amount: 1 }

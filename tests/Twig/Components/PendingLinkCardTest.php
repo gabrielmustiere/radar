@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Enum\Type\SourceType;
 use App\Repository\LinkRepository;
 use App\Repository\UserRepository;
+use App\Service\Preview\LinkPreview;
 use App\Twig\Components\PendingLinkCard;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -26,7 +27,7 @@ final class PendingLinkCardTest extends WebTestCase
 
         self::assertStringContainsString('data-poll="delay(3000)|refresh"', (string) $component->render());
 
-        $link->applyPreview('Titre enrichi', null, null, null);
+        $link->applyPreview(new LinkPreview(title: 'Titre enrichi'), null, null, new \DateTimeImmutable());
         $this->entityManager()->flush();
         $html = (string) $component->call('refresh')->render();
 

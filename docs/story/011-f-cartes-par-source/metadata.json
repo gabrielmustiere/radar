@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "title": "Juger un lien d'un coup d'œil grâce à une carte adaptée à sa source",
+  "created": "2026-10-29",
+  "updated": "2026-10-30",
+  "tags": [
+    "cartes",
+    "apercu",
+    "unfurl",
+    "images",
+    "securite",
+    "messenger"
+  ],
+  "backlog": "cartes-par-source",
+  "changelog": [
+    {
+      "date": "2026-10-29",
+      "type": "Création",
+      "description": "Pitch rédigé : cartes par source (vidéo jouable comptée, dépôt, article, post X via oEmbed), visuels hébergés, repli dégradé + favicon, CLI de ré-enrichissement."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Planification",
+      "description": "Plan technique rédigé : extracteurs tagués + resolver, snapshot horodaté comme cache, Flysystem local + route /media authentifiée, rate-limit par hôte, CLI app:links:enrich, 4 étapes."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Implémentation",
+      "description": "4/4 étapes livrées, make lint/phpunit (194)/playwright (19) verts, enrichissement réel vérifié en dev. Écarts : HtmlPage découpé (HtmlParser, MetadataValue, JsonLdGraph, JsonLdAuthor), YouTubeVideoId hors LinkUrlAnalyzer et LinkEnricher extrait du handler (seuils Mago) ; JsonFetcher partagé par les 4 sources JSON ; liste blanche oEmbed réduite à Vimeo/Speaker Deck (YouTube et X ont leur adaptateur) ; un échec de rafraîchissement garde l'aperçu prêt (seule la date change) ; partiel _card_visual.html.twig ; jeton CSRF invalide → redirection /login (firewall) au lieu de 403 ; exclusions Mago LinkPreview (paramètres) et src/Command (drapeaux) ; 3 visuels de fixtures absents (GitHub OG en 429) ; tests écrits par étape."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Review",
+      "description": "Corrections requises : 1 bloquant (ré-enrichissement qui annonce), 5 importants (bombe de pixels, rafraîchissement qui efface l'aperçu, vidéo morte en « prêt », titre de dépôt sur une issue, date de publication fausse), 6 mineurs."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Review",
+      "description": "Prêt à commiter ; 1 bloquant, 5 importants et 6 mineurs corrigés : [PLAN] rafraîchissement sans annonce (RefreshLinkPreview), [ROBUSTESSE] plafond de 16 Mpx, [BUG] rafraîchissement partiel fusionné, [BUG] vidéo sans oEmbed, [BUG] titre GitHub hors racine, [BUG] date ISO stricte, [TEST] plafonds réellement testés, [ROBUSTESSE] auteur tronqué, [SECU] `..` GitHub, [TEST] PreviewHttpClientFactory, [ROBUSTESSE] limiteur par saut, [ROBUSTESSE] JSON-LD du body lu."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Sync",
+      "description": "25 écarts réalignés (plan, 4 règles du pitch), 11/11 critères d'acceptation et 7/8 critères de sortie cochés, 8 dettes dont 2 critiques au déploiement ; stack.md enrichi (Flysystem, rate-limiter)."
+    }
+  ]
+}

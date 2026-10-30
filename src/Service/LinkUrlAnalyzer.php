@@ -13,7 +13,7 @@ use App\Enum\Type\SourceType;
 final class LinkUrlAnalyzer
 {
     private const array IMAGE_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg', 'avif'];
-    private const array TRACKING_PARAMETERS = ['fbclid', 'gclid', 'mc_cid', 'mc_eid', 'si'];
+    private const array TRACKING_PARAMETERS = ['fbclid', 'gclid', 'mc_cid', 'mc_eid', 'si', 'ref'];
 
     public function normalize(string $url): string
     {

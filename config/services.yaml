@@ -27,12 +27,9 @@ services:
 
     # Aperçus : les sources sont des URLs saisies par les membres, jamais le réseau interne.
     app.preview_http_client:
-        class: Symfony\Component\HttpClient\NoPrivateNetworkHttpClient
-        arguments: ['@http_client']
-
-    App\Service\Preview\LinkPreviewFetcher:
-        arguments:
-            $httpClient: '@app.preview_http_client'
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
+        factory: ['App\HttpClient\PreviewHttpClientFactory', 'create']
+        arguments: ['@http_client', '@limiter.preview_host', 'RadarBot/1.0 (+%env(DEFAULT_URI)%)']
 
 when@test:
     services:

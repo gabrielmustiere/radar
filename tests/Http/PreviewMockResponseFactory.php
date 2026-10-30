@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Http;
 
+use App\Tests\Service\Preview\TestImage;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -18,7 +19,7 @@ final class PreviewMockResponseFactory
         $path = (string) parse_url($url, PHP_URL_PATH);
 
         if (str_ends_with($path, '.png')) {
-            return new MockResponse('PNG', ['response_headers' => ['content-type' => 'image/png']]);
+            return new MockResponse(TestImage::png(), ['response_headers' => ['content-type' => 'image/png']]);
         }
 
         if (str_starts_with($path, '/article')) {

@@ -9,6 +9,7 @@ use App\Entity\Link;
 use App\Entity\User;
 use App\Enum\Type\SourceType;
 use App\Service\LinkAnnouncer;
+use App\Service\Preview\LinkPreview;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Notifier\ChatterInterface;
@@ -20,7 +21,7 @@ final class LinkAnnouncerTest extends TestCase
     public function testAnnouncesTitleCategoriesPosterContextAndLinksOnce(): void
     {
         $link = $this->link(context: 'Pour la recette mobile.');
-        $link->applyPreview('Maestro, tests mobiles', null, null, null);
+        $link->applyPreview(new LinkPreview(title: 'Maestro, tests mobiles'), null, null, new \DateTimeImmutable());
         $sent = [];
 
         $this->announcer($sent)->announce($link);

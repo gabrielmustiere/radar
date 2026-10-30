@@ -1,6 +1,6 @@
 # Stack technique — Radar
 
-> Dernière mise à jour : 2026-10-29 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier du dépôt (source entre parenthèses) ou marquée _non renseigné_. Les briques prévues mais pas encore en place figurent dans « Cible non encore en place ».
+> Dernière mise à jour : 2026-10-30 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier du dépôt (source entre parenthèses) ou marquée _non renseigné_. Les briques prévues mais pas encore en place figurent dans « Cible non encore en place ».
 
 ## Vue d'ensemble
 
@@ -26,7 +26,8 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **ORM / données** : Doctrine ORM `^3.7.2` (résolu `3.7.2`) + Doctrine Migrations (`composer.json`, `composer.lock`)
 - **Async** : Symfony Messenger, transport Doctrine (`.env` → `MESSENGER_TRANSPORT_DSN=doctrine://default`) ; `sync://` en test (`.env.test`)
 - **Notifications** : Symfony Notifier, `ChatMessage` routé en `async` (`config/packages/messenger.yaml`) ; bridge Google Chat `symfony/google-chat-notifier` 8.1, transport `googlechat` sur `GOOGLE_CHAT_DSN` (`null://null` par défaut) (`composer.json`, `config/packages/notifier.yaml`, `.env`)
-- **HTTP sortant** : Symfony HttpClient `8.1.*`, résolu `v8.1.7` (`composer.lock`)
+- **HTTP sortant** : Symfony HttpClient `8.1.*`, résolu `v8.1.7` (`composer.lock`) ; client des aperçus `app.preview_http_client` = `NoPrivateNetworkHttpClient` + limiteur par hôte, composé par `App\HttpClient\PreviewHttpClientFactory` (`config/services.yaml`)
+- **Limitation de débit** : `symfony/rate-limiter` `8.1.*`, résolu `v8.1.10` — limiteur `preview_host` (token bucket) (`composer.json`, `config/packages/rate_limiter.yaml`)
 - **Auth** : Security bundle, `form_login` email / mot de passe, provider entité `User` (`config/packages/security.yaml`, `src/Entity/User.php`)
 - **Mail** : Symfony Mailer (`composer.json`)
 
@@ -42,6 +43,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 
 - **Base de données** : SQLite — `var/data.db` (dev), `var/data_test.db` (test) (`.env`, `.env.dev`, `.env.test` → `DATABASE_URL`)
 - **File / queue** : table Doctrine via Messenger (voir Backend)
+- **Fichiers** : Flysystem — `league/flysystem-bundle` `^3.7` (résolu `3.7.1`), storage `media.storage` : adapter local `var/storage/media` (dev, prod), `memory` en test (`league/flysystem-memory`, dev) — visuels d'aperçu servis par la route authentifiée `/media` (`composer.json`, `config/packages/flysystem.yaml`)
 - **Mail (dev)** : Mailpit, en dev uniquement (`compose.yaml`, `.env` → `MAILER_DSN=smtp://localhost:1027`)
 
 ## Ops / Infrastructure
@@ -86,9 +88,11 @@ Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un 
 
 - PHP `>=8.5` imposé par le socle : l'image FrankenPHP devra embarquer PHP 8.5.
 - SQLite impose une seule instance applicative et un volume local (pas de stockage réseau) — cohérent avec un container unique sur un VPS.
+- Les visuels d'aperçu (`var/storage/media`) doivent vivre sur le même volume persistant que la base ; un adapter objet (S3 ou équivalent) se branchera dans `config/packages/flysystem.yaml` sans toucher au code (`config/packages/flysystem.yaml`).
 
 ## Changelog
 
 - 2026-10-29 — Création — amorcé depuis gabrielmustiere/symfony-template
 - 2026-10-29 — Qualité — PHPStan, PHP-CS-Fixer et PHP Insights remplacés par Mago (story 001)
 - 2026-10-29 — Enrichir — Backend (notifications) — sync post-livraison de la story 008-f-annonce-google-chat
+- 2026-10-30 — Enrichir — Backend (HTTP sortant, limitation de débit), Données (fichiers Flysystem), Contraintes (volume des médias) — sync post-livraison de la story 011-f-cartes-par-source

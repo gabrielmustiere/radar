@@ -1,0 +1,23 @@
+{# Visuel de carte : l'image conservée par Radar, ou le repli du type de source avec la favicon du site #}
+{% set fallback_styles = {
+    github: 'bg-gradient-to-br from-gray-800 to-gray-950 text-white',
+    youtube: 'bg-gradient-to-br from-rose-50 to-rose-100 text-rose-600 dark:from-rose-500/10 dark:to-rose-500/20 dark:text-rose-300',
+    x: 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900 dark:from-gray-800 dark:to-gray-900 dark:text-white',
+    image: 'bg-gradient-to-br from-amber-50 to-amber-100 text-amber-600 dark:from-amber-500/10 dark:to-amber-500/20 dark:text-amber-300',
+    article: 'bg-gradient-to-br from-teal-50 to-teal-100 text-teal-600 dark:from-teal-500/10 dark:to-teal-500/20 dark:text-teal-300',
+} %}
+<div class="absolute inset-0 flex flex-col items-center justify-center gap-2 {{ fallback_styles[source.value] }}"
+     data-test="link-card-fallback" {% if link.imagePath %}data-image-fallback-target="fallback" hidden{% endif %}>
+    {% if link.faviconPath %}
+        <img src="{{ path('app_media', {path: link.faviconPath}) }}" alt="" loading="lazy"
+             class="size-10 rounded-lg bg-white/90 p-1 shadow-sm" data-test="link-card-favicon">
+    {% else %}
+        <twig:ux:icon name="{{ source.icon }}" class="size-10 opacity-90"/>
+    {% endif %}
+    <span class="max-w-[80%] truncate text-sm font-medium opacity-80">{{ host }}</span>
+</div>
+{% if link.imagePath %}
+    <img src="{{ path('app_media', {path: link.imagePath}) }}" alt="{{ link.title ?? host }}" loading="lazy"
+         class="absolute inset-0 size-full object-cover" data-test="link-card-image"
+         data-image-fallback-target="image" data-action="error->image-fallback#fallback">
+{% endif %}

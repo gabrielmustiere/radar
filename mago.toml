@@ -16,8 +16,11 @@ minimum-fail-level = "Note"
 # Mêmes exclusions que l'ancienne complexité cognitive : entités, FormTypes et repositories sont déclaratifs.
 cyclomatic-complexity = { exclude = ["src/Entity/", "src/Form/", "src/Repository/"] }
 # Les entités portent leur mapping et un constructeur qui pose les invariants : leur taille suit le modèle, pas la logique.
+# LinkPreview est le snapshot d'aperçu de Link, champ pour champ : même raison.
 too-many-properties = { exclude = ["src/Entity/"] }
-excessive-parameter-list = { exclude = ["src/Entity/"] }
+excessive-parameter-list = { exclude = ["src/Entity/", "src/Service/Preview/LinkPreview.php"] }
+# Une option de console (`#[Option] bool $dryRun`) est un drapeau par nature.
+no-boolean-flag-parameter = { exclude = ["src/Command/"] }
 # Convention du projet : assertions PHPUnit appelées en `self::`.
 assertion-style = { style = "self_" }
 # Les tests utilisent les identifiants des fixtures (`admin@example.com` / `password`).

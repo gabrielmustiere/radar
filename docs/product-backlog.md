@@ -2,7 +2,7 @@
 
 > Carte des capacités fonctionnelles et backlog priorisé dérivé de `docs/vision.md`.
 
-_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-10-29._
+_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-10-30._
 
 ## Changelog
 
@@ -204,7 +204,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Pas encore cadrée
   - C3.3 · P5, P6 · dép. `ajout-lien` · Vision : principe 3 / hypothèse 3
 - [ ] `cartes-par-source` — Permettre à un membre de lire une carte adaptée à la source (dépôt GitHub, vidéo YouTube, post ou compte X, image, article) pour juger un lien d'un coup d'œil.
-  - Pas encore cadrée
+  - Story `011-f-cartes-par-source` · **clôture en cours**
   - C2.2 · P1, P2, P3, P4 · dép. `carte-apercu` · Vision : principe 2
 - [ ] `relance-apercu` — Permettre à un membre de relancer l'aperçu d'un lien dont l'enrichissement a échoué ou vieilli pour rattraper une carte dégradée.
   - Pas encore cadrée

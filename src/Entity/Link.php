@@ -7,12 +7,14 @@ namespace App\Entity;
 use App\Enum\Type\PreviewStatus;
 use App\Enum\Type\SourceType;
 use App\Repository\LinkRepository;
+use App\Service\Preview\LinkPreview;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LinkRepository::class)]
 #[ORM\Index(name: 'IDX_LINK_POSTED_AT', fields: ['postedAt'])]
+#[ORM\Index(name: 'IDX_LINK_PREVIEW_FETCHED_AT', fields: ['previewFetchedAt'])]
 #[ORM\UniqueConstraint(name: 'UNIQ_LINK_NORMALIZED_URL', fields: ['normalizedUrl'])]
 class Link
 {
@@ -55,6 +57,27 @@ class Link
 
     #[ORM\Column(name: 'site_name', length: 255, nullable: true)]
     private ?string $siteName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $author = null;
+
+    #[ORM\Column(name: 'published_at', nullable: true)]
+    private ?\DateTimeImmutable $publishedAt = null;
+
+    #[ORM\Column(name: 'image_path', length: 100, nullable: true)]
+    private ?string $imagePath = null;
+
+    #[ORM\Column(name: 'favicon_path', length: 100, nullable: true)]
+    private ?string $faviconPath = null;
+
+    #[ORM\Column(name: 'github_stars', nullable: true)]
+    private ?int $githubStars = null;
+
+    #[ORM\Column(name: 'github_language', length: 50, nullable: true)]
+    private ?string $githubLanguage = null;
+
+    #[ORM\Column(name: 'preview_fetched_at', nullable: true)]
+    private ?\DateTimeImmutable $previewFetchedAt = null;
 
     #[ORM\Column(options: ['default' => false])]
     private bool $seeded;
@@ -173,17 +196,85 @@ class Link
         return $this->siteName;
     }
 
-    public function applyPreview(?string $title, ?string $description, ?string $imageUrl, ?string $siteName): void
+    public function getAuthor(): ?string
     {
-        $this->title = $title;
-        $this->description = $description;
-        $this->imageUrl = $imageUrl;
-        $this->siteName = $siteName;
-        $this->previewStatus = PreviewStatus::Ready;
+        return $this->author;
     }
 
-    public function markPreviewUnavailable(): void
+    public function getPublishedAt(): ?\DateTimeImmutable
     {
-        $this->previewStatus = PreviewStatus::Unavailable;
+        return $this->publishedAt;
+    }
+
+    public function getImagePath(): ?string
+    {
+        return $this->imagePath;
+    }
+
+    public function getFaviconPath(): ?string
+    {
+        return $this->faviconPath;
+    }
+
+    public function getGithubStars(): ?int
+    {
+        return $this->githubStars;
+    }
+
+    public function getGithubLanguage(): ?string
+    {
+        return $this->githubLanguage;
+    }
+
+    public function getPreviewFetchedAt(): ?\DateTimeImmutable
+    {
+        return $this->previewFetchedAt;
+    }
+
+    /** Aperçu actuellement enregistré (champs vides tant qu'aucun aperçu n'a abouti). */
+    public function previewSnapshot(): LinkPreview
+    {
+        return new LinkPreview(
+            $this->title,
+            $this->description,
+            $this->imageUrl,
+            $this->siteName,
+            $this->author,
+            $this->publishedAt,
+            null,
+            $this->githubStars,
+            $this->githubLanguage,
+        );
+    }
+
+    /** `$imagePath` et `$faviconPath` désignent les visuels conservés par Radar ; `imageUrl` reste l'image d'origine. */
+    public function applyPreview(
+        LinkPreview $preview,
+        ?string $imagePath,
+        ?string $faviconPath,
+        \DateTimeImmutable $fetchedAt,
+    ): void {
+        $this->title = $preview->title;
+        $this->description = $preview->description;
+        $this->imageUrl = $preview->imageUrl;
+        $this->siteName = $preview->siteName;
+        $this->author = $preview->author;
+        $this->publishedAt = $preview->publishedAt;
+        $this->githubStars = $preview->githubStars;
+        $this->githubLanguage = $preview->githubLanguage;
+        $this->imagePath = $imagePath;
+        $this->faviconPath = $faviconPath;
+        $this->previewStatus = PreviewStatus::Ready;
+        $this->previewFetchedAt = $fetchedAt;
+    }
+
+    /** Un échec conserve le dernier aperçu connu : seule la date de la tentative change. */
+    public function markPreviewUnavailable(\DateTimeImmutable $fetchedAt): void
+    {
+        if (PreviewStatus::Ready !== $this->previewStatus) {
+            $this->previewStatus = PreviewStatus::Unavailable;
+        }
+
+        $this->previewFetchedAt = $fetchedAt;
     }
 }

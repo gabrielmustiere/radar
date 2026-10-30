@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Service\Preview\PreviewImageStore;
+
 final class LinkCardTest extends LinkWebTestCase
 {
     public function testCardShowsPreviewBuiltAfterAdd(): void
@@ -22,7 +24,12 @@ final class LinkCardTest extends LinkWebTestCase
             $card . ' [data-test="link-description"]',
             'Ce qu\'il faut savoir sur les tests.',
         );
-        self::assertSelectorExists($card . ' img[src="https://example.com/cover.png"]');
+        self::assertSelectorExists(sprintf(
+            '%s img[src="/media/%s"][loading="lazy"][alt="Un article de test"]',
+            $card,
+            PreviewImageStore::previewPath('https://example.com/cover.png'),
+        ));
+        self::assertSelectorNotExists($card . ' img[src^="https://"]');
         self::assertSelectorTextContains($card . ' [data-test="link-source"]', 'Article');
         self::assertSelectorTextContains($card . ' [data-test="link-category"]', 'Coder avec un agent IA');
     }

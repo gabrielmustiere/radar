@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Category;
 use App\Entity\Link;
+use App\Enum\Type\PreviewStatus;
 use App\Search\SearchQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -47,6 +48,30 @@ class LinkRepository extends ServiceEntityRepository
     public function findOneByNormalizedUrl(string $normalizedUrl): ?Link
     {
         return $this->findOneBy(['normalizedUrl' => $normalizedUrl]);
+    }
+
+    /**
+     * Liens dont l'aperçu est à (re)construire : jamais tenté, prêt depuis avant `$readyBefore`,
+     * ou indisponible depuis avant `$unavailableBefore`. Un lien en attente a déjà son message en file.
+     *
+     * @return list<Link>
+     */
+    public function findDueForEnrichment(\DateTimeImmutable $readyBefore, \DateTimeImmutable $unavailableBefore): array
+    {
+        /** @var list<Link> */
+        return $this
+            ->createQueryBuilder('l')
+            ->where('l.previewFetchedAt IS NULL AND l.previewStatus != :pending')
+            ->orWhere('l.previewStatus = :ready AND l.previewFetchedAt < :readyBefore')
+            ->orWhere('l.previewStatus = :unavailable AND l.previewFetchedAt < :unavailableBefore')
+            ->setParameter('pending', PreviewStatus::Pending)
+            ->setParameter('ready', PreviewStatus::Ready)
+            ->setParameter('readyBefore', $readyBefore)
+            ->setParameter('unavailable', PreviewStatus::Unavailable)
+            ->setParameter('unavailableBefore', $unavailableBefore)
+            ->orderBy('l.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function save(Link $link): void

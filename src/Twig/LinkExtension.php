@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use App\Entity\Link;
+use App\Service\Preview\YouTubeVideoId;
 use Psr\Clock\ClockInterface;
 use Twig\Attribute\AsTwigFilter;
 
@@ -20,6 +21,12 @@ final readonly class LinkExtension
         $host = strtolower((string) parse_url($url, PHP_URL_HOST));
 
         return str_starts_with($host, 'www.') ? substr($host, offset: 4) : $host;
+    }
+
+    #[AsTwigFilter('youtube_id')]
+    public function youTubeId(string $url): ?string
+    {
+        return YouTubeVideoId::fromUrl($url);
     }
 
     /**

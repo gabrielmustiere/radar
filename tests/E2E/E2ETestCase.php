@@ -54,10 +54,14 @@ abstract class E2ETestCase extends TestCase
         $this->expect($this->page)->toHaveURL(self::baseUrl() . '/');
     }
 
-    /** Premier vrai lien du catalogue pas encore dans Radar (la recherche porte aussi sur l'adresse). */
-    protected function freeRealLink(): string
+    /** Premier vrai lien du catalogue pas encore dans Radar (la recherche porte aussi sur l'adresse), filtré par début d'adresse. */
+    protected function freeRealLink(string $prefix = ''): string
     {
         foreach (RealLinks::URLS as $url) {
+            if (!str_starts_with($url, $prefix)) {
+                continue;
+            }
+
             $this->page->goto('/?q=' . rawurlencode($url));
             $this->expect(
                 $this->page->locator('[data-test="search-empty"], [data-test="link-card"]')->first(),

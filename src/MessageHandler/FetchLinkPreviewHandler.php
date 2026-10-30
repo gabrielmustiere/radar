@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\MessageHandler;
 
-use App\Enum\Type\SourceType;
 use App\Message\FetchLinkPreview;
 use App\Repository\LinkRepository;
 use App\Service\LinkAnnouncer;
-use App\Service\Preview\LinkPreviewFetcher;
+use App\Service\Preview\LinkEnricher;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -17,7 +16,7 @@ final readonly class FetchLinkPreviewHandler
 {
     public function __construct(
         private LinkRepository $linkRepository,
-        private LinkPreviewFetcher $fetcher,
+        private LinkEnricher $enricher,
         private EntityManagerInterface $entityManager,
         private LinkAnnouncer $announcer,
     ) {}
@@ -29,11 +28,7 @@ final readonly class FetchLinkPreviewHandler
             return;
         }
 
-        // X ferme ses aperçus aux accès anonymes : la carte de repli est le cas nominal.
-        $preview = SourceType::X === $link->getSourceType() ? null : $this->fetcher->fetch($link->getUrl());
-        null === $preview
-            ? $link->markPreviewUnavailable()
-            : $link->applyPreview($preview->title, $preview->description, $preview->imageUrl, $preview->siteName);
+        $this->enricher->enrich($link);
 
         // L'annonce attend l'aperçu pour porter le vrai titre.
         $this->announcer->announce($link);
