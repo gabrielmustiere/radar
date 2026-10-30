@@ -54,9 +54,9 @@ final class RichCardTest extends E2ETestCase
 
         $card = $this->addEnrichedLink($this->freeRealLink('https://x.com/'));
 
-        // L'oEmbed de X est un service tiers : sans réponse, la carte de repli est le comportement attendu.
+        // L'oEmbed de X est un service tiers : sans réponse, le post n'affiche que son compte, tiré de l'adresse.
         if ('ready' !== $card->getAttribute('data-preview-status')) {
-            $this->expect($card->locator('[data-test="link-card-fallback"]'))->toBeVisible();
+            $this->expect($card->locator('[data-test="link-handle"]'))->toBeVisible();
 
             return;
         }

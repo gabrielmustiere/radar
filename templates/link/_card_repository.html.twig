@@ -1,0 +1,29 @@
+{# Visuel d'un dépôt GitHub reconstruit depuis ses métadonnées, plutôt que l'image générique de GitHub.
+   Le lien couvre le visuel sans en masquer le contenu aux lecteurs d'écran. #}
+{% set owner = repository|split('/')|first %}
+{% set name = repository|split('/')|last %}
+<div class="relative flex aspect-[1.91/1] flex-col justify-between overflow-hidden bg-gradient-to-br from-gray-900 via-gray-900 to-teal-900 p-5 text-white"
+     data-test="link-repository">
+    <twig:ux:icon name="tabler:brand-github" class="absolute -right-8 -bottom-10 size-44 text-white/5" aria-hidden="true"/>
+    <p class="flex items-center gap-1.5 text-xs font-medium text-white/60">
+        <twig:ux:icon name="tabler:brand-github" class="size-4" aria-hidden="true"/> github.com
+    </p>
+    <p class="min-w-0">
+        <span class="block truncate font-mono text-sm text-white/60" data-test="link-repository-owner">{{ owner }} /</span>
+        <span class="mt-0.5 line-clamp-2 font-display text-2xl leading-tight font-bold break-words" data-test="link-repository-name">{{ name }}</span>
+    </p>
+    <p class="flex min-h-5 flex-wrap items-center gap-x-4 gap-y-1 text-sm text-white/80">
+        {% if link.githubStars is not null %}
+            <span class="inline-flex items-center gap-1" title="Étoiles sur GitHub" data-test="link-stars">
+                <twig:ux:icon name="tabler:star-filled" class="size-4 text-amber-300" aria-hidden="true"/> {{ link.githubStars|number_format(0, ',', ' ') }}
+            </span>
+        {% endif %}
+        {% if link.githubLanguage %}
+            <span class="inline-flex items-center gap-1.5" title="Langage principal" data-test="link-language">
+                <span class="size-2.5 rounded-full bg-teal-400"></span> {{ link.githubLanguage }}
+            </span>
+        {% endif %}
+    </p>
+    <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"
+       class="absolute inset-0"></a>
+</div>

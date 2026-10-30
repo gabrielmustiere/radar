@@ -46,7 +46,7 @@ final class LinkCardTest extends LinkWebTestCase
         self::assertSelectorExists($card . '[data-preview-status="unavailable"]');
         self::assertSelectorTextContains($card . ' [data-test="link-title"]', $url);
         self::assertSelectorTextContains($card . ' [data-test="link-source"]', 'Dépôt GitHub');
-        self::assertSelectorTextContains($card . ' [data-test="link-card-fallback"]', 'github.com');
+        self::assertSelectorTextSame($card . ' [data-test="link-repository-owner"]', 'acme /');
         self::assertSelectorNotExists($card . ' img');
     }
 }

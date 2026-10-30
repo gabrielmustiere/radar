@@ -28,18 +28,23 @@ final class LinkCardVariantsTest extends EnrichedLinkWebTestCase
         self::assertSelectorTextContains($card . ' [data-test="link-author"]', 'Symfony');
     }
 
-    public function testRepositoryShowsStarsAndLanguage(): void
+    public function testRepositoryVisualIsRebuiltFromMetadataInsteadOfGitHubImage(): void
     {
         $client = $this->loggedClient();
+        $name = uniqid('depot-');
         $link = $this->enrichedLink(
-            'https://github.com/symfony/' . uniqid('depot-'),
+            'https://github.com/symfony/' . $name,
             new LinkPreview(title: 'symfony/symfony', githubStars: 30_812, githubLanguage: 'PHP'),
+            PreviewImageStore::previewPath('https://opengraph.githubassets.com/' . $name),
         );
 
         $card = $this->showCard($client, $link);
 
+        self::assertSelectorTextSame($card . ' [data-test="link-repository-owner"]', 'symfony /');
+        self::assertSelectorTextSame($card . ' [data-test="link-repository-name"]', $name);
         self::assertSelectorTextContains($card . ' [data-test="link-stars"]', '30 812');
         self::assertSelectorTextContains($card . ' [data-test="link-language"]', 'PHP');
+        self::assertSelectorNotExists($card . ' [data-test="link-card-image"]');
     }
 
     public function testArticleShowsAuthorAndPublicationDateApartFromAddedDate(): void
@@ -75,9 +80,14 @@ final class LinkCardVariantsTest extends EnrichedLinkWebTestCase
 
         $card = $this->showCard($client, $link);
 
-        self::assertSelectorTextContains($card . ' [data-test="link-author"]', 'Symfony');
-        self::assertSelectorTextSame($card . ' [data-test="link-description"]', '<b>Pas</b> de HTML interprété');
+        self::assertSelectorTextContains($card . ' [data-test="link-post"] [data-test="link-author"]', 'Symfony');
+        self::assertSelectorTextSame($card . ' [data-test="link-handle"]', '@symfony');
+        self::assertSelectorTextSame(
+            $card . ' [data-test="link-post"] [data-test="link-description"]',
+            '<b>Pas</b> de HTML interprété',
+        );
         self::assertSelectorNotExists($card . ' [data-test="link-description"] b');
+        self::assertSelectorCount(1, $card . ' [data-test="link-description"]');
     }
 
     public function testFallbackShowsStoredFaviconInsteadOfSourceIcon(): void

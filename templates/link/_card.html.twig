@@ -1,6 +1,8 @@
 {% set source = link.sourceType %}
 {% set host = link.url|link_host %}
 {% set video_id = source.value == 'youtube' ? link.url|youtube_id : null %}
+{% set repository = source.value == 'github' ? link.url|github_repository : null %}
+{% set post = source.value == 'x' %}
 <article id="link-card-{{ link.id }}" class="flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-gray-200/70 transition hover:shadow-md hover:shadow-gray-900/5 dark:bg-gray-950 dark:ring-gray-800"
          data-test="link-card" data-preview-status="{{ link.previewStatus.value }}">
     {% if video_id %}
@@ -20,6 +22,10 @@
                 </span>
             </button>
         </div>
+    {% elseif repository %}
+        {% include 'link/_card_repository.html.twig' %}
+    {% elseif post %}
+        {% include 'link/_card_post.html.twig' %}
     {% else %}
         <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"
            class="relative block aspect-[1.91/1] overflow-hidden" {% if link.imagePath %}data-controller="image-fallback"{% endif %}>
@@ -39,22 +45,8 @@
             <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" class="hover:text-teal-700 dark:hover:text-teal-400">{{ link.title ?? link.url }}</a>
         </h2>
 
-        {% if link.githubStars is not null or link.githubLanguage %}
-            <p class="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600 dark:text-gray-400" data-test="link-repository">
-                {% if link.githubStars is not null %}
-                    <span class="inline-flex items-center gap-1" title="Étoiles sur GitHub" data-test="link-stars">
-                        <twig:ux:icon name="tabler:star" class="size-3.5"/> {{ link.githubStars|number_format(0, ',', ' ') }}
-                    </span>
-                {% endif %}
-                {% if link.githubLanguage %}
-                    <span class="inline-flex items-center gap-1.5" title="Langage principal" data-test="link-language">
-                        <span class="size-2 rounded-full bg-teal-500"></span> {{ link.githubLanguage }}
-                    </span>
-                {% endif %}
-            </p>
-        {% endif %}
-
-        {% if link.author or link.publishedAt %}
+        {# L'auteur et le texte d'un post X sont déjà dans son visuel #}
+        {% if not post and (link.author or link.publishedAt) %}
             <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400" data-test="link-byline">
                 {%- if link.author -%}
                     Par <span class="font-medium text-gray-700 dark:text-gray-300" data-test="link-author">{{ link.author }}</span>
@@ -65,7 +57,7 @@
             </p>
         {% endif %}
 
-        {% if link.description %}
+        {% if link.description and not post %}
             <p class="mt-1.5 line-clamp-2 text-sm text-gray-600 dark:text-gray-400" data-test="link-description">{{ link.description }}</p>
         {% endif %}
 

@@ -1,0 +1,24 @@
+{# Post X mis en avant à la place d'un visuel, que X ne fournit pas : auteur, compte et texte du post.
+   Le lien couvre le visuel sans en masquer le contenu aux lecteurs d'écran. #}
+{% set handle = link.url|x_handle %}
+<div class="relative border-b border-gray-100 bg-gray-50 p-5 dark:border-gray-800 dark:bg-gray-900" data-test="link-post">
+    <div class="flex items-center gap-3">
+        <span class="grid size-10 shrink-0 place-items-center rounded-full bg-gray-900 font-display text-base font-semibold text-white uppercase dark:bg-white dark:text-gray-900" aria-hidden="true">
+            {{- (link.author ?? handle ?? 'x')|first -}}
+        </span>
+        <p class="min-w-0 flex-1 leading-tight">
+            {% if link.author %}
+                <span class="block truncate text-sm font-semibold text-gray-900 dark:text-white" data-test="link-author">{{ link.author }}</span>
+            {% endif %}
+            {% if handle %}
+                <span class="block truncate text-xs text-gray-500 dark:text-gray-400" data-test="link-handle">@{{ handle }}</span>
+            {% endif %}
+        </p>
+        <twig:ux:icon name="tabler:brand-x" class="size-5 shrink-0 text-gray-900 dark:text-white" aria-hidden="true"/>
+    </div>
+    {% if link.description %}
+        <p class="mt-4 line-clamp-6 text-[0.95rem] leading-relaxed text-gray-800 dark:text-gray-200" data-test="link-description">{{ link.description }}</p>
+    {% endif %}
+    <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"
+       class="absolute inset-0"></a>
+</div>
