@@ -11,7 +11,7 @@
                     <a href="{{ path('app_category_show', {id: category.id}) }}"
                        {% if active %}aria-current="page"{% endif %}
                        data-test="category-nav-item"
-                       class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition {{ active ? 'bg-white font-semibold text-teal-700 shadow-xs ring-1 ring-gray-200/70 dark:bg-gray-900 dark:text-teal-400 dark:ring-gray-800' : 'font-medium text-gray-700 hover:bg-white hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white' }}">
+                       class="flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition {{ active ? 'bg-white font-semibold text-gray-900 shadow-xs ring-1 ring-gray-200/70 dark:bg-gray-900 dark:text-white dark:ring-gray-800' : 'font-medium text-gray-700 hover:bg-white hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white' }}">
                         <twig:ux:icon name="tabler:folder" class="size-4 shrink-0"/>
                         <span class="flex-1 truncate">{{ category.name }}</span>
                         <span class="text-xs text-gray-400 tabular-nums dark:text-gray-500">{{ category.linkCount }}</span>

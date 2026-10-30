@@ -1,0 +1,6 @@
+{% extends '@TalesFromADevFlowbite/form/default.html.twig' %}
+
+{# Focus noir et blanc, sans le contour bleu par défaut du navigateur (champs texte, selects, textareas) #}
+{% block class_input_text -%}
+    bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base block w-full px-3 py-2.5 shadow-xs focus:border-gray-900 focus:ring-1 focus:ring-gray-900 focus:outline-none dark:focus:border-gray-400 dark:focus:ring-gray-400 placeholder:text-body
+{%- endblock class_input_text %}

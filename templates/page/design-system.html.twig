@@ -8,7 +8,7 @@
     <div class="mb-8">
         <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">
             Design System
-            <span class="ml-2 inline-flex items-center rounded-full bg-teal-50 px-2.5 py-0.5 text-sm font-medium text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">Flowbite 4</span>
+            <span class="ml-2 inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-sm font-medium text-gray-900 dark:bg-gray-800 dark:text-white">Flowbite 4</span>
         </h1>
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Inventaire des composants UX Toolkit — kit Flowbite 4.
@@ -20,7 +20,7 @@
         {% set anchors = ['alert','badge','button','button-group','card','checkbox','indicator','input','kbd','modal','pagination','radio','select','skeleton','spinner','table','tabs','textarea','toggle'] %}
         {% for anchor in anchors %}
             <a href="#{{ anchor }}"
-               class="rounded-md border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-700 hover:border-teal-300 hover:text-teal-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-teal-500 dark:hover:text-teal-300">
+               class="rounded-md border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-700 hover:border-gray-400 hover:text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-gray-500 dark:hover:text-white">
                 {{ anchor|replace({'-': ' '})|title }}
             </a>
         {% endfor %}

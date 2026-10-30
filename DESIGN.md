@@ -2,7 +2,7 @@
 name: Radar
 inspiration: "Markit - Bookmark Manager (Marcos Costa, Dribbble) — https://dribbble.com/shots/27796580-Markit-Bookmark-Manager"
 colors:
-  primary: "#009689"   # teal-600
+  primary: "#1C1917"   # gray-900 (stone) — noir et blanc, sans accent
   neutral: "#FAFAF9"   # stone-50
   success: "#16A34A"
   warning: "#D97706"
@@ -21,7 +21,7 @@ rounded:
 
 ## Vue d'ensemble
 
-Interface calme et lumineuse, très inspirée de Markit : fond blanc cassé chaud, une seule couleur d'accent (sarcelle), coins généreusement arrondis, bordures fines plutôt qu'ombres, et quelques illustrations dessinées à la main pour la personnalité.
+Interface calme et lumineuse, très inspirée de Markit : fond blanc cassé chaud, noir et blanc sans couleur dominante (la couleur est réservée aux plateformes des cartes), coins généreusement arrondis, bordures fines plutôt qu'ombres, et quelques illustrations dessinées à la main pour la personnalité.
 
 Contrainte permanente : **simplicité**. On reprend le langage visuel de Markit, pas ses fonctionnalités (pas de « Read Later » ni de signets privés — anti-objectifs de `docs/vision.md`).
 
@@ -30,7 +30,8 @@ Contrainte permanente : **simplicité**. On reprend le langage visuel de Markit,
 Définis dans `assets/styles/app.css` (`@theme`) :
 
 - **Neutres** : la palette Tailwind `gray-*` pointe sur `stone-*`. Écrire `gray-*` dans les templates donne donc un gris chaud.
-- **Accent** : `teal` — `teal-600` (boutons, actif), `teal-700` (texte d'accent), `teal-50/100` (fonds légers). Les tokens Flowbite `brand-*` pointent dessus, donc les composants Twig (`<twig:Button>`…) suivent.
+- **Accent** : aucun — noir et blanc. Bouton principal `gray-900` / texte blanc (inversé en sombre : `white` / `gray-900`), texte actif `gray-900` / `dark:white`, focus `gray-900` / `dark:gray-400`. Les tokens Flowbite `brand-*` pointent sur les gris, donc les composants Twig (`<twig:Button>`…) suivent.
+- **Cartes par plateforme** : liseré et détails (catégories, liseré de contexte, « Ouvrir », survol du titre, initiale du posteur, visuel) teintés par source — YouTube `rose`, GitHub `violet`, X noir (liseré `gray-800` / `dark:gray-500`) ; articles et images restent en noir et blanc.
 - **Police** : Inter partout (`font-sans`, `font-body`, `font-display`), monospace système pour le code.
 - **Mode sombre** : suit la préférence système (`prefers-color-scheme`), aucun bouton de bascule. Chaque écran porte ses variantes `dark:`.
 
@@ -38,13 +39,13 @@ Définis dans `assets/styles/app.css` (`@theme`) :
 
 - Fond de page `gray-50`, sans bordure entre topbar et sidebar.
 - Topbar : logo à gauche, recherche centrée (blanche, `rounded-xl`), avatar à droite.
-- Sidebar : items `rounded-xl` ; l'item actif est une pastille blanche, texte `teal-700`, `shadow-xs`.
+- Sidebar : items `rounded-xl` ; l'item actif est une pastille blanche, texte `gray-900`, `shadow-xs`.
 - Contenu : panneau blanc arrondi en haut à gauche (`md:rounded-tl-4xl`).
 - En-tête de page : titre en gras, puce, compteur discret (« Tous les liens · 0 lien »).
 
 ## Illustrations
 
-Open Doodles (CC0, https://www.opendoodles.com), dans `assets/icons/doodles/`, rendues via `<twig:ux:icon name="doodles:…">`. Le trait suit `currentColor`, l'accent est `teal-200` / `dark:teal-800`.
+Open Doodles (CC0, https://www.opendoodles.com), dans `assets/icons/doodles/`, rendues via `<twig:ux:icon name="doodles:…">`. Le trait suit `currentColor`, l'aplat est `gray-200` / `dark:gray-800`.
 Usage réservé aux moments vides ou d'accueil (connexion, état vide) — jamais décoratif dans une liste.
 
 ## Écrans à venir (repères tirés de Markit)

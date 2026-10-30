@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><rect width=%22128%22 height=%22128%22 rx=%2228%22 fill=%22%231c1917%22/><circle cx=%2264%22 cy=%2264%22 r=%2234%22 fill=%22none%22 stroke=%22%232dd4bf%22 stroke-width=%2210%22/><circle cx=%2264%22 cy=%2264%22 r=%2210%22 fill=%22%232dd4bf%22/></svg>">
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><rect width=%22128%22 height=%22128%22 rx=%2228%22 fill=%22%231c1917%22/><circle cx=%2264%22 cy=%2264%22 r=%2234%22 fill=%22none%22 stroke=%22%23ffffff%22 stroke-width=%2210%22/><circle cx=%2264%22 cy=%2264%22 r=%2210%22 fill=%22%23ffffff%22/></svg>">
     {% block stylesheets %}{% endblock %}
 
     {% block javascripts %}
@@ -45,7 +45,7 @@
             </div>
             <input type="search" name="q" id="topbar-search" value="{{ app.request.query.get('q') }}" data-test="topbar-search"
                    data-search-shortcut-target="input" aria-keyshortcuts="/" autocomplete="off"
-                   class="block w-full rounded-xl border-0 bg-white py-2.5 pr-3 pl-9 text-sm text-gray-900 shadow-xs ring-1 ring-gray-200/70 placeholder:text-gray-400 focus:ring-2 focus:ring-teal-500 focus:outline-none md:pr-10 dark:bg-gray-900 dark:text-white dark:ring-gray-800"
+                   class="block w-full rounded-xl border-0 bg-white py-2.5 pr-3 pl-9 text-sm text-gray-900 shadow-xs ring-1 ring-gray-200/70 placeholder:text-gray-400 focus:ring-2 focus:ring-gray-900 focus:outline-none md:pr-10 dark:bg-gray-900 dark:text-white dark:ring-gray-800 dark:focus:ring-gray-400"
                    placeholder="Rechercher un lien…"/>
             <div class="pointer-events-none absolute inset-y-0 right-0 hidden items-center pr-2.5 group-focus-within:hidden md:flex">
                 <twig:Kbd class="px-1.5 py-0.5">/</twig:Kbd>
@@ -56,12 +56,12 @@
     <div class="flex shrink-0 items-center gap-2 sm:gap-3">
         {% if app.user %}
             <a href="{{ path('app_link_new') }}" data-test="add-link" data-turbo-frame="link-modal-frame"
-               class="flex items-center gap-2 rounded-xl bg-teal-600 px-3 py-2.5 text-sm font-medium text-white hover:bg-teal-700 sm:px-4">
+               class="flex items-center gap-2 rounded-xl bg-gray-900 px-3 py-2.5 text-sm font-medium text-white hover:bg-gray-700 sm:px-4 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
                 <twig:ux:icon name="tabler:plus" class="size-4"/> <span class="hidden sm:inline">Ajouter un lien</span>
             </a>
             <button type="button" data-dropdown-toggle="radar-topbar-user-menu" data-test="user-menu-toggle"
-                    class="flex rounded-full focus:ring-4 focus:ring-teal-100 dark:focus:ring-teal-900">
-                <span class="grid size-9 place-items-center rounded-full bg-white text-sm font-semibold text-teal-700 shadow-xs ring-1 ring-gray-200 dark:bg-gray-900 dark:text-teal-400 dark:ring-gray-800">
+                    class="flex rounded-full focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800">
+                <span class="grid size-9 place-items-center rounded-full bg-white text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-200 dark:bg-gray-900 dark:text-white dark:ring-gray-800">
                     {{ app.user.userIdentifier|first|upper }}
                 </span>
             </button>
@@ -95,7 +95,7 @@
             </div>
         {% else %}
             <a href="{{ path('app_login') }}"
-               class="flex items-center gap-2 rounded-xl bg-teal-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-teal-700">
+               class="flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
                 <twig:ux:icon name="tabler:login" class="size-4"/> Se connecter
             </a>
         {% endif %}
@@ -105,7 +105,7 @@
 {# Sidebar #}
 {% set nav_item = 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition' %}
 {% set nav_idle = nav_item ~ ' text-gray-700 hover:bg-white hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white' %}
-{% set nav_active = nav_item ~ ' bg-white font-semibold text-teal-700 shadow-xs ring-1 ring-gray-200/70 dark:bg-gray-900 dark:text-teal-400 dark:ring-gray-800' %}
+{% set nav_active = nav_item ~ ' bg-white font-semibold text-gray-900 shadow-xs ring-1 ring-gray-200/70 dark:bg-gray-900 dark:text-white dark:ring-gray-800' %}
 <aside id="radar-sidebar"
        class="fixed top-0 left-0 z-40 h-screen w-64 -translate-x-full bg-gray-50 pt-16 transition-transform md:translate-x-0 dark:bg-gray-950"
        aria-label="Sidebar">
@@ -127,6 +127,9 @@
         {% block body %}{% endblock %}
     </div>
 </main>
+{# Coin arrondi du panneau figé sous la topbar : le contenu qui défile passe dessous au lieu de l'aplatir #}
+<div aria-hidden="true"
+     class="pointer-events-none fixed top-16 left-64 z-30 hidden size-8 bg-[radial-gradient(circle_at_100%_100%,transparent_1.95rem,var(--color-gray-50)_2rem)] md:block dark:bg-[radial-gradient(circle_at_100%_100%,transparent_1.95rem,var(--color-gray-950)_2rem)]"></div>
 
 {# Modale d'ajout : « Ajouter un lien » y charge le formulaire (Turbo Frame), la page dédiée reste le repli. #}
 {% if app.user and app.current_route not in ['app_link_new', 'app_link_seed'] %}
@@ -143,7 +146,7 @@
         <template data-link-modal-target="template">
             <turbo-frame id="link-modal-frame" data-link-modal-target="frame">
                 <div class="flex justify-center py-24">
-                    <twig:ux:icon name="tabler:loader-2" class="size-6 animate-spin text-teal-600"/>
+                    <twig:ux:icon name="tabler:loader-2" class="size-6 animate-spin text-gray-900 dark:text-white"/>
                 </div>
             </turbo-frame>
         </template>

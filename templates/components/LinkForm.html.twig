@@ -16,8 +16,11 @@
                     {% for choice in form.categories %}
                         {% set locked = category_limit_reached and not choice.vars.checked %}
                         <label class="{{ locked ? 'cursor-not-allowed' : 'cursor-pointer' }}" {% if locked %}title="Deux catégories au plus"{% endif %}>
-                            {{ form_widget(choice, {attr: {class: 'peer sr-only', disabled: locked}, label: false}) }}
-                            <span class="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm text-gray-700 ring-1 ring-gray-200 transition hover:ring-gray-300 peer-checked:bg-teal-50 peer-checked:font-medium peer-checked:text-teal-800 peer-checked:ring-teal-500 peer-focus-visible:ring-2 peer-disabled:opacity-40 peer-disabled:hover:ring-gray-200 dark:bg-gray-950 dark:text-gray-300 dark:ring-gray-800 dark:peer-checked:bg-teal-500/10 dark:peer-checked:text-teal-300">
+                            {# Case brute, sans l'enveloppe du thème Flowbite : elle doit rester sœur de la pastille pour que `peer-checked` s'applique #}
+                            <input type="checkbox" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" value="{{ choice.vars.value }}" class="peer sr-only"
+                                   {%- if choice.vars.checked %} checked{% endif %}{% if locked %} disabled{% endif %}>
+                            {% do choice.setRendered %}
+                            <span class="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm text-gray-700 ring-1 ring-gray-200 transition hover:ring-gray-300 peer-checked:bg-gray-900 peer-checked:font-medium peer-checked:text-white peer-checked:ring-gray-900 peer-focus-visible:ring-2 peer-disabled:opacity-40 peer-disabled:hover:ring-gray-200 dark:bg-gray-950 dark:text-gray-300 dark:ring-gray-800 dark:peer-checked:bg-white dark:peer-checked:text-gray-900 dark:peer-checked:ring-white">
                                 {{ choice.vars.label }}
                             </span>
                         </label>
@@ -41,7 +44,7 @@
 
         <div class="flex items-center gap-3">
             <button type="submit" data-test="link-submit" {% if duplicate %}disabled{% endif %}
-                    class="inline-flex items-center gap-2 rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-teal-700 focus:ring-4 focus:ring-teal-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-teal-600 dark:focus:ring-teal-900">
+                    class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-gray-900 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700 dark:disabled:hover:bg-white">
                 {% if historical %}
                     <twig:ux:icon name="tabler:history" class="size-4"/> Reprendre
                 {% else %}
@@ -55,9 +58,9 @@
                 <a href="{{ path('app_page') }}" data-turbo-frame="_top" data-action="link-modal#close:prevent" data-test="link-cancel"
                    class="text-sm font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">Annuler</a>
                 <a href="{{ path('app_link_seed') }}" data-test="link-seed-entry"
-                   class="ml-auto text-sm font-medium text-teal-700 hover:underline dark:text-teal-400">Reprendre un lien de Chat</a>
+                   class="ml-auto text-sm font-medium text-gray-900 hover:underline dark:text-white">Reprendre un lien de Chat</a>
             {% endif %}
-            <twig:ux:icon name="tabler:loader-2" class="size-4 animate-spin text-teal-600" data-loading="delay|show" hidden/>
+            <twig:ux:icon name="tabler:loader-2" class="size-4 animate-spin text-gray-900 dark:text-white" data-loading="delay|show" hidden/>
         </div>
     {{ form_end(form) }}
 </div>

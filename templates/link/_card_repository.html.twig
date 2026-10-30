@@ -2,7 +2,7 @@
    Le lien couvre le visuel sans en masquer le contenu aux lecteurs d'écran. #}
 {% set owner = repository|split('/')|first %}
 {% set name = repository|split('/')|last %}
-<div class="relative flex aspect-[1.91/1] flex-col justify-between overflow-hidden bg-gradient-to-br from-gray-900 via-gray-900 to-teal-900 p-5 text-white"
+<div class="relative flex aspect-[1.91/1] flex-col justify-between overflow-hidden bg-gradient-to-br from-gray-900 via-gray-900 to-violet-900 p-5 text-white"
      data-test="link-repository">
     <twig:ux:icon name="tabler:brand-github" class="absolute -right-8 -bottom-10 size-44 text-white/5" aria-hidden="true"/>
     <p class="flex items-center gap-1.5 text-xs font-medium text-white/60">
@@ -20,7 +20,7 @@
         {% endif %}
         {% if link.githubLanguage %}
             <span class="inline-flex items-center gap-1.5" title="Langage principal" data-test="link-language">
-                <span class="size-2.5 rounded-full bg-teal-400"></span> {{ link.githubLanguage }}
+                <span class="size-2.5 rounded-full bg-violet-400"></span> {{ link.githubLanguage }}
             </span>
         {% endif %}
     </p>

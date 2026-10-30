@@ -1,10 +1,10 @@
 {# Visuel de carte : l'image conservée par Radar, ou le repli du type de source avec la favicon du site #}
 {% set fallback_styles = {
-    github: 'bg-gradient-to-br from-gray-800 to-gray-950 text-white',
+    github: 'bg-gradient-to-br from-gray-900 to-violet-900 text-white',
     youtube: 'bg-gradient-to-br from-rose-50 to-rose-100 text-rose-600 dark:from-rose-500/10 dark:to-rose-500/20 dark:text-rose-300',
     x: 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900 dark:from-gray-800 dark:to-gray-900 dark:text-white',
-    image: 'bg-gradient-to-br from-amber-50 to-amber-100 text-amber-600 dark:from-amber-500/10 dark:to-amber-500/20 dark:text-amber-300',
-    article: 'bg-gradient-to-br from-teal-50 to-teal-100 text-teal-600 dark:from-teal-500/10 dark:to-teal-500/20 dark:text-teal-300',
+    image: 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-600 dark:from-gray-800 dark:to-gray-900 dark:text-gray-300',
+    article: 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-600 dark:from-gray-800 dark:to-gray-900 dark:text-gray-300',
 } %}
 <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 {{ fallback_styles[source.value] }}"
      data-test="link-card-fallback" {% if link.imagePath %}data-image-fallback-target="fallback" hidden{% endif %}>
