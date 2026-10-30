@@ -10,6 +10,18 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-10-30 — Fil en mosaïque
+
+### ✨ Fonctionnel
+- **Fil continu en mosaïque** — les cartes s'enchaînent sans séparation par jour et s'emboîtent selon leur hauteur, du plus récent au plus ancien, sur le fil comme dans les catégories.
+- **Visuel des dépôts GitHub** — propriétaire, nom du dépôt, étoiles et langage à la place de l'image générique de GitHub.
+- **Posts X mis en avant** — auteur, @compte et texte du post en tête de carte, plutôt qu'un visuel vide.
+- **Barre latérale allégée** — « Design System » et « Tester l'email » n'y figurent plus ; les pages restent accessibles par leur adresse.
+
+### 🔧 Technique
+- **Mosaïque en Stimulus** — contrôleur `masonry` (rangées de 1 px, hauteur mesurée en continu) ; sans JS, la grille reste classique.
+- **Catégories des fixtures à un mot** — Symfony, IA, Agents, Architecture.
+
 ## [0.5.0] - 2026-10-30 — Cartes adaptées à chaque source
 
 ### ✨ Fonctionnel
@@ -84,7 +96,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/gabrielmustiere/radar/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/gabrielmustiere/radar/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/gabrielmustiere/radar/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/gabrielmustiere/radar/compare/v0.3.0...v0.4.0
