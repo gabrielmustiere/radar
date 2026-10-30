@@ -18,23 +18,12 @@
                 Rien ici pour l'instant : les liens repérés par l'équipe apparaîtront ici.
             </p>
         </div>
-    {% elseif category %}
-        <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-test="link-list">
-            {% for link in links.items %}
-                {% include 'link/_list_card.html.twig' %}
-            {% endfor %}
-        </div>
     {% else %}
-        <div data-test="link-list">
-            {% for day_links in links.items|by_day %}
-                <section class="mt-8" data-test="feed-day">
-                    <h2 class="mb-4 text-sm font-semibold text-gray-500 dark:text-gray-400" data-test="feed-day-label">{{ day_links|first.postedAt|day_label }}</h2>
-                    <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                        {% for link in day_links %}
-                            {% include 'link/_list_card.html.twig' %}
-                        {% endfor %}
-                    </div>
-                </section>
+        <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3" data-controller="masonry" data-test="link-list">
+            {% for link in links.items %}
+                <div class="min-w-0 self-start" data-masonry-target="item">
+                    {% include 'link/_list_card.html.twig' %}
+                </div>
             {% endfor %}
         </div>
     {% endif %}

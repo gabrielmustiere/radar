@@ -6,7 +6,7 @@ namespace App\Tests\Controller;
 
 final class FeedTest extends LinkWebTestCase
 {
-    public function testLatestLinkOpensTheFeedUnderToday(): void
+    public function testLatestLinkOpensTheFeedWithoutDaySeparation(): void
     {
         $client = $this->loggedClient();
         $url = 'https://example.com/' . uniqid('fil-');
@@ -14,10 +14,7 @@ final class FeedTest extends LinkWebTestCase
 
         $crawler = $client->request('GET', '/');
 
-        self::assertSelectorTextContains(
-            '[data-test="feed-day"]:first-child [data-test="feed-day-label"]',
-            'Aujourd\'hui',
-        );
+        self::assertSelectorNotExists('[data-test="link-list"] section');
         self::assertSelectorTextContains(self::FIRST_CARD, $url);
         $total = (int) $crawler->filter('[data-test="link-count"]')->text();
         self::assertGreaterThanOrEqual(count($crawler->filter('[data-test="link-card"]')), $total);

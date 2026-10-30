@@ -41,9 +41,9 @@ final class CategoryControllerTest extends LinkWebTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', $name);
         self::assertSelectorCount(2, '[data-test="link-card"]');
-        self::assertSelectorTextContains('[data-test="link-card"]:nth-child(1) [data-test="link-title"]', $newer);
-        self::assertSelectorTextContains('[data-test="link-card"]:nth-child(2) [data-test="link-title"]', $older);
-        self::assertSelectorCount(2, '[data-test="link-card"]:nth-child(1) [data-test="link-category"]');
+        self::assertSelectorTextContains('[data-test="link-list"] > :nth-child(1) [data-test="link-title"]', $newer);
+        self::assertSelectorTextContains('[data-test="link-list"] > :nth-child(2) [data-test="link-title"]', $older);
+        self::assertSelectorCount(2, '[data-test="link-list"] > :nth-child(1) [data-test="link-category"]');
         self::assertSelectorTextContains('[data-test="category-nav-item"][aria-current="page"]', $name);
     }
 

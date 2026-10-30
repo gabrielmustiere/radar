@@ -14,8 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 abstract class LinkWebTestCase extends WebTestCase
 {
-    /** Carte la plus récente du fil d'accueil (premier jour, première carte). */
-    protected const string FIRST_CARD = '[data-test="feed-day"]:first-child [data-test="link-card"]:first-child';
+    /** Carte la plus récente du fil d'accueil. */
+    protected const string FIRST_CARD = '[data-test="link-list"] > :first-child [data-test="link-card"]';
 
     protected function loggedClient(): KernelBrowser
     {
