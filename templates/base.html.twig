@@ -119,23 +119,6 @@
             </li>
         </ul>
         <twig:CategoryNav :currentId="category.id ?? null"/>
-        <ul class="mt-4 space-y-1 border-t border-gray-200 pt-4 dark:border-gray-800">
-            <li>
-                <a href="{{ path('app_design_system') }}" class="{{ app.current_route == 'app_design_system' ? nav_active : nav_idle }}">
-                    <twig:ux:icon name="tabler:palette" class="size-5"/>
-                    <span>Design System</span>
-                </a>
-            </li>
-            {# La route app_test_email n'existe qu'en dev (env: 'dev') #}
-            {% if app.environment == 'dev' %}
-            <li>
-                <a href="{{ path('app_test_email') }}" class="{{ nav_idle }}">
-                    <twig:ux:icon name="tabler:mail" class="size-5"/>
-                    <span>Tester l'email</span>
-                </a>
-            </li>
-            {% endif %}
-        </ul>
     </div>
 </aside>
 
