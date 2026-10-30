@@ -10,7 +10,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Réponses des sources en environnement de test : aucun appel réseau réel.
- * `/article…` expose un aperçu OpenGraph, `.png` est une image, tout le reste répond 404.
+ * `/article…` expose un aperçu OpenGraph, `.png` est une image, `/feed/…` est un flux, tout le reste répond 404.
  */
 final class PreviewMockResponseFactory
 {
@@ -20,6 +20,10 @@ final class PreviewMockResponseFactory
 
         if (str_ends_with($path, '.png')) {
             return new MockResponse(TestImage::png(), ['response_headers' => ['content-type' => 'image/png']]);
+        }
+
+        if (str_starts_with($path, '/feed/')) {
+            return $this->feed($path, (string) parse_url($url, PHP_URL_QUERY));
         }
 
         if (str_starts_with($path, '/article')) {
@@ -37,5 +41,46 @@ final class PreviewMockResponseFactory
         }
 
         return new MockResponse('', ['http_code' => 404]);
+    }
+
+    /**
+     * `/feed/journal?run=x` : deux articles propres à `x` (servis par `/article…`), le plus récent en tête :
+     * le n° 2 paru il y a 2 h, le n° 1 il y a 30 h.
+     */
+    private function feed(string $path, string $query): MockResponse
+    {
+        $parameters = [];
+        parse_str($query, $parameters);
+        $run = $parameters['run'] ?? 'run';
+        $run = is_string($run) ? $run : 'run';
+        $xml = match ($path) {
+            '/feed/symfony' => (string) file_get_contents(__DIR__ . '/../Fixtures/feed/symfony-blog.xml'),
+            '/feed/journal' => $this->journal($run),
+            '/feed/broken' => '<rss><channel>',
+            default => null,
+        };
+
+        if (null === $xml) {
+            return new MockResponse('<html><body>Pas un flux</body></html>', ['response_headers' => [
+                'content-type' => 'text/html',
+            ]]);
+        }
+
+        return new MockResponse($xml, ['response_headers' => ['content-type' => 'application/rss+xml']]);
+    }
+
+    private function journal(string $run): string
+    {
+        $items = '';
+        foreach ([2 => 2, 1 => 30] as $number => $hoursAgo) {
+            $items .= sprintf(
+                '<item><link>https://example.com/article-%1$s-%2$d</link><guid>%1$s-%2$d</guid><pubDate>%3$s</pubDate></item>',
+                $run,
+                $number,
+                date(DATE_RSS, time() - ($hoursAgo * 3600)),
+            );
+        }
+
+        return sprintf('<rss version="2.0"><channel><title>Journal %s</title>%s</channel></rss>', $run, $items);
     }
 }

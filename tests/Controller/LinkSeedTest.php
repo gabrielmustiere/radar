@@ -21,6 +21,16 @@ final class LinkSeedTest extends LinkWebTestCase
         self::assertSelectorTextContains('h1', 'Reprendre un lien de Chat');
     }
 
+    public function testRadarAccountIsNotOfferedAsOriginalPoster(): void
+    {
+        $client = $this->loggedClient();
+
+        $client->request('GET', '/liens/reprendre');
+
+        self::assertSelectorTextContains('[data-test="link-poster-select"]', 'marie');
+        self::assertSelectorTextNotContains('[data-test="link-poster-select"]', 'radar');
+    }
+
     public function testSeededLinkKeepsOriginalPosterAndDate(): void
     {
         $client = $this->loggedClient();

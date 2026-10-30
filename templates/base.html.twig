@@ -117,6 +117,20 @@
                     <span>Tous les liens</span>
                 </a>
             </li>
+            {% if is_granted('RADAR_ADMIN') %}
+                <li>
+                    <a href="{{ path('app_source_index') }}" data-test="nav-sources" class="{{ app.current_route == 'app_source_index' ? nav_active : nav_idle }}">
+                        <twig:ux:icon name="tabler:rss" class="size-5"/>
+                        <span>Sources</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ path('app_admin_index') }}" data-test="nav-admins" class="{{ app.current_route == 'app_admin_index' ? nav_active : nav_idle }}">
+                        <twig:ux:icon name="tabler:shield-check" class="size-5"/>
+                        <span>Administrateurs</span>
+                    </a>
+                </li>
+            {% endif %}
         </ul>
         <twig:CategoryNav :currentId="category.id ?? null"/>
     </div>

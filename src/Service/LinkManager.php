@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Link;
+use App\Entity\Source;
 use App\Entity\User;
 use App\Exception\DuplicateLinkException;
 use App\Form\Model\HistoricalLinkSubmission;
@@ -44,14 +45,33 @@ final readonly class LinkManager
         return $this->create($submission, $submission->poster, $submission->postedAt, seeded: true);
     }
 
+    /**
+     * Article d'une source suivie : classé dans les catégories de la source, daté de la relève, sans contexte.
+     *
+     * @throws DuplicateLinkException quand le lien existe déjà : rien n'est créé
+     */
+    public function publish(Source $source, string $url, User $poster): Link
+    {
+        $submission = new LinkSubmission();
+        $submission->url = $url;
+        $submission->categories = array_values($source->getCategories()->toArray());
+
+        return $this->create($submission, $poster, $this->clock->now(), seeded: false, source: $source);
+    }
+
     /** Lien déjà présent sous cette adresse, une fois normalisée (www, slash final, paramètres de suivi…). */
     public function findDuplicate(string $url): ?Link
     {
         return $this->linkRepository->findOneByNormalizedUrl($this->urlAnalyzer->normalize($url));
     }
 
-    private function create(LinkSubmission $submission, User $poster, \DateTimeImmutable $postedAt, bool $seeded): Link
-    {
+    private function create(
+        LinkSubmission $submission,
+        User $poster,
+        \DateTimeImmutable $postedAt,
+        bool $seeded,
+        ?Source $source = null,
+    ): Link {
         $url = (string) $submission->url;
         $existing = $this->findDuplicate($url);
         if (null !== $existing) {
@@ -77,6 +97,7 @@ final readonly class LinkManager
             $this->urlAnalyzer->sourceType($url),
             '' === $context ? null : $context,
             $seeded,
+            $source,
         );
 
         $this->linkRepository->save($link);

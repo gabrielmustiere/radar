@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Journal de test</title>
+    <link rel="self" href="https://example.com/feed.atom"/>
+    <id>tag:example.com,2026:journal</id>
+    <updated>2026-10-30T10:00:00Z</updated>
+    <entry>
+        <title>Deuxième billet</title>
+        <id>tag:example.com,2026:2</id>
+        <link rel="alternate" href="https://example.com/billets/2"/>
+        <link rel="edit" href="https://example.com/admin/billets/2"/>
+        <updated>2026-10-30T10:00:00Z</updated>
+    </entry>
+    <entry>
+        <title>Premier billet, lien sans rel</title>
+        <id>tag:example.com,2026:1</id>
+        <link href="https://example.com/billets/1"/>
+        <updated>2026-10-29T10:00:00Z</updated>
+    </entry>
+    <entry>
+        <title>Lien relatif, ignoré</title>
+        <id>tag:example.com,2026:0</id>
+        <link href="/billets/0"/>
+        <updated>2026-10-28T10:00:00Z</updated>
+    </entry>
+</feed>

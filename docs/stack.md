@@ -25,6 +25,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **Framework** : Symfony `8.1.*`, résolu `v8.1.7` (`composer.json`, `composer.lock`)
 - **ORM / données** : Doctrine ORM `^3.7.2` (résolu `3.7.2`) + Doctrine Migrations (`composer.json`, `composer.lock`)
 - **Async** : Symfony Messenger, transport Doctrine (`.env` → `MESSENGER_TRANSPORT_DSN=doctrine://default`) ; `sync://` en test (`.env.test`)
+- **Planification** : `symfony/scheduler` `8.1.*`, résolu `v8.1.10` — planning `App\Schedule` (`#[AsSchedule]`, relève horaire des sources), consommé par un worker `messenger:consume scheduler_default` (`composer.json`, `composer.lock`, `src/Schedule.php`, `.symfony.local.yaml`)
 - **Notifications** : Symfony Notifier, `ChatMessage` routé en `async` (`config/packages/messenger.yaml`) ; bridge Google Chat `symfony/google-chat-notifier` 8.1, transport `googlechat` sur `GOOGLE_CHAT_DSN` (`null://null` par défaut) (`composer.json`, `config/packages/notifier.yaml`, `.env`)
 - **HTTP sortant** : Symfony HttpClient `8.1.*`, résolu `v8.1.7` (`composer.lock`) ; client des aperçus `app.preview_http_client` = `NoPrivateNetworkHttpClient` + limiteur par hôte, composé par `App\HttpClient\PreviewHttpClientFactory` (`config/services.yaml`)
 - **Limitation de débit** : `symfony/rate-limiter` `8.1.*`, résolu `v8.1.10` — limiteur `preview_host` (token bucket) (`composer.json`, `config/packages/rate_limiter.yaml`)
@@ -71,7 +72,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 ## Outillage de développement local
 
 - **Commandes** : `make init`, `make serve`, `make phpunit`, `make playwright`, `make lint`, `make quality`, `make db-reset`… (`Makefile`)
-- **Serveur local** : Symfony CLI, proxy HTTPS `https://radar.wip`, workers Messenger + Tailwind watch (`.symfony.local.yaml`)
+- **Serveur local** : Symfony CLI, proxy HTTPS `https://radar.wip`, workers Messenger (`async`, `scheduler_default`) + Tailwind watch (`.symfony.local.yaml`)
 - **Services de dev** : `docker compose up -d` → Mailpit (`compose.yaml`)
 - **Assistance IA** : Symfony AI Mate `^0.14` (`composer.json`, `mate/`), serveurs MCP (`.mcp.json`)
 
@@ -79,7 +80,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 
 Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un fichier) :
 
-- **Container de production FrankenPHP** — image unique (FrankenPHP + app + assets compilés), volume persistant pour SQLite, déployée sur le VPS existant.
+- **Container de production FrankenPHP** — image unique (FrankenPHP + app + assets compilés), volume persistant pour SQLite, déployée sur le VPS existant. Deux workers Messenger à y faire tourner : `async` et `scheduler_default` (sans ce dernier, aucune relève des sources, sans erreur).
 - **Image et CI sur GitHub** — GitHub Actions (lint, tests, build de l'image) ; registre d'image à confirmer (GHCR pressenti).
 - **Connexion Google restreinte au domaine Workspace** — exigée par `docs/vision.md` (outil strictement interne) ; remplace ou complète le `form_login` du template.
 - **Annonce dans Google Chat** — webhook entrant de l'espace ; dépend de l'autorisation des webhooks par l'admin Workspace (risque externe, `docs/vision.md`).
@@ -96,3 +97,4 @@ Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un 
 - 2026-10-29 — Qualité — PHPStan, PHP-CS-Fixer et PHP Insights remplacés par Mago (story 001)
 - 2026-10-29 — Enrichir — Backend (notifications) — sync post-livraison de la story 008-f-annonce-google-chat
 - 2026-10-30 — Enrichir — Backend (HTTP sortant, limitation de débit), Données (fichiers Flysystem), Contraintes (volume des médias) — sync post-livraison de la story 011-f-cartes-par-source
+- 2026-10-30 — Enrichir — Backend (planification), Outillage local (worker scheduler), Cible (workers de production) — sync post-livraison de la story 012-f-sources-automatiques

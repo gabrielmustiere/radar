@@ -6,11 +6,14 @@ namespace DataFixtures;
 
 use App\Entity\Category;
 use App\Entity\Link;
+use App\Entity\Source;
+use App\Entity\SourceItem;
 use App\Entity\User;
 use App\Service\LinkUrlAnalyzer;
 use App\Service\Preview\LinkPreview;
 use App\Service\Preview\PreviewImageStore;
 use App\Service\Preview\TextTruncator;
+use App\Service\SystemUserProvider;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use League\Flysystem\FilesystemOperator;
@@ -290,6 +293,28 @@ class AppFixtures extends Fixture
         ],
     ];
 
+    /**
+     * Articles publiés par la source « Martin Fowler », relevés le 30/10/2026. La source est retirée : aucune relève
+     * réseau en dev (elle publierait ses autres articles), ses liens gardent leur badge « auto » et son nom.
+     *
+     * @var list<array{url: string, daysAgo: int, preview: array{string, string}}>
+     */
+    private const array SOURCE_LINKS = [
+        [
+            'url' => 'https://martinfowler.com/bliki/LLM-Voice.html',
+            'daysAgo' => 2,
+            'preview' => ['bliki: LLM Voice', 'The uncanny valley of LLMs\' prose'],
+        ],
+        [
+            'url' => 'https://martinfowler.com/rachels-ramblings/good-devs-wary.html',
+            'daysAgo' => 1,
+            'preview' => [
+                'Why are good developers so wary of agentic development?',
+                'Good developers’ caution about agentic development comes from knowing that built isn’t the same as working in production.',
+            ],
+        ],
+    ];
+
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly LinkUrlAnalyzer $urlAnalyzer,
@@ -358,7 +383,57 @@ class AppFixtures extends Fixture
             );
         }
 
+        $architecture = array_find(
+            $categories,
+            static fn(Category $category): bool => self::ARCHITECTURE === $category->getName(),
+        );
+        $this->sourceLinks($manager, $architecture ?? throw new \LogicException('Catégorie Architecture absente.'));
+
         $manager->flush();
+    }
+
+    private function sourceLinks(ObjectManager $manager, Category $category): void
+    {
+        $radar = new User();
+        $radar->setEmail(SystemUserProvider::EMAIL);
+        $radar->setPassword('!');
+        $manager->persist($radar);
+
+        $source = new Source(
+            'https://martinfowler.com/feed.atom',
+            'Martin Fowler',
+            [$category],
+            new \DateTimeImmutable('-3 days'),
+        );
+        $source->markFetched(new \DateTimeImmutable('-1 day'));
+        $source->remove(new \DateTimeImmutable('-1 day'));
+        $manager->persist($source);
+
+        foreach (self::SOURCE_LINKS as $data) {
+            $manager->persist(new SourceItem($source, $data['url'], new \DateTimeImmutable()));
+            $link = new Link(
+                $data['url'],
+                $this->urlAnalyzer->normalize($data['url']),
+                [$category],
+                $radar,
+                new \DateTimeImmutable(sprintf('-%d days', $data['daysAgo'])),
+                $this->urlAnalyzer->sourceType($data['url']),
+                source: $source,
+            );
+            [$title, $description] = $data['preview'];
+            $link->applyPreview(
+                new LinkPreview(
+                    $this->truncator->truncate($title, 100),
+                    $this->truncator->truncate($description, 250),
+                    null,
+                    'martinfowler.com',
+                ),
+                null,
+                null,
+                new \DateTimeImmutable(),
+            );
+            $manager->persist($link);
+        }
     }
 
     /**

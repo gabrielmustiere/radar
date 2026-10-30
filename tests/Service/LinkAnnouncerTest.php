@@ -6,6 +6,7 @@ namespace App\Tests\Service;
 
 use App\Entity\Category;
 use App\Entity\Link;
+use App\Entity\Source;
 use App\Entity\User;
 use App\Enum\Type\SourceType;
 use App\Service\LinkAnnouncer;
@@ -49,6 +50,25 @@ final class LinkAnnouncerTest extends TestCase
             "*https://maestro.dev*\nTester une app mobile, Outils QA · posté par marie\n<",
             $sent[0] ?? '',
         );
+    }
+
+    public function testNamesTheSourceOfAnAutomaticLink(): void
+    {
+        $source = new Source('https://symfony.com/feed', 'Symfony Blog', [], new \DateTimeImmutable());
+        $link = new Link(
+            'https://symfony.com/blog/article',
+            'https://symfony.com/blog/article',
+            [new Category('Symfony', new \DateTimeImmutable())],
+            new User()->setEmail('radar@radar.invalid'),
+            new \DateTimeImmutable(),
+            SourceType::Article,
+            source: $source,
+        );
+        $sent = [];
+
+        $this->announcer($sent)->announce($link);
+
+        self::assertStringContainsString("\nSymfony · posté par radar via Symfony Blog\n", $sent[0] ?? '');
     }
 
     public function testNeverAnnouncesSeededLink(): void

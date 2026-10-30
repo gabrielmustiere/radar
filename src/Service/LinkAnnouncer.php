@@ -48,9 +48,15 @@ final readonly class LinkAnnouncer
             UrlGeneratorInterface::ABSOLUTE_URL,
         );
 
+        $source = $link->getSource();
         $lines = [
             sprintf('*%s*', $link->getTitle() ?? $link->getUrl()),
-            sprintf('%s · posté par %s', $categories, $link->getPostedBy()->getDisplayName()),
+            sprintf(
+                '%s · posté par %s%s',
+                $categories,
+                $link->getPostedBy()->getDisplayName(),
+                null === $source ? '' : ' via ' . $source->getName(),
+            ),
         ];
         if (null !== $link->getContext()) {
             $lines[] = sprintf('_« %s »_', $link->getContext());

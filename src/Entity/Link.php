@@ -85,6 +85,10 @@ class Link
     #[ORM\Column(name: 'announced_at', nullable: true)]
     private ?\DateTimeImmutable $announcedAt = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(name: 'source_id', nullable: true, onDelete: 'SET NULL')]
+    private ?Source $source;
+
     /** @var Collection<int, Category> */
     #[ORM\ManyToMany(targetEntity: Category::class)]
     #[ORM\JoinTable(name: 'link_category')]
@@ -101,8 +105,10 @@ class Link
         SourceType $sourceType,
         ?string $context = null,
         bool $seeded = false,
+        ?Source $source = null,
     ) {
         $this->seeded = $seeded;
+        $this->source = $source;
         $this->url = $url;
         $this->normalizedUrl = $normalizedUrl;
         $this->sourceType = $sourceType;
@@ -154,6 +160,12 @@ class Link
     public function isSeeded(): bool
     {
         return $this->seeded;
+    }
+
+    /** Source suivie qui a publié ce lien automatiquement, `null` pour un lien ajouté par un membre. */
+    public function getSource(): ?Source
+    {
+        return $this->source;
     }
 
     public function getAnnouncedAt(): ?\DateTimeImmutable

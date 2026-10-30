@@ -21,7 +21,7 @@ final class LinkDuplicateTest extends LinkWebTestCase
         self::assertResponseRedirects('/');
 
         $this->submit($client, [
-            'url' => 'http://www.example.com/' . $slug . '/?utm_source=chat#haut',
+            'url' => 'http://www.example.com/' . $slug . '/?utm_source=chat#:~:text=haut',
             'newCategory' => $category,
         ]);
 

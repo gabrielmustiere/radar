@@ -21,6 +21,36 @@
       "date": "2026-10-30",
       "type": "Planification",
       "description": "Plan technique rédigé : voter RADAR_ADMIN, Source/SourceItem avec retrait logique et réactivation, parseur RSS/Atom maison, Scheduler horaire → un message par source, badge et annonce avec le nom de la source, 4 étapes."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Implémentation",
+      "description": "4/4 étapes livrées, make lint/phpunit (254)/playwright (22) verts. Écarts : ancres conservées par la normalisation sauf :~:text= (décision user, R6 global, flux PHP.net) ; fixtures source Martin Fowler retirée au lieu de PHP.net active (885 entrées) ; planning dans src/Schedule.php (recette Flex) ; compte radar passé par le handler et doublon testé par findDuplicate (seuils Mago) ; XmlNodes, FeedItem::tryFrom, Feed::fromItems extraits (complexité Mago) ; env admin via #[Autowire(env:)] ; SourceManager/SourcePublisher et publish() testés en fonctionnel."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Review",
+      "description": "Corrections requises : 2 importants (compte radar proposé comme posteur d'origine, retrait d'une source non testé), 3 mineurs."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Review",
+      "description": "Prêt à commiter ; 2 importants et 3 mineurs corrigés : [BUG] compte radar exclu des posteurs d'origine, [TEST] source retirée jamais relevée, [ROBUSTESSE] état de relève remis à zéro à la réactivation, [TEST] attente Turbo dans l'E2E, [STYLE] imports des tests."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Implémentation",
+      "description": "Ajouts demandés après review : cartes des liens de source en orange (couleur des flux RSS, prioritaire sur la plateforme) et bouton « Relever » qui lance la relève d'une source à la demande, avec le nombre d'articles publiés ou l'erreur ; make lint/phpunit (259)/E2E sources verts."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Implémentation",
+      "description": "Relève manuelle avec antériorité (1 h, 12 h, 36 h, 72 h, enum FetchWindow) : les articles parus dans la fenêtre sont repris même déjà vus (dont ceux présents à l'ajout), jamais en double ; dates lues dans pubDate / published / updated ; make lint/phpunit (261)/E2E sources verts."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Sync",
+      "description": "14 écarts réalignés dans le pitch et le plan (relève à la demande, ancres conservées, fixtures, Schedule), 12/12 critères d'acceptation et 8/8 critères de sortie cochés (schema:validate, debug:scheduler, make playwright 22/22 verts), 3 dettes dont 1 critique ; stack et backlog mis à jour."
     }
   ]
 }

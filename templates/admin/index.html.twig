@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administrateurs · Radar{% endblock %}
+
+{% block body %}
+    <div class="mx-auto max-w-2xl">
+        <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Administrateurs</h1>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Les admins gèrent les sources suivies et cette liste. Une personne sans compte devient admin dès sa première connexion.
+        </p>
+
+        {{ form_start(form, {attr: {class: 'mt-8 flex items-start gap-3', 'data-test': 'admin-form', novalidate: 'novalidate'}}) }}
+            <div class="min-w-0 flex-1">{{ form_row(form.email, {label_attr: {class: 'sr-only'}}) }}</div>
+            <button type="submit" data-test="admin-submit"
+                    class="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700">
+                <twig:ux:icon name="tabler:plus" class="size-4"/> Ajouter
+            </button>
+        {{ form_end(form) }}
+
+        <ul class="mt-8 divide-y divide-gray-100 rounded-2xl ring-1 ring-gray-200/70 dark:divide-gray-800 dark:ring-gray-800" data-test="admin-list">
+            {% if permanentEmail %}
+                <li class="flex items-center gap-3 px-4 py-3 text-sm" data-test="admin-permanent">
+                    <span class="min-w-0 flex-1 truncate font-medium text-gray-900 dark:text-white">{{ permanentEmail }}</span>
+                    <span class="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-700 dark:bg-white/10 dark:text-gray-300"
+                          title="Désigné par la configuration de Radar : ne peut pas être retiré ici">
+                        <twig:ux:icon name="tabler:lock" class="size-3.5"/> permanent
+                    </span>
+                </li>
+            {% endif %}
+            {% for admin in admins %}
+                <li class="flex items-center gap-3 px-4 py-3 text-sm" data-test="admin-row">
+                    <span class="min-w-0 flex-1 truncate text-gray-900 dark:text-white">{{ admin.email }}</span>
+                    <form method="post" action="{{ path('app_admin_remove', {id: admin.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('admin-remove') }}">
+                        <button type="submit" data-test="admin-remove"
+                                class="rounded-lg px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-white">
+                            Retirer
+                        </button>
+                    </form>
+                </li>
+            {% else %}
+                {% if not permanentEmail %}
+                    <li class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">Aucun admin pour l'instant.</li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

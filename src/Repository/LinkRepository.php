@@ -34,8 +34,9 @@ class LinkRepository extends ServiceEntityRepository
             $this->filter(
                 $this
                     ->createQueryBuilder('l')
-                    ->addSelect('u', 'c')
+                    ->addSelect('u', 'c', 's')
                     ->join('l.postedBy', 'u')
+                    ->leftJoin('l.source', 's')
                     ->leftJoin('l.categories', 'c')
                     ->orderBy('l.postedAt', 'DESC')
                     ->addOrderBy('l.id', 'DESC'),
@@ -87,8 +88,9 @@ class LinkRepository extends ServiceEntityRepository
             $this->filter(
                 $this
                     ->createQueryBuilder('l')
-                    ->addSelect('u', 'c')
+                    ->addSelect('u', 'c', 's')
                     ->join('l.postedBy', 'u')
+                    ->leftJoin('l.source', 's')
                     ->join('l.categories', 'filter', 'WITH', 'filter = :category')
                     ->leftJoin('l.categories', 'c')
                     ->setParameter('category', $category)

@@ -6,5 +6,7 @@ workers:
     docker_compose: ~
     messenger_consume_async:
         cmd: [ 'symfony', 'console', 'messenger:consume', 'async', '--silent' ]
+    messenger_consume_scheduler:
+        cmd: [ 'symfony', 'console', 'messenger:consume', 'scheduler_default', '--silent' ]
     tailwind:
         cmd: [ 'symfony', 'console', 'tailwind:build', '--watch' ]

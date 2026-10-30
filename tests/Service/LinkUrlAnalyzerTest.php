@@ -25,7 +25,12 @@ final class LinkUrlAnalyzerTest extends TestCase
         yield 'préfixe www' => ['https://www.example.com/post', 'https://example.com/post'];
         yield 'barre finale' => ['https://example.com/post/', 'https://example.com/post'];
         yield 'racine' => ['https://example.com/', 'https://example.com'];
-        yield 'ancre' => ['https://example.com/post#intro', 'https://example.com/post'];
+        yield 'ancre vide' => ['https://example.com/post#', 'https://example.com/post'];
+        yield 'fragment de texte' => ['https://example.com/post#:~:text=extrait', 'https://example.com/post'];
+        yield 'ancre conservée sans son fragment de texte' => [
+            'https://example.com/post#intro:~:text=extrait',
+            'https://example.com/post#intro',
+        ];
         yield 'paramètres de suivi' => [
             'https://example.com/post?utm_source=chat&fbclid=x&gclid=y',
             'https://example.com/post',
@@ -41,6 +46,16 @@ final class LinkUrlAnalyzerTest extends TestCase
         ];
         yield 'lien court YouTube' => ['https://youtu.be/abc123?si=share', 'https://youtube.com/watch?v=abc123'];
         yield 'port conservé' => ['https://example.com:8443/a', 'https://example.com:8443/a'];
+    }
+
+    public function testDistinctAnchorsStayDistinct(): void
+    {
+        $normalizer = new LinkUrlAnalyzer();
+
+        self::assertNotSame(
+            $normalizer->normalize('https://www.php.net/index.php#2026-10-26-1'),
+            $normalizer->normalize('https://www.php.net/index.php#2026-10-23-1'),
+        );
     }
 
     public function testDistinctParametersStayDistinct(): void

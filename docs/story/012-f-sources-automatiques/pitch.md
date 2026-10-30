@@ -37,6 +37,7 @@ Brancher la source une fois, avec ses catégories, fait entrer ces articles dans
 
 - En tant qu'**admin**, je veux enregistrer un flux RSS ou Atom avec une ou deux catégories afin que ses nouveaux articles entrent dans Radar sans que personne ait à les coller.
 - En tant qu'**admin**, je veux voir pour chaque source sa dernière relève réussie et sa dernière erreur afin de repérer un flux cassé.
+- En tant qu'**admin**, je veux lancer la relève d'une source à la demande, en reprenant si besoin les articles parus récemment, afin de ne pas attendre la relève horaire.
 - En tant qu'**admin**, je veux retirer une source afin d'arrêter de la suivre, sans perdre les liens qu'elle a déjà apportés.
 - En tant qu'**admin**, je veux ajouter ou retirer un email de la liste des admins afin de partager la gestion des sources.
 - En tant que **membre**, je veux reconnaître d'un coup d'œil qu'un lien est arrivé automatiquement afin de savoir qu'aucun collègue ne l'a choisi individuellement.
@@ -57,9 +58,9 @@ Brancher la source une fois, avec ses catégories, fait entrer ces articles dans
 
 5. Une source est l'adresse d'un flux RSS ou Atom et une ou deux catégories existantes (R4). Son nom est celui que le flux annonce.
 6. À l'enregistrement, Radar vérifie que l'adresse répond un flux lisible. Sinon, la source est refusée avec un message explicite. Une même adresse de flux ne peut être enregistrée qu'une fois.
-7. À l'enregistrement, les articles déjà présents dans le flux sont ignorés : seuls ceux qui apparaissent ensuite sont publiés.
-8. Toutes les sources sont relevées toutes les heures.
-9. Un article déjà vu pour une source n'est jamais republié, même s'il est modifié ou réordonné dans le flux.
+7. À l'enregistrement, les articles déjà présents dans le flux sont ignorés par la relève horaire : seuls ceux qui apparaissent ensuite sont publiés. Une relève à la demande peut les reprendre (règle 8).
+8. Toutes les sources sont relevées toutes les heures. Un admin peut aussi lancer la relève d'une source à la demande, en choisissant une antériorité (1 h, 12 h, 36 h ou 72 h) : les articles parus dans cette fenêtre sont repris même déjà vus, ceux présents à l'enregistrement compris. Le nombre d'articles publiés, ou l'erreur, s'affiche.
+9. Un article déjà publié n'est jamais republié, même s'il est modifié ou réordonné dans le flux ou repris par une relève à la demande.
 10. Retirer une source arrête sa relève. Les liens qu'elle a apportés restent dans Radar, avec leur marqueur « auto ».
 
 ### Publication
@@ -67,8 +68,8 @@ Brancher la source une fois, avec ses catégories, fait entrer ces articles dans
 11. Un nouvel article devient un lien : l'adresse de l'article, les catégories de la source, le compte « Radar » comme posteur, la date de la relève comme date d'ajout, et aucun contexte.
 12. Un article dont l'adresse existe déjà dans Radar (ajout manuel ou autre source) est ignoré, et le lien existant n'est pas modifié (R6).
 13. L'aperçu de la carte suit le circuit normal des liens (cartes par source), pas le contenu du flux.
-14. La carte d'un lien automatique porte un marqueur « auto ». Il n'y a pas de filtre pour masquer ces liens.
-15. Chaque lien automatique est annoncé une seule fois dans Google Chat, après son aperçu, comme un ajout manuel (R5).
+14. La carte d'un lien automatique porte un marqueur « auto » avec le nom de sa source, et prend l'orange des flux RSS quelle que soit sa plateforme. Il n'y a pas de filtre pour masquer ces liens.
+15. Chaque lien automatique est annoncé une seule fois dans Google Chat, après son aperçu, comme un ajout manuel, avec le nom de sa source (R5).
 
 ### Erreurs
 
@@ -77,24 +78,24 @@ Brancher la source une fois, avec ses catégories, fait entrer ces articles dans
 
 ## Critères d'acceptation
 
-- [ ] Un membre qui n'est pas admin n'accède ni à la page des sources ni à la liste des admins, et ne voit pas leur entrée de menu.
-- [ ] L'admin permanent configuré accède aux deux pages, et l'interface ne permet pas de le retirer de la liste.
-- [ ] Un admin ajoute un email à la liste ; la personne correspondante accède à la page des sources à sa connexion suivante.
-- [ ] Un admin enregistre le flux `https://feeds.feedburner.com/symfony/blog` avec une catégorie ; la source apparaît avec le nom annoncé par le flux.
-- [ ] L'enregistrement d'une adresse qui n'est pas un flux lisible est refusé avec un message ; l'enregistrement d'une adresse déjà suivie est refusé.
-- [ ] Juste après l'enregistrement d'une source, aucun de ses articles existants n'apparaît dans le fil.
-- [ ] À la relève suivante, un article apparu dans le flux est publié dans le fil avec les catégories de la source, le posteur « Radar » et le marqueur « auto ».
-- [ ] Un article publié est annoncé une fois dans Google Chat ; une relève suivante ne le republie ni ne le réannonce.
-- [ ] Un article dont l'adresse existe déjà dans Radar n'est pas publié, et le lien existant est inchangé.
-- [ ] Un flux en erreur n'empêche pas la publication des articles d'une autre source ; son erreur est visible sur la page des sources.
-- [ ] Retirer une source arrête la publication de ses articles ; ses liens déjà publiés restent visibles avec le marqueur « auto ».
-- [ ] Le compte « Radar » ne peut pas se connecter.
+- [x] Un membre qui n'est pas admin n'accède ni à la page des sources ni à la liste des admins, et ne voit pas leur entrée de menu.
+- [x] L'admin permanent configuré accède aux deux pages, et l'interface ne permet pas de le retirer de la liste.
+- [x] Un admin ajoute un email à la liste ; la personne correspondante accède à la page des sources à sa connexion suivante.
+- [x] Un admin enregistre le flux `https://feeds.feedburner.com/symfony/blog` avec une catégorie ; la source apparaît avec le nom annoncé par le flux.
+- [x] L'enregistrement d'une adresse qui n'est pas un flux lisible est refusé avec un message ; l'enregistrement d'une adresse déjà suivie est refusé.
+- [x] Juste après l'enregistrement d'une source, aucun de ses articles existants n'apparaît dans le fil.
+- [x] À la relève suivante, un article apparu dans le flux est publié dans le fil avec les catégories de la source, le posteur « Radar » et le marqueur « auto ».
+- [x] Un article publié est annoncé une fois dans Google Chat ; une relève suivante ne le republie ni ne le réannonce.
+- [x] Un article dont l'adresse existe déjà dans Radar n'est pas publié, et le lien existant est inchangé.
+- [x] Un flux en erreur n'empêche pas la publication des articles d'une autre source ; son erreur est visible sur la page des sources.
+- [x] Retirer une source arrête la publication de ses articles ; ses liens déjà publiés restent visibles avec le marqueur « auto ».
+- [x] Le compte « Radar » ne peut pas se connecter.
 
 ## Hors scope
 
 - **Tri manuel avant publication** (file « à trier ») : écarté au profit d'une publication directe, le marqueur « auto » assumant la différence.
 - **Filtre « masquer les liens auto »** : écarté explicitement.
-- **Reprise de l'historique d'un flux** : seuls les articles postérieurs à l'enregistrement de la source sont publiés.
+- **Reprise de l'historique d'un flux** : la relève horaire ne publie que les articles postérieurs à l'enregistrement de la source ; une relève à la demande remonte au plus 72 h (règle 8).
 - **Sources qui ne sont pas des flux RSS/Atom** (newsletters, comptes X, chaînes YouTube sans flux, pages sans flux) : hors périmètre.
 - **Fréquence de relève réglable par source** : une seule fréquence, horaire.
 - **Modification d'une source** (changer ses catégories ou son adresse) : on la retire et on la recrée.

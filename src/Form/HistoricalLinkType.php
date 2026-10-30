@@ -30,7 +30,7 @@ final class HistoricalLinkType extends AbstractType
         ])->add('poster', EntityType::class, [
             'label' => 'Posté par',
             'class' => User::class,
-            'choices' => $this->userRepository->findAllOrderedByEmail(),
+            'choices' => $this->userRepository->findMembersOrderedByEmail(),
             'choice_label' => 'displayName',
             'placeholder' => 'Choisir un membre',
             'required' => false,

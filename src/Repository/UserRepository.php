@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Service\SystemUserProvider;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -39,10 +40,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    /** @return list<User> */
-    public function findAllOrderedByEmail(): array
+    public function findOneByEmail(string $email): ?User
+    {
+        return $this->findOneBy(['email' => $email]);
+    }
+
+    /** @return list<User> les membres, sans le compte système qui publie les articles des sources */
+    public function findMembersOrderedByEmail(): array
     {
         /** @var list<User> */
-        return $this->createQueryBuilder('u')->orderBy('u.email', 'ASC')->getQuery()->getResult();
+        return $this
+            ->createQueryBuilder('u')
+            ->where('u.email != :system')
+            ->setParameter('system', SystemUserProvider::EMAIL)
+            ->orderBy('u.email', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

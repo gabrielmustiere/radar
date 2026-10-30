@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+>
+    <channel>
+        <title>Symfony Blog</title>
+        <atom:link href="https://feeds.feedburner.com/symfony/blog" rel="self" type="application/rss+xml" />
+        <link>https://symfony.com/blog/</link>
+        <description>Most recent posts published on the Symfony project blog</description>
+        <pubDate>Fri, 30 Oct 2026 13:05:30 +0100</pubDate>
+        <language>en</language>
+        <item>
+            <title>New in Symfony 8.2: Recovering from Controller Attribute Failures</title>
+            <link>https://symfony.com/blog/new-in-symfony-8-2-recovering-from-controller-attribute-failures?utm_source=Symfony%20Blog%20Feed&amp;utm_medium=feed</link>
+            <description>Contributed by Kevin Bond in #67563…</description>
+            <content:encoded><![CDATA[<p>Contenu raccourci pour les tests.</p>]]></content:encoded>
+            <guid isPermaLink="false">https://symfony.com/blog/new-in-symfony-8-2-recovering-from-controller-attribute-failures?utm_source=Symfony%20Blog%20Feed&amp;utm_medium=feed</guid>
+            <dc:creator><![CDATA[ Javier Eguiluz ]]></dc:creator>
+            <pubDate>Fri, 30 Oct 2026 09:26:00 +0100</pubDate>
+        </item>
+        <item>
+            <title>SymfonyCon Warsaw 2026: Symfony Mate: From Hallway Idea to Daily Driver</title>
+            <link>https://symfony.com/blog/symfonycon-warsaw-2026-symfony-mate-from-hallway-idea-to-daily-driver?utm_source=Symfony%20Blog%20Feed&amp;utm_medium=feed</link>
+            <description>SymfonyCon Warsaw 2026…</description>
+            <content:encoded><![CDATA[<p>Contenu raccourci pour les tests.</p>]]></content:encoded>
+            <guid isPermaLink="false">https://symfony.com/blog/symfonycon-warsaw-2026-symfony-mate-from-hallway-idea-to-daily-driver?utm_source=Symfony%20Blog%20Feed&amp;utm_medium=feed</guid>
+            <pubDate>Thu, 29 Oct 2026 14:30:00 +0100</pubDate>
+        </item>
+        <item>
+            <title>Symfony AI &amp; MCP Hackathon: Meet the Jury, and What You Can Win</title>
+            <link>https://symfony.com/blog/symfony-ai-and-mcp-hackathon-meet-the-jury-and-what-you-can-win?utm_source=Symfony%20Blog%20Feed&amp;utm_medium=feed</link>
+            <description>Symfony AI &amp; MCP Hackathon…</description>
+            <content:encoded><![CDATA[<p>Contenu raccourci pour les tests.</p>]]></content:encoded>
+            <guid isPermaLink="false">https://symfony.com/blog/symfony-ai-and-mcp-hackathon-meet-the-jury-and-what-you-can-win?utm_source=Symfony%20Blog%20Feed&amp;utm_medium=feed</guid>
+            <pubDate>Thu, 29 Oct 2026 11:30:00 +0100</pubDate>
+        </item>
+    </channel>
+</rss>

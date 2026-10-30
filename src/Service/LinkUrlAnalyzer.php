@@ -34,8 +34,20 @@ final class LinkUrlAnalyzer
 
         $port = $parsed->getPort();
         $port = null === $port ? '' : ':' . $port;
+        $fragment = $this->keptFragment((string) $parsed->getFragment());
 
-        return 'https://' . $host . $port . $path . ([] === $query ? '' : '?' . implode('&', $query));
+        return 'https://' . $host . $port . $path . ([] === $query ? '' : '?' . implode('&', $query)) . $fragment;
+    }
+
+    /**
+     * Une ancre désigne un contenu distinct (une actualité de PHP.net, une section) : elle est conservée. La directive
+     * de fragment de texte (`:~:text=`, ajoutée par « copier le lien vers la sélection ») ne désigne rien : retirée.
+     */
+    private function keptFragment(string $fragment): string
+    {
+        $anchor = explode(':~:', $fragment, limit: 2)[0];
+
+        return '' === $anchor ? '' : '#' . $anchor;
     }
 
     /** @return list<string> paires `clé=valeur` conservées, dans leur ordre d'origine */
