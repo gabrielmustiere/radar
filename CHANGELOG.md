@@ -10,6 +10,20 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-30 — Cartes adaptées à chaque source
+
+### ✨ Fonctionnel
+- **Cartes adaptées à la source** — une vidéo YouTube se lance depuis sa carte, un dépôt GitHub affiche ses étoiles et son langage, un article son auteur et sa date de publication, un post X son auteur et son texte.
+- **Visuels conservés par Radar** — les images des cartes restent en place des mois plus tard, et le navigateur n'appelle plus les sites des liens.
+- **Repli avec l'icône du site** — une carte sans image affiche la favicon du site.
+
+### 🔧 Technique
+- **Cascade de sources** — adaptateurs YouTube, GitHub et X, puis oEmbed, OpenGraph, Twitter Cards, JSON-LD et HTML, fusionnés champ par champ.
+- **Visuels via Flysystem** — stockage local `var/storage/media` (à placer sur le volume persistant), servi par la route authentifiée `/media`.
+- **Commande `app:links:enrich`** — rafraîchit les aperçus échus (`--dry-run`, `--force`), sans annonce ; à lancer après le déploiement.
+- **Lecture vidéo mesurée** — lancer une vidéo dans sa carte compte comme une ouverture du lien.
+- **Aperçus sécurisés** — réseau interne refusé à chaque redirection, limite par domaine, images vérifiées (5 Mo, 16 Mpx) ; étoiles GitHub si `GITHUB_TOKEN` est renseigné.
+
 ## [0.4.1] - 2026-10-29 — Jeu de données réaliste
 
 ### 🔧 Technique
@@ -70,7 +84,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/gabrielmustiere/radar/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/gabrielmustiere/radar/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/gabrielmustiere/radar/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/gabrielmustiere/radar/compare/v0.2.0...v0.3.0
