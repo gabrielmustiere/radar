@@ -189,7 +189,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `010-f-fil-derniers-ajouts` · **livrée** v0.2.0
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
-### V2 — Court terme post-lancement · `0/9 livrées`
+### V2 — Court terme post-lancement · `1/9 livrées`
 
 - [ ] `indicateurs-mensuels` — Permettre au porteur du projet de consulter les indicateurs agrégés du mois pour évaluer les seuils et le signal d'arrêt à 3 mois.
   - Pas encore cadrée
@@ -203,8 +203,8 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [ ] `description-categorie` — Permettre à un membre de décrire le besoin couvert par une catégorie pour que chacun classe de la même façon.
   - Pas encore cadrée
   - C3.3 · P5, P6 · dép. `ajout-lien` · Vision : principe 3 / hypothèse 3
-- [ ] `cartes-par-source` — Permettre à un membre de lire une carte adaptée à la source (dépôt GitHub, vidéo YouTube, post ou compte X, image, article) pour juger un lien d'un coup d'œil.
-  - Story `011-f-cartes-par-source` · **clôture en cours**
+- [x] `cartes-par-source` — Permettre à un membre de lire une carte adaptée à la source (dépôt GitHub, vidéo YouTube, post ou compte X, image, article) pour juger un lien d'un coup d'œil.
+  - Story `011-f-cartes-par-source` · **livrée** v0.5.0
   - C2.2 · P1, P2, P3, P4 · dép. `carte-apercu` · Vision : principe 2
 - [ ] `relance-apercu` — Permettre à un membre de relancer l'aperçu d'un lien dont l'enrichissement a échoué ou vieilli pour rattraper une carte dégradée.
   - Pas encore cadrée
@@ -230,7 +230,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 ### Capacités par horizon
 
 - **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1 · planifiées : —
-- **V2** — livrées : — · planifiées : C1.5, C2.2, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
+- **V2** — livrées : C2.2 · planifiées : C1.5, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
 ### Capacités non couvertes (à challenger)
@@ -239,7 +239,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 
 ### Parcours supportés
 
-- **P1** : entièrement supporté en MVP (C2.2 en V2, carte de repli et aperçu générique au lancement).
+- **P1** : entièrement supporté en MVP ; cartes par source (C2.2) livrées en V2.
 - **P2** : entièrement supporté en MVP (filtre par type de source C4.5 reporté en V2).
 - **P3** : partiellement supporté en MVP (reclassement C3.2 reporté en V2).
 - **P4** : entièrement supporté en MVP via le fil C4.4 (C4.6 en V2).

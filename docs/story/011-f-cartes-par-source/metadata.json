@@ -47,10 +47,15 @@
       "date": "2026-10-30",
       "type": "Livraison",
       "description": "Story livrée sur main en un commit (5e24b28)."
+    },
+    {
+      "date": "2026-10-30",
+      "type": "Release",
+      "description": "Embarquée dans la release v0.5.0 « Cartes adaptées à chaque source »."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v0.5.0",
     "commit": "5e24b28"
   }
 }
