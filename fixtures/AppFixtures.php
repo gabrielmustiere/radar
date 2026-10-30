@@ -18,10 +18,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-    private const string SYMFONY = 'Faire évoluer une app Symfony';
-    private const string LLM = 'Intégrer un LLM dans une app';
-    private const string AGENT = 'Coder avec un agent IA';
-    private const string ARCHITECTURE = 'Structurer une architecture';
+    private const string SYMFONY = 'Symfony';
+    private const string IA = 'IA';
+    private const string AGENT = 'Agents';
+    private const string ARCHITECTURE = 'Architecture';
 
     /**
      * Vrais liens relevés le 29/10/2026, aperçus tels que publiés par les sources (balises og).
@@ -30,7 +30,7 @@ class AppFixtures extends Fixture
      *
      * @var list<array{
      *     url: string,
-     *     categories: list<self::SYMFONY|self::LLM|self::AGENT|self::ARCHITECTURE>,
+     *     categories: list<self::SYMFONY|self::IA|self::AGENT|self::ARCHITECTURE>,
      *     poster: 'admin@example.com'|'marie@example.com'|'karim@example.com',
      *     daysAgo: int,
      *     context: ?string,
@@ -66,7 +66,7 @@ class AppFixtures extends Fixture
         ],
         [
             'url' => 'https://www.youtube.com/watch?v=WiEqxGRg5K4',
-            'categories' => [self::SYMFONY, self::LLM],
+            'categories' => [self::SYMFONY, self::IA],
             'poster' => 'karim@example.com',
             'daysAgo' => 33,
             'context' => 'Le talk SymfonyCon pour voir Symfony AI sur un vrai projet.',
@@ -100,7 +100,7 @@ class AppFixtures extends Fixture
         ],
         [
             'url' => 'https://github.com/symfony/ai',
-            'categories' => [self::LLM, self::SYMFONY],
+            'categories' => [self::IA, self::SYMFONY],
             'poster' => 'karim@example.com',
             'daysAgo' => 52,
             'context' => null,
@@ -113,7 +113,7 @@ class AppFixtures extends Fixture
         ],
         [
             'url' => 'https://github.com/modelcontextprotocol/php-sdk',
-            'categories' => [self::LLM],
+            'categories' => [self::IA],
             'poster' => 'admin@example.com',
             'daysAgo' => 27,
             'context' => 'SDK MCP officiel en PHP, maintenu avec la PHP Foundation.',
@@ -126,7 +126,7 @@ class AppFixtures extends Fixture
         ],
         [
             'url' => 'https://www.youtube.com/watch?v=zjkBMFhNj_g',
-            'categories' => [self::LLM],
+            'categories' => [self::IA],
             'poster' => 'marie@example.com',
             'daysAgo' => 60,
             'context' => 'Une heure pour comprendre ce qu\'il y a sous le capot d\'un LLM, à montrer aux nouveaux.',
@@ -139,7 +139,7 @@ class AppFixtures extends Fixture
         ],
         [
             'url' => 'https://x.com/karpathy/status/2079610838143623371',
-            'categories' => [self::LLM],
+            'categories' => [self::IA],
             'poster' => 'karim@example.com',
             'daysAgo' => 14,
             'context' => null,
@@ -152,7 +152,7 @@ class AppFixtures extends Fixture
         ],
         [
             'url' => 'https://www.anthropic.com/research/building-effective-agents',
-            'categories' => [self::LLM, self::AGENT],
+            'categories' => [self::IA, self::AGENT],
             'poster' => 'admin@example.com',
             'daysAgo' => 45,
             'context' => 'À lire avant de coder le moindre agent : workflows simples d\'abord.',
@@ -315,7 +315,7 @@ class AppFixtures extends Fixture
         }
 
         $categories = [];
-        foreach ([self::SYMFONY, self::LLM, self::AGENT, self::ARCHITECTURE] as $name) {
+        foreach ([self::SYMFONY, self::IA, self::AGENT, self::ARCHITECTURE] as $name) {
             $category = new Category($name, new \DateTimeImmutable());
             $manager->persist($category);
             $categories[] = $category;

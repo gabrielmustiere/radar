@@ -14,7 +14,7 @@ final class LinkCardTest extends LinkWebTestCase
 
         $this->submit($client, [
             'url' => 'https://example.com/article-' . uniqid(),
-            'categories' => [$this->categoryId('Coder avec un agent IA')],
+            'categories' => [$this->categoryId('Agents')],
         ]);
 
         $client->followRedirect();
@@ -31,7 +31,7 @@ final class LinkCardTest extends LinkWebTestCase
         ));
         self::assertSelectorNotExists($card . ' img[src^="https://"]');
         self::assertSelectorTextContains($card . ' [data-test="link-source"]', 'Article');
-        self::assertSelectorTextContains($card . ' [data-test="link-category"]', 'Coder avec un agent IA');
+        self::assertSelectorTextContains($card . ' [data-test="link-category"]', 'Agents');
     }
 
     public function testCardFallsBackWhenSourceHasNoPreview(): void
@@ -39,7 +39,7 @@ final class LinkCardTest extends LinkWebTestCase
         $client = $this->loggedClient();
         $url = 'https://github.com/acme/' . uniqid();
 
-        $this->submit($client, ['url' => $url, 'categories' => [$this->categoryId('Coder avec un agent IA')]]);
+        $this->submit($client, ['url' => $url, 'categories' => [$this->categoryId('Agents')]]);
 
         $client->followRedirect();
         $card = self::FIRST_CARD;

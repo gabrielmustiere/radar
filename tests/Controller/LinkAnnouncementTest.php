@@ -15,7 +15,7 @@ final class LinkAnnouncementTest extends LinkWebTestCase
 
         $this->submit($client, [
             'url' => $url,
-            'categories' => [$this->categoryId('Coder avec un agent IA')],
+            'categories' => [$this->categoryId('Agents')],
             'context' => 'À lire.',
         ]);
 
@@ -26,7 +26,7 @@ final class LinkAnnouncementTest extends LinkWebTestCase
         self::assertNotNull($message);
         $text = $message->getSubject();
         self::assertStringContainsString('*Un article de test*', $text);
-        self::assertStringContainsString('Coder avec un agent IA · posté par admin', $text);
+        self::assertStringContainsString('Agents · posté par admin', $text);
         self::assertStringContainsString('_« À lire. »_', $text);
         self::assertMatchesRegularExpression('#<http://localhost/liens/\d+\|Voir dans Radar>#', $text);
     }
@@ -41,7 +41,7 @@ final class LinkAnnouncementTest extends LinkWebTestCase
             $client,
             [
                 'url' => 'https://example.com/' . uniqid('repris-'),
-                'categories' => [$this->categoryId('Coder avec un agent IA')],
+                'categories' => [$this->categoryId('Agents')],
                 'postedAt' => '2026-01-10',
                 'poster' => (string) $repository->findOneBy(['email' => 'admin@example.com'])?->getId(),
             ],

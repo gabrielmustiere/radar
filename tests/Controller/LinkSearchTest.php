@@ -16,7 +16,7 @@ final class LinkSearchTest extends LinkWebTestCase
         $marker = uniqid('mk');
         $this->submit($client, [
             'url' => 'https://example.com/' . $marker,
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
             ...array_map(static fn(string $value): string => str_replace('{mk}', $marker, $value), $values),
         ]);
 
@@ -45,7 +45,7 @@ final class LinkSearchTest extends LinkWebTestCase
         $marker = uniqid('art');
         $this->submit($client, [
             'url' => 'https://example.com/article-' . $marker,
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
         ]);
 
         $client->request('GET', '/', ['q' => $marker . ' article savoir']);
@@ -58,12 +58,12 @@ final class LinkSearchTest extends LinkWebTestCase
         $marker = uniqid('et');
         $this->submit($client, [
             'url' => 'https://example.com/' . $marker . '-a',
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
             'context' => 'alpha',
         ]);
         $this->submit($client, [
             'url' => 'https://example.com/' . $marker . '-b',
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
             'context' => 'beta',
         ]);
 
@@ -115,7 +115,7 @@ final class LinkSearchTest extends LinkWebTestCase
         ]);
         $this->submit($client, [
             'url' => 'https://example.com/' . $marker . '-dehors',
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
         ]);
 
         $client->request('GET', '/categories/' . $this->categoryId($name), ['q' => $marker]);
@@ -128,7 +128,7 @@ final class LinkSearchTest extends LinkWebTestCase
     {
         $client = $this->loggedClient();
 
-        $client->request('GET', '/categories/' . $this->categoryId('Faire évoluer une app Symfony'));
+        $client->request('GET', '/categories/' . $this->categoryId('Symfony'));
         self::assertSelectorExists('form[role="search"][data-controller~="search-filter"]');
 
         $client->request('GET', '/design-system');

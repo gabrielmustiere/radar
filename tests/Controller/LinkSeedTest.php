@@ -96,7 +96,7 @@ final class LinkSeedTest extends LinkWebTestCase
             [
                 'poster' => $this->userId('admin@example.com'),
                 ...$values,
-                'categories' => [$this->categoryId('Structurer une architecture')],
+                'categories' => [$this->categoryId('Architecture')],
             ],
             '/liens/reprendre',
             'historical_link',

@@ -16,7 +16,7 @@ final class LinkDuplicateTest extends LinkWebTestCase
         $category = 'Catégorie du doublon ' . uniqid();
         $this->submit($client, [
             'url' => 'https://example.com/' . $slug,
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
         ]);
         self::assertResponseRedirects('/');
 
@@ -48,12 +48,12 @@ final class LinkDuplicateTest extends LinkWebTestCase
         $id = uniqid('vid');
         $this->submit($client, [
             'url' => 'https://www.youtube.com/watch?v=' . $id,
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
         ]);
 
         $this->submit($client, [
             'url' => 'https://youtu.be/' . $id,
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
         ]);
 
         self::assertResponseStatusCodeSame(422);
@@ -66,12 +66,12 @@ final class LinkDuplicateTest extends LinkWebTestCase
         $path = 'https://example.com/' . uniqid('liste-');
         $this->submit($client, [
             'url' => $path . '?page=1',
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
         ]);
 
         $this->submit($client, [
             'url' => $path . '?page=2',
-            'categories' => [$this->categoryId('Faire évoluer une app Symfony')],
+            'categories' => [$this->categoryId('Symfony')],
         ]);
 
         self::assertResponseRedirects('/');
