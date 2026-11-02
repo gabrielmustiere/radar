@@ -109,20 +109,25 @@
             {% endfor %}
         </div>
 
-        <div class="mt-3 flex items-center gap-2 border-t border-gray-100 pt-3 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
-            <span class="grid size-6 place-items-center rounded-full bg-gray-100 text-[0.65rem] font-semibold uppercase dark:bg-gray-800 {{ theme.avatar }}">{{ link.postedBy.displayName|first }}</span>
-            <span data-test="link-poster">{{ link.postedBy.displayName }}</span>
+        <div class="mt-3 flex items-center gap-1.5 border-t border-gray-100 pt-3 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
+            {# Un lien d'une source suivie est toujours posté par l'utilisateur système radar : la source prend sa place #}
+            {% if link.source %}
+                <span class="grid size-6 shrink-0 place-items-center rounded-full bg-gray-100 dark:bg-gray-800 {{ theme.avatar }}">
+                    <twig:ux:icon name="tabler:rss" class="size-3.5"/>
+                </span>
+                <span class="min-w-0 truncate font-medium {{ theme.badge }}" title="Publié automatiquement depuis la source « {{ link.source.name }} »" data-test="link-auto">
+                    <span class="sr-only">Publié automatiquement depuis la source </span><span data-test="link-source-name">{{ link.source.name }}</span>
+                </span>
+            {% else %}
+                <span class="grid size-6 place-items-center rounded-full bg-gray-100 text-[0.65rem] font-semibold uppercase dark:bg-gray-800 {{ theme.avatar }}">{{ link.postedBy.displayName|first }}</span>
+                <span data-test="link-poster">{{ link.postedBy.displayName }}</span>
+            {% endif %}
             <span class="size-1 rounded-full bg-gray-300 dark:bg-gray-700"></span>
             <time datetime="{{ link.postedAt|date('c') }}" data-test="link-date">{{ link.postedAt|date('d/m/Y') }}</time>
             {% if link.seeded %}
-                <span class="inline-flex items-center gap-1" title="Repris de l'historique Google Chat" data-test="link-seeded">
-                    <twig:ux:icon name="tabler:history" class="size-3.5"/> repris de Chat
-                </span>
-            {% endif %}
-            {% if link.source %}
-                <span class="inline-flex min-w-0 items-center gap-1 font-medium {{ theme.badge }}" title="Publié automatiquement depuis la source « {{ link.source.name }} »" data-test="link-auto">
-                    <twig:ux:icon name="tabler:rss" class="size-3.5 shrink-0"/>
-                    <span class="truncate">auto · <span data-test="link-source-name">{{ link.source.name }}</span></span>
+                <span class="inline-flex items-center" title="Repris de l'historique Google Chat" data-test="link-seeded">
+                    <twig:ux:icon name="tabler:history" class="size-3.5"/>
+                    <span class="sr-only">repris de Chat</span>
                 </span>
             {% endif %}
             <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" data-test="link-open" title="Ouvrir {{ link.url }}"

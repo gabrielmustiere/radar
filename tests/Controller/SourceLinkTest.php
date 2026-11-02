@@ -47,8 +47,9 @@ final class SourceLinkTest extends SourceWebTestCase
         self::assertStringContainsString('Agents · posté par radar via Journal ' . $run, $message->getSubject());
 
         $client->request('GET', '/?q=' . $run);
-        self::assertSelectorTextContains('[data-test="link-card"] [data-test="link-auto"]', 'auto · Journal ' . $run);
-        self::assertSelectorTextContains('[data-test="link-card"] [data-test="link-poster"]', 'radar');
+        // La source remplace l'utilisateur système radar dans le pied de carte
+        self::assertSelectorTextSame('[data-test="link-card"] [data-test="link-source-name"]', 'Journal ' . $run);
+        self::assertSelectorNotExists('[data-test="link-card"] [data-test="link-poster"]');
     }
 
     public function testArticleAlreadySeenIsNeverPublishedAgain(): void
@@ -162,7 +163,7 @@ final class SourceLinkTest extends SourceWebTestCase
 
         $client->request('GET', '/?q=' . rawurlencode('LLM Voice'));
 
-        self::assertSelectorTextContains('[data-test="link-card"] [data-test="link-auto"]', 'auto · Martin Fowler');
+        self::assertSelectorTextContains('[data-test="link-card"] [data-test="link-auto"]', 'Martin Fowler');
         self::assertStringContainsString(
             'ring-orange-200',
             (string) $client->getCrawler()->filter('[data-test="link-card"]')->attr('class'),

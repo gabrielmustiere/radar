@@ -87,8 +87,8 @@ final class SourceTest extends E2ETestCase
         $this->page->goto('/?q=' . rawurlencode('LLM Voice'));
 
         $card = $this->page->locator('[data-test="link-card"]')->first();
-        $this->expect($card->locator('[data-test="link-auto"]'))->toContainText('auto · Martin Fowler');
-        $this->expect($card->locator('[data-test="link-poster"]'))->toHaveText('radar');
+        $this->expect($card->locator('[data-test="link-source-name"]'))->toHaveText('Martin Fowler');
+        $this->expect($card->locator('[data-test="link-poster"]'))->toHaveCount(0);
     }
 
     /** Un passage interrompu a pu laisser le flux suivi. */
