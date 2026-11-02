@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Extension navigateur · Radar{% endblock %}
+
+{% set button_primary = 'inline-flex shrink-0 items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700' %}
+{% set button_secondary = 'inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 ring-1 ring-gray-200 hover:bg-gray-50 dark:text-gray-300 dark:ring-gray-700 dark:hover:bg-white/10' %}
+
+{% block body %}
+    <div class="mx-auto max-w-2xl">
+        <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Extension navigateur</h1>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+            L'extension Radar ajoute la page que vous lisez sans quitter l'onglet, depuis son icône ou le clic droit.
+            Elle agit avec une clé personnelle, qui ne sert qu'à ajouter des liens et expire après 90 jours sans usage.
+        </p>
+
+        {% if key %}
+            <section class="mt-8 rounded-2xl p-5 ring-1 ring-gray-200/70 dark:ring-gray-800" data-controller="clipboard" data-test="extension-key-created">
+                <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Votre clé</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Copiez-la maintenant et collez-la dans l'extension : elle ne sera plus jamais affichée.
+                    Ne rechargez pas cette page : une nouvelle clé remplacerait celle-ci.
+                </p>
+                <div class="mt-4 flex items-center gap-3">
+                    <code class="min-w-0 flex-1 truncate rounded-xl bg-gray-100 px-3 py-2.5 font-mono text-sm text-gray-900 dark:bg-white/10 dark:text-white"
+                          data-clipboard-target="source" data-test="extension-key-value">{{ key }}</code>
+                    <button type="button" data-action="clipboard#copy" data-test="extension-key-copy" class="{{ button_primary }}">
+                        <twig:ux:icon name="tabler:copy" class="size-4"/> <span data-clipboard-target="label">Copier</span>
+                    </button>
+                </div>
+            </section>
+        {% elseif user.extensionKeyHash %}
+            <section class="mt-8 rounded-2xl p-5 ring-1 ring-gray-200/70 dark:ring-gray-800" data-test="extension-key-status">
+                <h2 class="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+                    Votre clé
+                    {% if expired %}
+                        <span class="rounded-full bg-rose-50 px-2 py-0.5 text-xs font-medium text-rose-700 dark:bg-rose-900/30 dark:text-rose-300" data-test="extension-key-expired">
+                            expirée
+                        </span>
+                    {% endif %}
+                </h2>
+                <dl class="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm">
+                    <dt class="text-gray-500 dark:text-gray-400">Créée le</dt>
+                    <dd class="text-gray-900 dark:text-white" data-test="extension-key-created-at">{{ user.extensionKeyCreatedAt|date('d/m/Y à H:i', 'Europe/Paris') }}</dd>
+                    <dt class="text-gray-500 dark:text-gray-400">Dernière utilisation</dt>
+                    <dd class="text-gray-900 dark:text-white" data-test="extension-key-last-used-at">
+                        {{ user.extensionKeyLastUsedAt ? user.extensionKeyLastUsedAt|date('d/m/Y à H:i', 'Europe/Paris') : 'jamais' }}
+                    </dd>
+                </dl>
+                {% if expired %}
+                    <p class="mt-3 text-sm text-gray-500 dark:text-gray-400">Inutilisée depuis plus de 90 jours, elle ne fonctionne plus : régénérez-la.</p>
+                {% endif %}
+            </section>
+        {% else %}
+            <p class="mt-8 rounded-2xl px-4 py-6 text-center text-sm text-gray-500 ring-1 ring-gray-200/70 dark:text-gray-400 dark:ring-gray-800" data-test="extension-key-none">
+                Vous n'avez pas encore de clé.
+            </p>
+        {% endif %}
+
+        <div class="mt-6 flex flex-wrap gap-3">
+            {# Réponse rendue sans redirection : Turbo Drive n'accepte pas un 200 à un envoi de formulaire. #}
+            <form method="post" action="{{ path('app_extension_key_generate') }}" data-turbo="false">
+                <input type="hidden" name="_token" value="{{ csrf_token('extension-key') }}">
+                <button type="submit" data-test="extension-key-generate" class="{{ key or not user.extensionKeyHash ? button_primary : button_secondary }}">
+                    <twig:ux:icon name="tabler:key" class="size-4"/>
+                    {{ user.extensionKeyHash ? 'Régénérer' : 'Générer une clé' }}
+                </button>
+            </form>
+            {% if user.extensionKeyHash %}
+                <form method="post" action="{{ path('app_extension_key_revoke') }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('extension-key') }}">
+                    <button type="submit" data-test="extension-key-revoke"
+                            class="inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-rose-700 hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-900/30">
+                        <twig:ux:icon name="tabler:key-off" class="size-4"/> Révoquer
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+        {% if user.extensionKeyHash and not key %}
+            <p class="mt-3 text-xs text-gray-500 dark:text-gray-400">Régénérer remplace la clé actuelle, qui cesse aussitôt de fonctionner.</p>
+        {% endif %}
+    </div>
+{% endblock %}

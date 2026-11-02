@@ -16,6 +16,14 @@ security:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+        # API de l'extension navigateur : clé personnelle en `Authorization: Bearer`, jamais de session.
+        # Seul pare-feu à accepter la clé, d'où sa portée limitée à l'ajout.
+        api:
+            pattern: ^/api/
+            stateless: true
+            provider: app_user_provider
+            access_token:
+                token_handler: App\Security\ExtensionKeyHandler
         main:
             lazy: true
             provider: app_user_provider
@@ -40,6 +48,7 @@ security:
     # Note: Only the *first* matching rule is applied
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/, roles: ROLE_USER }
         - { path: ^/, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
 

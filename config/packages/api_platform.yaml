@@ -1,0 +1,20 @@
+api_platform:
+    title: Radar — extension navigateur
+    version: 1.0.0
+    # Ressources DTO sans persistance Doctrine (src/ApiResource), passées par des Providers et Processors.
+    doctrine:
+        enabled: false
+    # Aucun client autre que l'extension : ni documentation ni point d'entrée exposés (R1).
+    enable_docs: false
+    enable_entrypoint: false
+    enable_swagger: false
+    enable_swagger_ui: false
+    enable_re_doc: false
+    enable_scalar: false
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']
+    exception_to_status:
+        App\Exception\DuplicateLinkException: 409
+        App\Exception\CategoryLimitException: 409

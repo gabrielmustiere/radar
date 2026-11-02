@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Ajouter à Radar</title>
+    <link rel="stylesheet" href="popup.css">
+    <script type="module" src="popup.js"></script>
+</head>
+<body>
+<header class="header">
+    <img src="icons/icon-32.png" alt="" width="20" height="20">
+    <h1 data-test="extension-title">Ajouter à Radar</h1>
+</header>
+
+<p class="message" data-test="extension-message" hidden></p>
+
+<section data-screen="key" hidden>
+    <form class="stack" data-test="extension-key-form" novalidate>
+        <label for="key">Votre clé Radar</label>
+        <input id="key" name="key" type="password" autocomplete="off" spellcheck="false" placeholder="rdr_…" data-test="extension-key-input" required>
+        <p class="hint">Générez-la dans Radar, menu du compte → « Extension navigateur », puis collez-la ici.</p>
+        <div class="actions">
+            <button type="submit" class="primary" data-test="extension-key-save">Enregistrer</button>
+            <a class="link" data-radar-link="/extension" target="_blank" rel="noopener">Obtenir une clé</a>
+        </div>
+    </form>
+</section>
+
+<section data-screen="form" hidden>
+    <form class="stack" data-test="extension-link-form" novalidate>
+        <div class="field">
+            <label for="context">Pourquoi c'est utile (facultatif)</label>
+            <textarea id="context" name="context" rows="3" maxlength="500" data-test="extension-context"></textarea>
+        </div>
+
+        <fieldset class="field">
+            <legend>Catégories (une à trois)</legend>
+            <input type="text" autocomplete="off" maxlength="60" data-test="extension-category-query"
+                   placeholder="Filtrer ou créer une catégorie-besoin, puis Entrée" aria-label="Filtrer ou créer une catégorie">
+            <p class="error" data-test="extension-category-error" hidden></p>
+            <div class="pills" data-test="extension-categories"></div>
+        </fieldset>
+
+        <div class="field">
+            <label for="url">Adresse du lien</label>
+            <input id="url" name="url" type="url" data-test="extension-url">
+        </div>
+
+        <div class="duplicate" role="alert" data-test="extension-duplicate" hidden>
+            <p class="duplicate-title">Ce lien est déjà dans Radar</p>
+            <p class="duplicate-notice" data-test="extension-duplicate-notice" hidden></p>
+            <p data-test="extension-duplicate-link-title"></p>
+            <a class="link" target="_blank" rel="noopener" data-test="extension-duplicate-show">Voir la carte →</a>
+            <div class="duplicate-completion" data-test="extension-duplicate-completion" hidden>
+                <p data-test="extension-duplicate-candidates"></p>
+                <button type="button" class="primary" data-test="extension-duplicate-complete">Ajouter mes catégories</button>
+                <p class="hint">Votre contexte n'est pas repris : seul le posteur modifie celui de son lien, la discussion continue dans Chat.</p>
+            </div>
+        </div>
+
+        <ul class="errors" data-test="extension-errors" hidden></ul>
+
+        <div class="actions">
+            <button type="submit" class="primary" data-test="extension-submit">Ajouter</button>
+            <button type="button" class="link" data-action="change-key" data-test="extension-change-key">Changer de clé</button>
+        </div>
+    </form>
+</section>
+
+<section data-screen="done" hidden>
+    <div class="stack" data-test="extension-done">
+        <p class="done-title">Lien ajouté.</p>
+        <p class="hint">Il sera annoncé dans Google Chat dès que sa carte est prête.</p>
+        <a class="primary" target="_blank" rel="noopener" data-test="extension-card-link">Voir la carte</a>
+    </div>
+</section>
+
+<section data-screen="invalid-key" hidden>
+    <div class="stack" data-test="extension-invalid-key">
+        <p>Votre clé n'est plus valide : elle a été révoquée, régénérée ou est restée inutilisée plus de 90 jours. Rien n'a été enregistré.</p>
+        <div class="actions">
+            <a class="primary" data-radar-link="/extension" target="_blank" rel="noopener" data-test="extension-key-page">Obtenir une nouvelle clé</a>
+            <button type="button" class="link" data-action="change-key">Coller une autre clé</button>
+        </div>
+    </div>
+</section>
+</body>
+</html>

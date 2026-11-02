@@ -14,6 +14,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | 2026-10-30 | Enrichir | C1.6, C1.7, C1.8, P8, R13, `sources-automatiques` | Sources suivies publiées automatiquement (édition ciblée du principe 4) |
 | 2026-10-30 | Éditer | C1.6 | Relève d'une source à la demande, avec antériorité — sync post-livraison de la story 012-f-sources-automatiques |
 | 2026-11-02 | Éditer | C1.1, C1.3, C1.6, R4 | Une à trois catégories par lien et par source, complément des catégories d'un lien existant depuis l'alerte de doublon — sync post-livraison de la story 013-f-saisie-categories-ajout |
+| 2026-11-02 | Enrichir | C1.9, P1, `extension-navigateur` | Ajout depuis le navigateur par une extension à clé personnelle — sync post-livraison de la story 014-f-extension-navigateur |
 
 ## Domaines fonctionnels
 
@@ -38,6 +39,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **C1.6** — Un admin peut enregistrer ou retirer une source (flux RSS ou Atom) avec une à trois catégories, consulter son état de relève et la relever à la demande (en reprenant au besoin les articles des dernières heures).
 - **C1.7** — Le système peut publier automatiquement, avec les catégories de la source et un marqueur « auto », chaque nouvel article d'une source suivie.
 - **C1.8** — Un admin peut gérer la liste des emails admin (pour partager la gestion des sources).
+- **C1.9** — Un membre peut ajouter la page qu'il lit depuis son navigateur (icône ou clic droit), avec les mêmes règles qu'un ajout dans Radar, grâce à une clé personnelle limitée à l'ajout, révocable et expirant après 90 jours sans usage.
 
 ### D2 — Cartes
 
@@ -79,7 +81,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 
 - **Acteur** : tout contributeur (développeur, producteur, QA, manager).
 - **Déclencheur** : il tombe sur un lien utile.
-- **Étapes** : C1.1 (+ C3.1 si aucune catégorie ne convient) → C1.3 si le lien existe déjà → C1.2 → C2.1 / C2.2 / C2.3 → C5.1.
+- **Étapes** : C1.1 ou C1.9 depuis le navigateur (+ C3.1 si aucune catégorie ne convient) → C1.3 si le lien existe déjà → C1.2 → C2.1 / C2.2 / C2.3 → C5.1.
 - **État final** : le lien est classé, sa carte est enrichie et l'annonce est postée dans Chat.
 - **Fréquence** : 5 à 20 fois par semaine.
 
@@ -204,7 +206,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `010-f-fil-derniers-ajouts` · **livrée** v0.2.0
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
-### V2 — Court terme post-lancement · `2/10 livrées`
+### V2 — Court terme post-lancement · `2/11 livrées`
 
 - [ ] `indicateurs-mensuels` — Permettre au porteur du projet de consulter les indicateurs agrégés du mois pour évaluer les seuils et le signal d'arrêt à 3 mois.
   - Pas encore cadrée
@@ -236,6 +238,9 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [x] `sources-automatiques` — Permettre à un admin de faire suivre une source (flux RSS ou Atom) dont chaque nouvel article est publié automatiquement, classé et annoncé, pour que la veille des sources suivies entre dans Radar sans effort.
   - Story `012-f-sources-automatiques` · **livrée** v0.7.0
   - C1.6, C1.7, C1.8 · P8 · dép. `cartes-par-source`, `annonce-google-chat` · Vision : principe 4 (édition ciblée du 2026-10-30)
+- [ ] `extension-navigateur` — Permettre à un membre d'ajouter la page qu'il lit depuis son navigateur (icône ou clic droit), avec une clé personnelle limitée à l'ajout, pour que partager dans Radar coûte moins qu'un post Chat.
+  - Story `014-f-extension-navigateur` · **clôture en cours**
+  - C1.9 · P1 · dép. `ajout-lien`, `doublon-lien` · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
 
 ### V3 — Long terme
 
@@ -248,7 +253,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 ### Capacités par horizon
 
 - **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1 · planifiées : —
-- **V2** — livrées : C1.6, C1.7, C1.8, C2.2 · planifiées : C1.5, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
+- **V2** — livrées : C1.6, C1.7, C1.8, C2.2 · planifiées : C1.5, C1.9, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
 ### Capacités non couvertes (à challenger)
@@ -257,7 +262,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 
 ### Parcours supportés
 
-- **P1** : entièrement supporté en MVP ; cartes par source (C2.2) livrées en V2.
+- **P1** : entièrement supporté en MVP ; cartes par source (C2.2) livrées en V2 ; ajout depuis le navigateur (C1.9) en V2.
 - **P2** : entièrement supporté en MVP (filtre par type de source C4.5 reporté en V2).
 - **P3** : partiellement supporté en MVP (reclassement C3.2 reporté en V2).
 - **P4** : entièrement supporté en MVP via le fil C4.4 (C4.6 en V2).

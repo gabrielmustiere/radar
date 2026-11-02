@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "title": "Ajouter la page en cours à Radar depuis le navigateur, sans quitter la page",
+  "created": "2026-11-02",
+  "updated": "2026-11-02",
+  "tags": [
+    "extension-navigateur"
+  ],
+  "backlog": "extension-navigateur",
+  "changelog": [
+    {
+      "date": "2026-11-02",
+      "type": "Création",
+      "description": "Pitch rédigé : extension Chrome (icône + clic droit sur la page), formulaire d'ajout à parité dans la bulle, clé personnelle unique affichée une fois, limitée à l'ajout, expirant après 90 jours sans usage, diffusée en non répertorié sur le Web Store."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Planification",
+      "description": "Plan technique rédigé : API Platform (DTO + Providers/Processors, JSON-LD, docs coupées), pare-feu api stateless par access_token, clé hachée sur User, limiteur d'échecs par IP, extension MV3 vanilla, 7 étapes dont prototype E2E."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Implémentation",
+      "description": "6/7 étapes livrées (recette manuelle Chrome/Edge restante) ; make lint, phpunit (330), playwright (32, 6 ignorés hors story : catalogue E2E épuisé) et schema:validate verts. Écarts : bulle testée en file:// avec API chrome simulée (Playwright PHP sans launchPersistentContext, route() bloquante, validé user) ; doctrine.enabled false et enable_scalar false (recette API Platform) ; doublon sans url et catégories en tableaux {id,name} (IRI Hydra, seuil Mago) ; Length du nom recopié dans le DTO ; Cache-Control no-store protégé par NO_AUTO_CACHE_CONTROL_HEADER ; CSRF invalide → redirection login (comportement projet) ; badge « expirée » sur la page ; ExtensionScopeTest scindé (seuil Mago) ; extension en .PHONY."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Review",
+      "description": "Prêt à commiter : 0 bloquant, 0 important, 5 mineurs ouverts ([ROBUSTESSE] liste des catégories non 200 dans la bulle, [STYLE] paramètre title inutilisé, [ARCHI] URL de carte générée 3 fois, [UX] rechargement qui régénère la clé, [TEST] chemins d'erreur de la bulle)."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Review",
+      "description": "Prêt à commiter ; 5 mineurs corrigés : [ROBUSTESSE] liste des catégories non 200 dans la bulle, [STYLE] paramètre title retiré, [ARCHI] URL de carte générée par ExtensionDuplicate::fromLink, [UX] avertissement contre le rechargement de la page de clé, [TEST] erreurs 422, plafond et badge « expirée » couverts. review.md conservé pour « Hors review »."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Sync",
+      "description": "9 écarts (8 réalignés dans le pitch et le plan), 11/15 critères d'acceptation et 8/8 critères de sortie cochés, 4 dettes dont 1 critique ; backlog enrichi (C1.9, ligne extension-navigateur) et rattaché (champ backlog, accord user)."
+    }
+  ]
+}

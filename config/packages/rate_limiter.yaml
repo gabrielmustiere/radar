@@ -5,3 +5,8 @@ framework:
             policy: token_bucket
             limit: 3
             rate: { interval: '2 seconds', amount: 1 }
+        # API de l'extension : une IP qui accumule les clés refusées est bloquée un moment (429).
+        extension_api_failure:
+            policy: sliding_window
+            limit: 10
+            interval: '15 minutes'

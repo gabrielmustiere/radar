@@ -2,7 +2,7 @@
         db-create db-drop db-reset db-test db-validate migrate migration migrate-rollback fixtures cache-clear \
         phpunit phpunit-coverage phpunit-coverage-text phpunit-coverage-clover phpunit-filter \
         playwright playwright-headed playwright-file \
-        fmt fmt-check mago-lint mago-fix analyze lint build quality clean
+        fmt fmt-check mago-lint mago-fix analyze lint build extension quality clean
 .DEFAULT_GOAL := help
 
 # Colors
@@ -199,6 +199,13 @@ build: ## Build des assets (Tailwind + AssetMapper)
 	@echo "$(BLUE)🏗️  Build des assets...$(RESET)"
 	symfony console tailwind:build --minify
 	symfony console asset-map:compile
+
+extension: ## Construit le zip de l'extension navigateur pour le Chrome Web Store (var/extension/)
+	@mkdir -p var/extension
+	@version=$$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' extension/manifest.json); \
+		rm -f var/extension/radar-extension-$$version.zip; \
+		cd extension && zip -qr ../var/extension/radar-extension-$$version.zip . -x '.*'; \
+		echo "$(GREEN)✅ var/extension/radar-extension-$$version.zip$(RESET)"
 
 quality: fmt mago-fix analyze build ## Lance toute la QA en mode dev (Mago : format, correctifs, analyse + build)
 

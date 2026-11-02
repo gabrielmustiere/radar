@@ -1,0 +1,209 @@
+:root {
+    color-scheme: light dark;
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --text: #1c1917;
+    --muted: #78716c;
+    --line: #e7e5e4;
+    --strong: #1c1917;
+    --on-strong: #ffffff;
+    --danger: #be123c;
+    --warn-bg: #fffbeb;
+    --warn-line: #fde68a;
+    --warn-text: #78350f;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #0c0a09;
+        --surface: #1c1917;
+        --text: #fafaf9;
+        --muted: #a8a29e;
+        --line: #292524;
+        --strong: #ffffff;
+        --on-strong: #1c1917;
+        --danger: #fb7185;
+        --warn-bg: rgb(245 158 11 / 0.1);
+        --warn-line: rgb(245 158 11 / 0.3);
+        --warn-text: #fde68a;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 380px;
+    margin: 0;
+    padding: 16px;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.stack,
+.field {
+    display: grid;
+    gap: 8px;
+}
+
+.stack {
+    gap: 16px;
+}
+
+fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+label,
+legend {
+    font-weight: 500;
+}
+
+legend {
+    margin-bottom: 8px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+input:focus,
+textarea:focus {
+    outline: 2px solid var(--strong);
+    outline-offset: -1px;
+}
+
+.pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.pill {
+    padding: 4px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    cursor: pointer;
+}
+
+.pill[aria-pressed='true'] {
+    border-color: var(--strong);
+    background: var(--strong);
+    color: var(--on-strong);
+    font-weight: 500;
+}
+
+.pill:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.primary {
+    display: inline-flex;
+    padding: 8px 18px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--strong);
+    color: var(--on-strong);
+    font: inherit;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text);
+    font: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.hint {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.message,
+.error,
+.errors {
+    margin: 0 0 12px;
+    color: var(--danger);
+}
+
+.errors {
+    padding-left: 18px;
+}
+
+.duplicate {
+    display: grid;
+    gap: 6px;
+    padding: 12px;
+    border: 1px solid var(--warn-line);
+    border-radius: 16px;
+    background: var(--warn-bg);
+    color: var(--warn-text);
+}
+
+.duplicate p {
+    margin: 0;
+}
+
+.duplicate-title,
+.done-title {
+    margin: 0;
+    font-weight: 600;
+}
+
+.duplicate-completion {
+    display: grid;
+    gap: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--warn-line);
+}

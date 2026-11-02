@@ -1,6 +1,6 @@
 # Stack technique — Radar
 
-> Dernière mise à jour : 2026-10-30 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier du dépôt (source entre parenthèses) ou marquée _non renseigné_. Les briques prévues mais pas encore en place figurent dans « Cible non encore en place ».
+> Dernière mise à jour : 2026-11-02 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier du dépôt (source entre parenthèses) ou marquée _non renseigné_. Les briques prévues mais pas encore en place figurent dans « Cible non encore en place ».
 
 ## Vue d'ensemble
 
@@ -28,8 +28,9 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **Planification** : `symfony/scheduler` `8.1.*`, résolu `v8.1.10` — planning `App\Schedule` (`#[AsSchedule]`, relève horaire des sources), consommé par un worker `messenger:consume scheduler_default` (`composer.json`, `composer.lock`, `src/Schedule.php`, `.symfony.local.yaml`)
 - **Notifications** : Symfony Notifier, `ChatMessage` routé en `async` (`config/packages/messenger.yaml`) ; bridge Google Chat `symfony/google-chat-notifier` 8.1, transport `googlechat` sur `GOOGLE_CHAT_DSN` (`null://null` par défaut) (`composer.json`, `config/packages/notifier.yaml`, `.env`)
 - **HTTP sortant** : Symfony HttpClient `8.1.*`, résolu `v8.1.7` (`composer.lock`) ; client des aperçus `app.preview_http_client` = `NoPrivateNetworkHttpClient` + limiteur par hôte, composé par `App\HttpClient\PreviewHttpClientFactory` (`config/services.yaml`)
-- **Limitation de débit** : `symfony/rate-limiter` `8.1.*`, résolu `v8.1.10` — limiteur `preview_host` (token bucket) (`composer.json`, `config/packages/rate_limiter.yaml`)
-- **Auth** : Security bundle, `form_login` email / mot de passe, provider entité `User` (`config/packages/security.yaml`, `src/Entity/User.php`)
+- **Limitation de débit** : `symfony/rate-limiter` `8.1.*`, résolu `v8.1.10` — limiteurs `preview_host` (token bucket) et `extension_api_failure` (fenêtre glissante, clés refusées par IP) (`composer.json`, `config/packages/rate_limiter.yaml`)
+- **Auth** : Security bundle, `form_login` email / mot de passe, provider entité `User` ; pare-feu `api` sans état (`^/api/`) par `access_token` (clé d'extension, empreinte SHA-256 sur `User`, `App\Security\ExtensionKeyHandler`) (`config/packages/security.yaml`, `src/Entity/User.php`)
+- **API** : API Platform `^5.0`, résolu `v5.0.5` — ressources DTO de l'extension navigateur sous `/api/extension` (`src/ApiResource/`, `src/State/`), JSON-LD, sans intégration Doctrine ni documentation exposée (`composer.json`, `config/packages/api_platform.yaml`)
 - **Mail** : Symfony Mailer (`composer.json`)
 
 ## Frontend
@@ -71,7 +72,8 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 
 ## Outillage de développement local
 
-- **Commandes** : `make init`, `make serve`, `make phpunit`, `make playwright`, `make lint`, `make quality`, `make db-reset`… (`Makefile`)
+- **Commandes** : `make init`, `make serve`, `make phpunit`, `make playwright`, `make lint`, `make quality`, `make db-reset`, `make extension`… (`Makefile`)
+- **Extension navigateur** : Manifest V3 en JS vanilla, sans build (`extension/`) ; zip pour le Chrome Web Store via `make extension` (`var/extension/`) ; vise `https://radar.wip` chargée non empaquetée, `https://radar.mustiere.fr` publiée (`extension/config.js`)
 - **Serveur local** : Symfony CLI, proxy HTTPS `https://radar.wip`, workers Messenger (`async`, `scheduler_default`) + Tailwind watch (`.symfony.local.yaml`)
 - **Services de dev** : `docker compose up -d` → Mailpit (`compose.yaml`)
 - **Assistance IA** : Symfony AI Mate `^0.14` (`composer.json`, `mate/`), serveurs MCP (`.mcp.json`)
@@ -98,3 +100,4 @@ Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un 
 - 2026-10-30 — Enrichir — Backend (HTTP sortant, limitation de débit), Données (fichiers Flysystem), Contraintes (volume des médias) — sync post-livraison de la story 011-f-cartes-par-source
 - 2026-10-30 — Enrichir — Backend (planification), Outillage local (worker scheduler), Cible (workers de production) — sync post-livraison de la story 012-f-sources-automatiques
 - 2026-11-02 — Enrichir — Données (base de prod, WAL), Ops (conteneurisation FrankenPHP, reverse proxy, secrets, sauvegarde), DevOps (déploiement), Cible (container de prod livré) — déploiement en production
+- 2026-11-02 — Enrichir — Backend (API Platform, pare-feu `api`, limiteur `extension_api_failure`), Outillage (extension navigateur, `make extension`) — implémentation de la story 014-f-extension-navigateur
