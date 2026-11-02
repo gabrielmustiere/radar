@@ -44,10 +44,15 @@
       "date": "2026-11-02",
       "type": "Livraison",
       "description": "Commit 995adf0 poussé sur main."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Release",
+      "description": "Publiée dans v0.7.0 — Sources suivies & mise en production."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v0.7.0",
     "commit": "995adf0"
   }
 }

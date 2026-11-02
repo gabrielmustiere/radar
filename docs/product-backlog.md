@@ -204,7 +204,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `010-f-fil-derniers-ajouts` · **livrée** v0.2.0
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
-### V2 — Court terme post-lancement · `1/10 livrées`
+### V2 — Court terme post-lancement · `2/10 livrées`
 
 - [ ] `indicateurs-mensuels` — Permettre au porteur du projet de consulter les indicateurs agrégés du mois pour évaluer les seuils et le signal d'arrêt à 3 mois.
   - Pas encore cadrée
@@ -233,8 +233,8 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [ ] `nouveautes-depuis-derniere-visite` — Permettre à un membre de voir ce qui a été ajouté depuis sa dernière visite pour rattraper la veille sans tout relire.
   - Pas encore cadrée
   - C4.6 · P4 · dép. `fil-derniers-ajouts` · Vision : « la curiosité est le moteur de l'usage »
-- [ ] `sources-automatiques` — Permettre à un admin de faire suivre une source (flux RSS ou Atom) dont chaque nouvel article est publié automatiquement, classé et annoncé, pour que la veille des sources suivies entre dans Radar sans effort.
-  - Story `012-f-sources-automatiques` · **clôture en cours**
+- [x] `sources-automatiques` — Permettre à un admin de faire suivre une source (flux RSS ou Atom) dont chaque nouvel article est publié automatiquement, classé et annoncé, pour que la veille des sources suivies entre dans Radar sans effort.
+  - Story `012-f-sources-automatiques` · **livrée** v0.7.0
   - C1.6, C1.7, C1.8 · P8 · dép. `cartes-par-source`, `annonce-google-chat` · Vision : principe 4 (édition ciblée du 2026-10-30)
 
 ### V3 — Long terme
@@ -248,7 +248,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 ### Capacités par horizon
 
 - **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1 · planifiées : —
-- **V2** — livrées : C2.2 · planifiées : C1.5, C1.6, C1.7, C1.8, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
+- **V2** — livrées : C1.6, C1.7, C1.8, C2.2 · planifiées : C1.5, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
 ### Capacités non couvertes (à challenger)
@@ -264,7 +264,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 - **P5** : non supporté en MVP (C3.2, C3.3, C3.4 en V2).
 - **P6** : entièrement supporté en MVP (description de catégorie C3.3 reportée en V2).
 - **P7** : non supporté en MVP (C6.2 en V2) ; les données sont collectées dès le MVP par C6.1.
-- **P8** : non supporté en MVP (C1.6, C1.7, C1.8 en V2).
+- **P8** : non supporté en MVP ; sources suivies (C1.6, C1.7, C1.8) livrées en V2.
 
 ## Notes pour `/feature-pitch`
 

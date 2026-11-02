@@ -2,7 +2,7 @@
   "version": 2,
   "title": "Publier automatiquement les articles des sources suivies",
   "created": "2026-10-30",
-  "updated": "2026-10-30",
+  "updated": "2026-11-02",
   "tags": [
     "contribution",
     "rss",
@@ -56,10 +56,15 @@
       "date": "2026-10-30",
       "type": "Livraison",
       "description": "Commit ba28258 poussé sur main."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Release",
+      "description": "Publiée dans v0.7.0 — Sources suivies & mise en production."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v0.7.0",
     "commit": "ba28258"
   }
 }
