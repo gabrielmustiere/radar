@@ -44,6 +44,9 @@ function show(screen) {
     document.querySelectorAll('[data-screen]').forEach((section) => {
         section.hidden = section.dataset.screen !== screen;
     });
+    if ('key' === screen) {
+        byTest('extension-key-input').focus();
+    }
 }
 
 function message(text) {
@@ -262,6 +265,7 @@ function debounce(callback, delay) {
     };
 }
 
+byTest('extension-server').textContent = new URL(RADAR_URL).host;
 document.querySelectorAll('[data-radar-link]').forEach((link) => {
     link.href = RADAR_URL + link.dataset.radarLink;
 });
@@ -269,7 +273,6 @@ document.querySelectorAll('[data-action="change-key"]').forEach((button) => {
     button.addEventListener('click', () => {
         message(null);
         show('key');
-        byTest('extension-key-input').focus();
     });
 });
 byTest('extension-key-form').addEventListener('submit', (event) => guard(() => saveKey(event)));

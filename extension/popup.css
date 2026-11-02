@@ -59,6 +59,12 @@ h1 {
     font-weight: 700;
 }
 
+.server {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 12px;
+}
+
 .stack,
 .field {
     display: grid;

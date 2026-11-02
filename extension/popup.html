@@ -10,6 +10,7 @@
 <header class="header">
     <img src="icons/icon-32.png" alt="" width="20" height="20">
     <h1 data-test="extension-title">Ajouter à Radar</h1>
+    <span class="server" data-test="extension-server"></span>
 </header>
 
 <p class="message" data-test="extension-message" hidden></p>
@@ -17,7 +18,7 @@
 <section data-screen="key" hidden>
     <form class="stack" data-test="extension-key-form" novalidate>
         <label for="key">Votre clé Radar</label>
-        <input id="key" name="key" type="password" autocomplete="off" spellcheck="false" placeholder="rdr_…" data-test="extension-key-input" required>
+        <input id="key" name="key" type="text" autocomplete="off" spellcheck="false" placeholder="rdr_…" data-test="extension-key-input" required>
         <p class="hint">Générez-la dans Radar, menu du compte → « Extension navigateur », puis collez-la ici.</p>
         <div class="actions">
             <button type="submit" class="primary" data-test="extension-key-save">Enregistrer</button>

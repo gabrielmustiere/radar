@@ -21,7 +21,6 @@ abstract class ExtensionTestCase extends E2ETestCase
             if (location.protocol === 'file:') {
                 const read = (key) => JSON.parse(localStorage.getItem('chrome.storage.' + key) ?? 'null');
                 window.chrome = {
-                    runtime: { getManifest: () => ({}) },
                     storage: { local: {
                         get: async (key) => (null === read(key) ? {} : { [key]: read(key) }),
                         set: async (items) => Object.entries(items).forEach(([key, value]) => localStorage.setItem('chrome.storage.' + key, JSON.stringify(value))),

@@ -200,12 +200,15 @@ build: ## Build des assets (Tailwind + AssetMapper)
 	symfony console tailwind:build --minify
 	symfony console asset-map:compile
 
-extension: ## Construit le zip de l'extension navigateur pour le Chrome Web Store (var/extension/)
-	@mkdir -p var/extension
+extension: ## Construit l'extension de production (dossier à charger dans Chrome + zip pour le Web Store, var/extension/)
 	@version=$$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' extension/manifest.json); \
-		rm -f var/extension/radar-extension-$$version.zip; \
-		cd extension && zip -qr ../var/extension/radar-extension-$$version.zip . -x '.*'; \
-		echo "$(GREEN)✅ var/extension/radar-extension-$$version.zip$(RESET)"
+		build=var/extension/radar-extension-$$version; \
+		rm -rf $$build $$build.zip && mkdir -p $$build; \
+		cp -R extension/. $$build/; \
+		sed -i.bak 's#https://radar.wip#https://radar.mustiere.fr#' $$build/config.js && rm $$build/config.js.bak; \
+		grep -q 'https://radar.mustiere.fr' $$build/config.js || { echo "❌ adresse de production absente de config.js"; exit 1; }; \
+		(cd $$build && zip -qr ../radar-extension-$$version.zip . -x '.*'); \
+		echo "$(GREEN)✅ $$build/ (à charger dans Chrome) et $$build.zip (Web Store)$(RESET)"
 
 quality: fmt mago-fix analyze build ## Lance toute la QA en mode dev (Mago : format, correctifs, analyse + build)
 

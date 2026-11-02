@@ -20,13 +20,16 @@
                     Copiez-la maintenant et collez-la dans l'extension : elle ne sera plus jamais affichée.
                     Ne rechargez pas cette page : une nouvelle clé remplacerait celle-ci.
                 </p>
-                <div class="mt-4 flex items-center gap-3">
-                    <code class="min-w-0 flex-1 truncate rounded-xl bg-gray-100 px-3 py-2.5 font-mono text-sm text-gray-900 dark:bg-white/10 dark:text-white"
+                <div class="mt-4 flex items-start gap-3">
+                    <code class="min-w-0 flex-1 rounded-xl bg-gray-100 px-3 py-2.5 font-mono text-sm break-all text-gray-900 dark:bg-white/10 dark:text-white"
                           data-clipboard-target="source" data-test="extension-key-value">{{ key }}</code>
                     <button type="button" data-action="clipboard#copy" data-test="extension-key-copy" class="{{ button_primary }}">
                         <twig:ux:icon name="tabler:copy" class="size-4"/> <span data-clipboard-target="label">Copier</span>
                     </button>
                 </div>
+                <p class="mt-2 text-sm text-rose-700 dark:text-rose-300" data-clipboard-target="error" data-test="extension-key-copy-error" hidden>
+                    Le navigateur a refusé la copie : la clé est sélectionnée, copiez-la avec Cmd+C (Ctrl+C).
+                </p>
             </section>
         {% elseif user.extensionKeyHash %}
             <section class="mt-8 rounded-2xl p-5 ring-1 ring-gray-200/70 dark:ring-gray-800" data-test="extension-key-status">

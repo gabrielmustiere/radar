@@ -16,6 +16,7 @@ final class ExtensionTest extends ExtensionTestCase
         $this->openPopup($url);
         $this->pasteKey($key);
 
+        $this->expect($this->page->locator('[data-test="extension-server"]'))->toHaveText('radar.wip');
         $this->expect($this->page->locator('[data-test="extension-url"]'))->toHaveValue($url);
         $this->page->locator('[data-test="extension-context"]')->fill('Repéré depuis l\'extension.');
         $this->page->locator('[data-test="extension-category"]')->first()->click();
@@ -98,6 +99,19 @@ final class ExtensionTest extends ExtensionTestCase
             'désélectionnez une catégorie',
         );
         $this->expect($this->page->locator('[data-test="extension-category"][aria-pressed="true"]'))->toHaveCount(3);
+    }
+
+    public function testKeyIsCopiedAndLeftSelected(): void
+    {
+        $this->context->grantPermissions(['clipboard-read', 'clipboard-write']);
+        $this->logIn();
+        $key = $this->generateKey();
+
+        $this->page->locator('[data-test="extension-key-copy"]')->click();
+
+        $this->expect($this->page->locator('[data-test="extension-key-copy"]'))->toContainText('Copiée');
+        self::assertSame($key, $this->page->evaluate('navigator.clipboard.readText()'));
+        self::assertSame($key, $this->page->evaluate('window.getSelection().toString().trim()'));
     }
 
     public function testRevokedKeyIsExplained(): void

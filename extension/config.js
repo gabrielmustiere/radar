@@ -1,2 +1,2 @@
-// Publiée sur le Web Store, l'extension porte une `update_url` ; chargée non empaquetée, elle vise le serveur local.
-export const RADAR_URL = chrome.runtime.getManifest().update_url ? 'https://radar.mustiere.fr' : 'https://radar.wip';
+// Serveur local dans le dépôt ; `make extension` y met l'adresse de production pour la version distribuée.
+export const RADAR_URL = 'https://radar.wip';

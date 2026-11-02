@@ -73,7 +73,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 ## Outillage de développement local
 
 - **Commandes** : `make init`, `make serve`, `make phpunit`, `make playwright`, `make lint`, `make quality`, `make db-reset`, `make extension`… (`Makefile`)
-- **Extension navigateur** : Manifest V3 en JS vanilla, sans build (`extension/`) ; zip pour le Chrome Web Store via `make extension` (`var/extension/`) ; vise `https://radar.wip` chargée non empaquetée, `https://radar.mustiere.fr` publiée (`extension/config.js`)
+- **Extension navigateur** : Manifest V3 en JS vanilla, sans build (`extension/`) ; `make extension` construit la version de production (adresse `https://radar.mustiere.fr` dans `config.js`) : un dossier à charger dans Chrome et un zip pour le Chrome Web Store (`var/extension/`) ; le dossier `extension/` du dépôt vise `https://radar.wip` (`extension/config.js`, `Makefile`)
 - **Serveur local** : Symfony CLI, proxy HTTPS `https://radar.wip`, workers Messenger (`async`, `scheduler_default`) + Tailwind watch (`.symfony.local.yaml`)
 - **Services de dev** : `docker compose up -d` → Mailpit (`compose.yaml`)
 - **Assistance IA** : Symfony AI Mate `^0.14` (`composer.json`, `mate/`), serveurs MCP (`.mcp.json`)
