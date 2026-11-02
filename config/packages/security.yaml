@@ -19,6 +19,8 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            # Page de connexion exposée sur internet : 5 tentatives par minute et par email + IP.
+            login_throttling: null
             form_login:
                 login_path: app_login
                 check_path: app_login

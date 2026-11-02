@@ -1,0 +1,66 @@
+name: radar
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+# Base SQLite et sessions sur `data`, visuels d'aperçu sur `storage` : partagés par le web et le worker.
+x-volumes: &app-volumes
+  - data:/app/var/data
+  - storage:/app/var/storage
+
+services:
+
+  app:
+    build:
+      context: ../..
+      dockerfile: docker/Dockerfile
+    image: radar-app
+    ports:
+      - "127.0.0.1:9018:80"
+    env_file:
+      - .env
+    volumes: *app-volumes
+    restart: always
+    logging: *default-logging
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1/login"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # Un seul consumer pour les deux transports : la relève horaire (scheduler) d'abord, puis aperçus,
+  # relèves et annonces Chat. Un seul : le limiteur par domaine vit dans le cache local du conteneur.
+  worker:
+    image: radar-app
+    pull_policy: never
+    command: ["bin/console", "messenger:consume", "scheduler_default", "async", "--time-limit=3600", "--memory-limit=256M"]
+    env_file:
+      - .env
+    volumes: *app-volumes
+    restart: always
+    stop_grace_period: 30s
+    # Hérité de l'image FrankenPHP, il interroge le serveur HTTP : sans objet pour un consumer.
+    healthcheck:
+      disable: true
+    logging: *default-logging
+
+  # Lancé par deploy.sh, web et worker arrêtés. WAL : les lectures du web ne sont plus bloquées par les écritures du worker.
+  migrate:
+    image: radar-app
+    pull_policy: never
+    profiles: [tools]
+    healthcheck:
+      disable: true
+    command: ["sh", "-c", "bin/console doctrine:migrations:migrate -n --allow-no-migration && bin/console dbal:run-sql 'PRAGMA journal_mode=WAL'"]
+    env_file:
+      - .env
+    volumes: *app-volumes
+    logging: *default-logging
+
+volumes:
+  data:
+  storage:

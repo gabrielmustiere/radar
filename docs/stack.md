@@ -42,19 +42,19 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 
 ## Données & stockage
 
-- **Base de données** : SQLite — `var/data.db` (dev), `var/data_test.db` (test) (`.env`, `.env.dev`, `.env.test` → `DATABASE_URL`)
+- **Base de données** : SQLite — `var/data.db` (dev), `var/data_test.db` (test), `var/data/radar.db` en prod sur le volume `data`, en mode WAL (lectures du web non bloquées par les écritures du worker) (`.env`, `.env.dev`, `.env.test`, `environments/prod/.env.example` → `DATABASE_URL`, `environments/prod/compose.yaml`)
 - **File / queue** : table Doctrine via Messenger (voir Backend)
 - **Fichiers** : Flysystem — `league/flysystem-bundle` `^3.7` (résolu `3.7.1`), storage `media.storage` : adapter local `var/storage/media` (dev, prod), `memory` en test (`league/flysystem-memory`, dev) — visuels d'aperçu servis par la route authentifiée `/media` (`composer.json`, `config/packages/flysystem.yaml`)
 - **Mail (dev)** : Mailpit, en dev uniquement (`compose.yaml`, `.env` → `MAILER_DSN=smtp://localhost:1027`)
 
 ## Ops / Infrastructure
 
-- **Conteneurisation** : _non en place_ — voir « Cible non encore en place »
-- **Hébergement de production** : serveur / VPS existant de l'organisation — _source : déclaratif utilisateur_
-- **CDN / reverse proxy** : _non renseigné_
-- **Gestion des secrets** : _non renseigné_
+- **Conteneurisation** : image FrankenPHP (`dunglas/frankenphp:1-php8.5.12-bookworm`, mode classique, extensions `gd`, `intl`, `pcntl`, `pdo_sqlite`) construite sur le VPS ; Compose de prod : `app` (web, `127.0.0.1:9018`), `worker` (un seul `messenger:consume scheduler_default async`, même image) et `migrate` (profil `tools`, lancé au déploiement) ; volumes `data` (base + sessions) et `storage` (médias) partagés par web et worker (`docker/Dockerfile`, `environments/prod/compose.yaml`)
+- **Hébergement de production** : VPS `srv-lwskvm` (partagé avec kadence), `https://radar.mustiere.fr` (`environments/prod/.env.script.example`)
+- **CDN / reverse proxy** : Caddy de l'hôte (TLS) → `127.0.0.1:9018`, configuré et rechargé par `deploy.sh` ; proxys de confiance `PRIVATE_SUBNETS` (`deploy.sh`, `environments/prod/.env.example`)
+- **Gestion des secrets** : `environments/prod/.env` (non versionné, modèle `.env.example`), copié par `deploy.sh` en `chmod 600` (`.gitignore`, `deploy.sh`)
 - **Environnements** : dev (local) + prod (VPS), pas de staging — _source : déclaratif utilisateur_
-- **Sauvegarde** : backup du volume qui porte la base SQLite — _source : déclaratif utilisateur_ ; mécanisme précis _non renseigné_
+- **Sauvegarde** : aucune pour l'instant, données sur volumes Docker nommés seulement — _source : déclaratif utilisateur (2026-11-02)_
 
 ## DevOps / CI-CD
 
@@ -62,7 +62,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **Pipeline CI** : _non en place_ (aucun `.github/workflows/`)
 - **Tests** : PHPUnit `13.3.5` (Unit + Functional) (`composer.lock`, `phpunit.dist.xml`) ; Playwright PHP `1.5.0` (E2E, testsuite `e2e` dans `tests/E2E/`) (`composer.lock`, `phpunit.dist.xml`)
 - **Analyse statique / style** : Mago `1.59.0` — formatter, linter (intégrations Symfony + PHPUnit) et analyseur statique en mode strict, zéro finding sans baseline (`composer.lock`, `mago.toml`)
-- **Déploiement** : _non renseigné_
+- **Déploiement** : `./deploy.sh` depuis le poste — git pull sur le VPS, copie du `.env`, build, arrêt web + worker, migrations (jamais de fixtures), redémarrage, Caddy ; premier compte par `bin/console app:user:create <email>` dans le conteneur `app` (`deploy.sh`, `src/Command/CreateUserCommand.php`)
 
 ## Monitoring / observabilité
 
@@ -80,14 +80,13 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 
 Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un fichier) :
 
-- **Container de production FrankenPHP** — image unique (FrankenPHP + app + assets compilés), volume persistant pour SQLite, déployée sur le VPS existant. Deux workers Messenger à y faire tourner : `async` et `scheduler_default` (sans ce dernier, aucune relève des sources, sans erreur).
 - **Image et CI sur GitHub** — GitHub Actions (lint, tests, build de l'image) ; registre d'image à confirmer (GHCR pressenti).
 - **Connexion Google restreinte au domaine Workspace** — exigée par `docs/vision.md` (outil strictement interne) ; remplace ou complète le `form_login` du template.
 - **Annonce dans Google Chat** — webhook entrant de l'espace ; dépend de l'autorisation des webhooks par l'admin Workspace (risque externe, `docs/vision.md`).
 
 ## Contraintes & dette de stack connues
 
-- PHP `>=8.5` imposé par le socle : l'image FrankenPHP devra embarquer PHP 8.5.
+- PHP `>=8.5` imposé par le socle : l'image FrankenPHP embarque PHP 8.5.12 (`docker/Dockerfile`).
 - SQLite impose une seule instance applicative et un volume local (pas de stockage réseau) — cohérent avec un container unique sur un VPS.
 - Les visuels d'aperçu (`var/storage/media`) doivent vivre sur le même volume persistant que la base ; un adapter objet (S3 ou équivalent) se branchera dans `config/packages/flysystem.yaml` sans toucher au code (`config/packages/flysystem.yaml`).
 
@@ -98,3 +97,4 @@ Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un 
 - 2026-10-29 — Enrichir — Backend (notifications) — sync post-livraison de la story 008-f-annonce-google-chat
 - 2026-10-30 — Enrichir — Backend (HTTP sortant, limitation de débit), Données (fichiers Flysystem), Contraintes (volume des médias) — sync post-livraison de la story 011-f-cartes-par-source
 - 2026-10-30 — Enrichir — Backend (planification), Outillage local (worker scheduler), Cible (workers de production) — sync post-livraison de la story 012-f-sources-automatiques
+- 2026-11-02 — Enrichir — Données (base de prod, WAL), Ops (conteneurisation FrankenPHP, reverse proxy, secrets, sauvegarde), DevOps (déploiement), Cible (container de prod livré) — déploiement en production

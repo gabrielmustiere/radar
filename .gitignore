@@ -28,3 +28,7 @@ node_modules
 # Playwright
 /test-failures/
 .playwright-mcp
+
+# Déploiement : secrets de production
+/environments/prod/.env
+/environments/prod/.env.script

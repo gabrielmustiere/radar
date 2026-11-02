@@ -19,9 +19,6 @@ services:
     App\:
         resource: '../src/'
 
-    DataFixtures\:
-        resource: '../fixtures'
-
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
@@ -31,8 +28,21 @@ services:
         factory: ['App\HttpClient\PreviewHttpClientFactory', 'create']
         arguments: ['@http_client', '@limiter.preview_host', 'RadarBot/1.0 (+%env(DEFAULT_URI)%)']
 
+# DataFixtures\ n'est autoloadé qu'avec les dépendances de dev (autoload-dev) : absent de l'image de prod.
+when@dev:
+    services:
+        DataFixtures\:
+            resource: '../fixtures'
+            autowire: true
+            autoconfigure: true
+
 when@test:
     services:
+        DataFixtures\:
+            resource: '../fixtures'
+            autowire: true
+            autoconfigure: true
+
         App\Tests\Http\PreviewMockResponseFactory: ~
 
         # En test, les sources sont simulées : aucun appel réseau, aucune résolution DNS.
