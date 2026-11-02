@@ -10,6 +10,16 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-11-02 — Extension navigateur
+
+### ✨ Fonctionnel
+- **Extension navigateur** — ajouter la page que vous lisez à Radar sans quitter l'onglet, depuis l'icône de l'extension ou le clic droit « Ajouter cette page à Radar ». L'adresse est préremplie, avec les mêmes catégories, la même alerte de doublon et la même annonce dans Google Chat. La publication sur le Chrome Web Store est à venir.
+- **Clé personnelle de l'extension** — elle se génère depuis le menu du compte (« Extension navigateur »), s'affiche une seule fois, et peut être régénérée ou révoquée. Elle ne sert qu'à ajouter des liens et expire après 90 jours sans usage.
+
+### 🔧 Technique
+- **API de l'extension** — API Platform sous `/api/extension`, derrière un pare-feu sans session authentifié par clé (seule son empreinte est conservée). Une adresse est bloquée après 10 clés refusées en 15 minutes.
+- **Paquet de l'extension** — `make extension` produit le zip pour le Chrome Web Store, et une page de confidentialité publique est en ligne.
+
 ## [0.8.1] - 2026-11-02 — Cartes ajustées aux grands écrans
 
 ### ✨ Fonctionnel
@@ -126,7 +136,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.8.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/gabrielmustiere/radar/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/gabrielmustiere/radar/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/gabrielmustiere/radar/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/gabrielmustiere/radar/compare/v0.6.0...v0.7.0
