@@ -10,6 +10,12 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-11-02 — Cartes ajustées aux grands écrans
+
+### ✨ Fonctionnel
+- **Plus de colonnes sur grand écran** — le fil ajoute des colonnes au lieu d'étirer les cartes : 5 colonnes en 1920 px, 7 sur un écran 2K, une seule sur tablette étroite. Les cartes gardent une taille lisible et leurs visuels restent nets.
+- **Pied de carte lisible sur les cartes étroites** — un lien publié par une source suivie affiche le nom de la source à la place de « radar », au lieu d'un badge tronqué ; « repris de Chat » devient une icône avec infobulle.
+
 ## [0.8.0] - 2026-11-02 — Catégories éditables
 
 ### ✨ Fonctionnel
@@ -120,7 +126,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.8.1...HEAD
+[0.8.1]: https://github.com/gabrielmustiere/radar/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/gabrielmustiere/radar/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/gabrielmustiere/radar/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/gabrielmustiere/radar/compare/v0.5.0...v0.6.0
