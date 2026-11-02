@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Repository\UserRepository;
 use Symfony\Component\DomCrawler\Crawler;
 
 final class CategoryControllerTest extends LinkWebTestCase
@@ -80,6 +81,28 @@ final class CategoryControllerTest extends LinkWebTestCase
         self::assertSame($open->attr('href'), $crawler->filter('[data-test="link-title"] a')->attr('href'));
         $client->click($crawler->filter('[data-test="link-category"]')->link());
         self::assertSelectorTextContains('h1', $name);
+    }
+
+    public function testOnlyAdminSeesTheRenameButtonOnACategoryPage(): void
+    {
+        $client = $this->loggedClient();
+        $path = '/categories/' . $this->createCategory('Renommable ' . uniqid());
+
+        $client->request('GET', $path);
+        self::assertSelectorExists('[data-test="category-rename"]');
+        self::assertSelectorExists('#modal-category-rename [data-test="category-rename-name"]');
+
+        $client->request('GET', '/');
+        self::assertSelectorNotExists('[data-test="category-rename"]');
+
+        $repository = self::getContainer()->get(UserRepository::class);
+        self::assertInstanceOf(UserRepository::class, $repository);
+        $member = $repository->findOneByEmail('marie@example.com');
+        self::assertNotNull($member);
+        $client->loginUser($member);
+        $client->request('GET', $path);
+        self::assertResponseIsSuccessful();
+        self::assertSelectorNotExists('[data-test="category-rename"]');
     }
 
     public function testUnknownCategoryIsNotFound(): void

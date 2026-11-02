@@ -1,0 +1,24 @@
+<div {{ attributes }}>
+    <form data-action="live#action:prevent" data-live-action-param="save" data-test="category-rename-form" class="space-y-4" novalidate>
+        <div>
+            <label for="category-rename-name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100">Libellé</label>
+            <input type="text" id="category-rename-name" data-test="category-rename-name" autocomplete="off" maxlength="60"
+                   value="{{ name }}" data-model="norender|name" autofocus
+                   class="block w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 focus:border-gray-900 focus:ring-gray-900 dark:border-gray-800 dark:bg-gray-950 dark:text-white dark:focus:border-white dark:focus:ring-white">
+            {% if error %}
+                <p class="mt-2 text-sm text-rose-700 dark:text-rose-400" data-test="category-rename-error">{{ error }}</p>
+            {% endif %}
+        </div>
+        <div class="flex items-center justify-end gap-3">
+            <twig:ux:icon name="tabler:loader-2" class="size-4 animate-spin text-gray-900 dark:text-white" data-loading="delay|show" hidden/>
+            <button type="button" data-action="flowbite-modal#close"
+                    class="rounded-xl px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white">
+                Annuler
+            </button>
+            <button type="submit" data-test="category-rename-submit"
+                    class="rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700">
+                Enregistrer
+            </button>
+        </div>
+    </form>
+</div>

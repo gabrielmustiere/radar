@@ -98,6 +98,23 @@ final class AddLinkTest extends E2ETestCase
         $this->expect($modal->locator('[data-test="link-url"]'))->toHaveValue('');
     }
 
+    public function testPlusButtonCreatesAndChecksACategoryWithoutSubmitting(): void
+    {
+        $this->logIn();
+        $modal = $this->openModal();
+        // Nom stable : le premier passage la crée, les suivants la retrouvent (aucune catégorie ne se supprime).
+        $name = 'e2e créée au bouton plus';
+
+        $query = $modal->locator('[data-test="category-query"]');
+        $query->fill($name);
+        $modal->locator('[data-test="category-create"]')->click();
+
+        $pill = $modal->locator(sprintf('[data-test="category-pill"]:has-text("%s")', ucfirst($name)));
+        $this->expect($pill->locator('input'))->toBeChecked();
+        $this->expect($query)->toHaveValue('');
+        $this->expect($modal)->toBeVisible();
+    }
+
     public function testDuplicateIsCompletedWithTheCheckedCategories(): void
     {
         $this->logIn();

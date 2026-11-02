@@ -3,6 +3,24 @@
 <div {{ attributes.defaults({class: 'transition-opacity duration-200'}) }} data-loading="delay|addClass(opacity-60)">
     <div class="flex items-center gap-3">
         <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ category ? category.name : 'Tous les liens' }}</h1>
+        {% if category and is_granted('RADAR_ADMIN') %}
+            <twig:Modal id="category-rename" class="-ml-2">
+                <twig:Modal:Trigger>
+                    <button type="button" data-test="category-rename" title="Renommer la catégorie"
+                            data-action="flowbite-modal#open" data-flowbite-modal-target="trigger" aria-haspopup="dialog"
+                            class="grid size-8 place-items-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-white">
+                        <twig:ux:icon name="tabler:edit" class="size-4"/>
+                        <span class="sr-only">Renommer la catégorie</span>
+                    </button>
+                </twig:Modal:Trigger>
+                <twig:Modal:Content class="w-[calc(100%-2rem)] max-w-md rounded-3xl border-0 p-6 shadow-2xl ring-1 ring-gray-200/70 sm:p-8 dark:ring-gray-800">
+                    <twig:Modal:Header class="border-0 pb-4 md:pb-4">
+                        <twig:Modal:Title class="font-display text-lg font-semibold">Renommer la catégorie</twig:Modal:Title>
+                    </twig:Modal:Header>
+                    <twig:CategoryRenameForm :category="category"/>
+                </twig:Modal:Content>
+            </twig:Modal>
+        {% endif %}
         <span class="size-1 rounded-full bg-gray-400"></span>
         {% include 'link/_count.html.twig' %}
     </div>
