@@ -74,6 +74,37 @@ final class RichCardTest extends E2ETestCase
         $this->expect($this->page->locator('[data-test="link-card"]')->first())->toBeVisible();
 
         self::assertTrue($this->page->evaluate('document.documentElement.scrollWidth <= window.innerWidth'));
+        self::assertSame(
+            1,
+            $this->page->evaluate(
+                'new Set([...document.querySelectorAll(\'[data-test="link-card"]\')].map((card) => Math.round(card.getBoundingClientRect().left))).size',
+            ),
+        );
+    }
+
+    public function testWideScreenAddsColumnsInsteadOfStretchingCards(): void
+    {
+        $this->logIn();
+        $this->page->setViewportSize(2560, 1440);
+
+        $this->page->goto('/');
+        $this->expect($this->page->locator('[data-test="link-card"]')->first())->toBeVisible();
+
+        /** @var array{columns: int, widest: float} $layout */
+        $layout = $this->page->evaluate(<<<'JS'
+            () => {
+                const cards = [...document.querySelectorAll('[data-test="link-card"]')].map((card) => card.getBoundingClientRect());
+
+                return {
+                    columns: new Set(cards.map((card) => Math.round(card.left))).size,
+                    widest: Math.max(...cards.map((card) => card.width)),
+                };
+            }
+            JS);
+
+        self::assertGreaterThanOrEqual(5, $layout['columns']);
+        // Les visuels sont conservés sur 600 px de large : au-delà, ils seraient agrandis et flous.
+        self::assertLessThanOrEqual(600, $layout['widest']);
     }
 
     /** Ajoute le lien dans la première catégorie, puis attend que sa carte quitte l'état « en cours ». */
