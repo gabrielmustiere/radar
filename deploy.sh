@@ -65,7 +65,12 @@ remote "
 "
 
 step "Étape 5 : démarrage du web et du worker"
-remote "cd '$SITE_DIR' && $COMPOSE up -d --wait --wait-timeout 120 --remove-orphans app worker"
+# --wait sur le web seul : le worker n'a pas de healthcheck, compose le traiterait comme un échec.
+remote "
+  cd '$SITE_DIR'
+  $COMPOSE up -d --wait --wait-timeout 120 --remove-orphans app
+  $COMPOSE up -d worker
+"
 
 # Le Caddy hôte sert tous les sites du serveur : reload (gracieux), jamais restart.
 step "Étape 6 : configuration Caddy"
