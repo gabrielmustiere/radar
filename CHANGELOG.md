@@ -10,6 +10,16 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-11-02 — Extension branchée sur la production
+
+### ✨ Fonctionnel
+- **L'extension parle à la bonne instance** — la version distribuée vise radar.mustiere.fr ; la bulle affiche le serveur auquel elle est reliée, pour repérer d'un coup d'œil une extension mal branchée.
+- **Clé plus simple à coller** — la clé collée dans l'extension reste lisible, et le curseur est déjà dans le champ.
+- **Copie de la clé plus fiable** — la page « Extension navigateur » affiche la clé en entier et la laisse sélectionnée après « Copier » ; si le navigateur refuse la copie, un message invite à faire Cmd+C.
+
+### 🔧 Technique
+- **`make extension`** construit la version de production : un dossier à charger dans Chrome et un zip pour le Chrome Web Store ; le dossier `extension/` du dépôt reste réglé sur le serveur local.
+
 ## [0.9.0] - 2026-11-02 — Extension navigateur
 
 ### ✨ Fonctionnel
@@ -136,7 +146,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/gabrielmustiere/radar/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/gabrielmustiere/radar/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/gabrielmustiere/radar/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/gabrielmustiere/radar/compare/v0.7.0...v0.8.0
