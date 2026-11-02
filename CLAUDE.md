@@ -51,7 +51,7 @@ Transformer les tâches en objectifs vérifiables :
 - "Corriger le bug" → "Écrire un test qui le reproduit, puis le faire passer"
 - "Refactor X" → "Tests verts avant et après"
 
-Pour le multi-étapes : suivre le workflow `PLAN → ANALYZE → BUILD → TEST` (voir skill `/workflow:help`). **Ne jamais passer à la phase suivante sans validation du user.**
+Pour le multi-étapes : suivre le workflow `PLAN → ANALYZE → BUILD → TEST` (voir skill `/forge:help`). **Ne jamais passer à la phase suivante sans validation du user.**
 
 ## Stack
 
@@ -101,24 +101,24 @@ Request → Controller → Service/Manager → Repository → Entity → Respons
 
 ## Skills disponibles
 
-Le projet s'appuie sur la marketplace `gabrielmustiere/skills`. Deux plugins structurent le travail sur ce dépôt :
+Deux plugins structurent le travail sur ce dépôt : `forge` (marketplace `gabrielmustiere/forge`) et `symfony` (marketplace `gabrielmustiere/skills`).
 
-### Plugin `workflow` — pipeline de développement
+### Plugin `forge` — pipeline de développement
 
 Cycle complet vision → backlog → feature/refacto/tech → release.
 
 | Skill                    | Usage                                                |
 |--------------------------|------------------------------------------------------|
-| `/workflow:help`         | Vue d'ensemble du pipeline                           |
-| `/workflow:vision`       | Phase 0 : cadrer la vision produit                   |
-| `/workflow:product-backlog` | Construire/maintenir le backlog                   |
-| `/workflow:feature-pitch`, `/workflow:feature-design`, `/workflow:feature` | Track feature complet |
-| `/workflow:refactor-plan`, `/workflow:refactor` | Track refacto                       |
-| `/workflow:tech-plan`, `/workflow:tech` | Track technique                              |
-| `/workflow:test-scenario` | Spécifier les scénarios de test                     |
-| `/workflow:commit`, `/workflow:release` | Sortie de livrables                          |
-| `/workflow:review`, `/workflow:report`, `/workflow:sync` | Suivi & qualité             |
-| `/workflow:import-external`, `/workflow:migrate-legacy`, `/workflow:doc-feature` | Cas particuliers |
+| `/forge:help`            | Vue d'ensemble du pipeline                           |
+| `/forge:vision`          | Phase 0 : cadrer la vision produit                   |
+| `/forge:product-backlog` | Construire/maintenir le backlog                      |
+| `/forge:feature-pitch`, `/forge:feature-plan`, `/forge:feature-implem` | Track feature complet |
+| `/forge:refactor-plan`, `/forge:refactor-implem` | Track refacto                        |
+| `/forge:tech-plan`, `/forge:tech-implem` | Track technique                              |
+| `/forge:test-scenario`   | Spécifier les scénarios de test                      |
+| `/forge:commit`, `/forge:release` | Sortie de livrables                         |
+| `/forge:review`, `/forge:sync` | Suivi & qualité                                |
+| `/forge:doc-feature`     | Cas particuliers                                     |
 
 ### Plugin `symfony` — recettes framework
 
