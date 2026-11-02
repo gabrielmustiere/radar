@@ -39,6 +39,15 @@
       "date": "2026-11-02",
       "type": "Sync",
       "description": "7 écarts (6 réalignés dans le pitch et le plan), 16/17 critères d'acceptation et 7/7 critères de sortie cochés, 3 dettes ; vision (principe 5) et backlog (C1.1, C1.3, C1.6, R4) passés à trois catégories."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Livraison",
+      "description": "Commit 995adf0 poussé sur main."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "995adf0"
+  }
 }
