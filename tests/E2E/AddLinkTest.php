@@ -53,7 +53,7 @@ final class AddLinkTest extends E2ETestCase
         $this->expect($modal->locator('[data-test="link-submit"]'))->toBeDisabled();
     }
 
-    public function testThirdCategoryIsLockedOnceTwoAreChecked(): void
+    public function testFourthCategoryIsLockedOnceThreeAreChecked(): void
     {
         $this->logIn();
         $modal = $this->openModal();
@@ -61,8 +61,62 @@ final class AddLinkTest extends E2ETestCase
         $labels = $modal->locator('[data-test="link-categories"] > div > label');
         $labels->nth(0)->click();
         $labels->nth(1)->click();
+        $labels->nth(2)->click();
 
-        $this->expect($modal->locator('[data-test="link-categories"] input')->nth(2))->toBeDisabled();
+        $this->expect($modal->locator('[data-test="link-categories"] input[type="checkbox"]')->nth(3))->toBeDisabled();
+    }
+
+    public function testFormStartsWithTheContextThenCategoriesThenAddress(): void
+    {
+        $this->logIn();
+        $modal = $this->openModal();
+
+        $this->expect($modal->locator('[data-test="link-context"]'))->toBeFocused();
+        self::assertSame(
+            ['link-context', 'link-categories', 'link-url'],
+            $this->page->evaluate(
+                "[...document.querySelectorAll('[data-test=\"link-modal\"] [data-test=\"link-context\"], [data-test=\"link-modal\"] [data-test=\"link-categories\"], [data-test=\"link-modal\"] [data-test=\"link-url\"]')].map(e => e.dataset.test)",
+            ),
+        );
+    }
+
+    public function testEnterCreatesAndChecksACategoryWithoutSubmitting(): void
+    {
+        $this->logIn();
+        $modal = $this->openModal();
+        // Nom stable : le premier passage la crée, les suivants la retrouvent (aucune catégorie ne se supprime).
+        $name = 'e2e créée à l\'entrée';
+
+        $query = $modal->locator('[data-test="category-query"]');
+        $query->fill($name);
+        $query->press('Enter');
+
+        $pill = $modal->locator(sprintf('[data-test="category-pill"]:has-text("%s")', ucfirst($name)));
+        $this->expect($pill->locator('input'))->toBeChecked();
+        $this->expect($query)->toHaveValue('');
+        $this->expect($modal)->toBeVisible();
+        $this->expect($modal->locator('[data-test="link-url"]'))->toHaveValue('');
+    }
+
+    public function testDuplicateIsCompletedWithTheCheckedCategories(): void
+    {
+        $this->logIn();
+        $url = $this->freeRealLink();
+        $modal = $this->openModal();
+        $labels = $modal->locator('[data-test="link-categories"] > div > label');
+        $labels->nth(0)->click();
+        $modal->locator('[data-test="link-url"]')->fill($url);
+        $modal->locator('[data-test="link-submit"]')->click();
+        $this->expect($modal)->toBeHidden();
+
+        $modal = $this->openModal();
+        $modal->locator('[data-test="link-categories"] > div > label')->nth(1)->click();
+        $modal->locator('[data-test="link-url"]')->fill($url);
+        $modal->locator('[data-test="link-duplicate-complete"]')->click();
+
+        $this->expect($this->page->locator('[role="alert"]'))->toContainText('Catégories ajoutées.');
+        self::assertMatchesRegularExpression('#/liens/\\d+$#', $this->page->url());
+        $this->expect($this->page->locator('[data-test="link-card"] [data-test="link-category"]'))->toHaveCount(2);
     }
 
     public function testCancelClosesTheModalAndStartsAFreshFormNextTime(): void

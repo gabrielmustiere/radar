@@ -27,7 +27,7 @@ final class SourceType extends AbstractType
             'default_protocol' => null,
             'attr' => ['placeholder' => 'https://…/feed', 'data-test' => 'source-url'],
         ])->add('categories', EntityType::class, [
-            'label' => 'Catégories (une ou deux)',
+            'label' => 'Catégories (une à trois)',
             'class' => Category::class,
             'choices' => $this->categoryRepository->findAllOrderedByName(),
             'choice_label' => 'name',

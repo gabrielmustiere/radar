@@ -2,7 +2,7 @@
 
 > Pitch en une phrase : un outil de veille partagé pour la cinquantaine de développeurs, producteurs, QA et managers de l'organisation, qui empêche les liens postés dans Google Chat de disparaître en quelques jours, en les transformant en cartes enrichies, classées par besoin et retrouvables des mois plus tard — chaque ajout restant annoncé dans Google Chat.
 
-_Document vivant — enrichi au fil du cycle de vie, refondu lors d'un pivot stratégique. Date de dernière mise à jour : 2026-10-30._
+_Document vivant — enrichi au fil du cycle de vie, refondu lors d'un pivot stratégique. Date de dernière mise à jour : 2026-11-02._
 
 ## Changelog
 
@@ -13,6 +13,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | 2026-10-29 | Création | — | Vision initiale |
 | 2026-10-29 | Éditer | — | Renommage du projet : Veille → Radar |
 | 2026-10-30 | Éditer | Principes produit | Principe 4 : un lien peut aussi entrer par une source suivie, classé d'office (story `012-f-sources-automatiques`) |
+| 2026-11-02 | Éditer | Principes produit | Principe 5 : une à trois catégories par lien — sync post-livraison de la story `013-f-saisie-categories-ajout` |
 
 ## Le problème
 
@@ -89,7 +90,7 @@ Après 3 mois d'usage, l'un de ces constats déclenche un arrêt ou un pivot :
 2. **Une carte se lit sans clic** — aperçu visuel, type de source, posteur, date : on décide si le lien vaut le clic sans quitter l'outil. C'est la traduction vérifiable de « esthétique et intéressant ». Une source qui ne fournit pas d'aperçu a quand même une carte de repli soignée.
 3. **Les catégories sont des besoins, pas des rubriques** — on classe par problème à résoudre (« tester une app mobile ») plutôt que par taxonomie de bibliothèque (« Mobile > QA »).
 4. **L'outil est la porte d'entrée, Google Chat est le haut-parleur** — un lien entre uniquement par l'outil, où il est classé ; l'outil l'annonce ensuite dans Google Chat, où la discussion continue. Un lien entre soit par un membre qui le classe, soit par une source suivie (flux choisi par un admin) qui le classe d'office dans ses catégories : choisir une source est une forme de sélection collective, et la carte signale qu'il est arrivé automatiquement.
-5. **Le classement est collectif** — le posteur choisit une ou deux catégories en un clic ; n'importe qui peut ensuite reclasser ou compléter. Pas de curateur unique.
+5. **Le classement est collectif** — le posteur choisit une à trois catégories en un clic ; n'importe qui peut ensuite reclasser ou compléter. Pas de curateur unique.
 
 ## Anti-objectifs
 

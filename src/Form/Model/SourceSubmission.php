@@ -19,7 +19,7 @@ class SourceSubmission
         min: 1,
         max: LinkSubmission::MAX_CATEGORIES,
         minMessage: 'Choisissez au moins une catégorie.',
-        maxMessage: 'Une source porte au plus deux catégories.',
+        maxMessage: 'Une source porte au plus trois catégories.',
     )]
     public array $categories = [];
 }

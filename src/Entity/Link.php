@@ -157,6 +157,13 @@ class Link
         return $this->categories;
     }
 
+    public function addCategory(Category $category): void
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+    }
+
     public function isSeeded(): bool
     {
         return $this->seeded;

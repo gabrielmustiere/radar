@@ -12,8 +12,9 @@ final class CategoryControllerTest extends LinkWebTestCase
     {
         $client = $this->loggedClient();
         $name = 'Sidebar ' . uniqid();
-        $this->submit($client, ['url' => 'https://example.com/' . uniqid('nav-a-'), 'newCategory' => $name]);
-        $this->submit($client, ['url' => 'https://example.com/' . uniqid('nav-b-'), 'newCategory' => $name]);
+        $categories = [$this->createCategory($name)];
+        $this->submit($client, ['url' => 'https://example.com/' . uniqid('nav-a-'), 'categories' => $categories]);
+        $this->submit($client, ['url' => 'https://example.com/' . uniqid('nav-b-'), 'categories' => $categories]);
 
         $crawler = $client->request('GET', '/');
 
@@ -24,6 +25,19 @@ final class CategoryControllerTest extends LinkWebTestCase
         self::assertStringEndsWith('2', trim($item->text()));
     }
 
+    public function testCategoryWithoutLinkIsNotInTheSidebar(): void
+    {
+        $client = $this->loggedClient();
+        $name = 'Sans lien ' . uniqid();
+        $this->createCategory($name);
+
+        $client->request('GET', '/');
+
+        self::assertSelectorTextNotContains('[data-test="category-nav"]', $name);
+        $client->request('GET', '/liens/ajouter');
+        self::assertSelectorTextContains('[data-test="link-categories"]', $name);
+    }
+
     public function testCategoryPageListsOnlyItsLinksMostRecentFirst(): void
     {
         $client = $this->loggedClient();
@@ -32,9 +46,11 @@ final class CategoryControllerTest extends LinkWebTestCase
         $older = 'https://example.com/' . uniqid('ancien-');
         $newer = 'https://example.com/' . uniqid('recent-');
         $outside = 'https://example.com/' . uniqid('ailleurs-');
-        $this->submit($client, ['url' => $older, 'newCategory' => $name]);
-        $this->submit($client, ['url' => $newer, 'categories' => [$this->categoryId($name)], 'newCategory' => $other]);
-        $this->submit($client, ['url' => $outside, 'newCategory' => $other]);
+        $nameId = $this->createCategory($name);
+        $otherId = $this->createCategory($other);
+        $this->submit($client, ['url' => $older, 'categories' => [$nameId]]);
+        $this->submit($client, ['url' => $newer, 'categories' => [$nameId, $otherId]]);
+        $this->submit($client, ['url' => $outside, 'categories' => [$otherId]]);
 
         $client->request('GET', '/categories/' . $this->categoryId($name));
 
@@ -52,7 +68,7 @@ final class CategoryControllerTest extends LinkWebTestCase
         $client = $this->loggedClient();
         $name = 'Rebond ' . uniqid();
         $url = 'https://example.com/' . uniqid('ouvrir-');
-        $this->submit($client, ['url' => $url, 'newCategory' => $name]);
+        $this->submit($client, ['url' => $url, 'categories' => [$this->createCategory($name)]]);
 
         $crawler = $client->request('GET', '/categories/' . $this->categoryId($name));
 

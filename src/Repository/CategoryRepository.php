@@ -24,4 +24,31 @@ class CategoryRepository extends ServiceEntityRepository
         /** @var list<Category> */
         return $this->createQueryBuilder('c')->orderBy('c.name', 'ASC')->getQuery()->getResult();
     }
+
+    /**
+     * @param list<int|string> $ids
+     *
+     * @return list<Category>
+     */
+    public function findByIdsOrderedByName(array $ids): array
+    {
+        if ([] === $ids) {
+            return [];
+        }
+
+        /** @var list<Category> */
+        return $this
+            ->createQueryBuilder('c')
+            ->where('c.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function save(Category $category): void
+    {
+        $this->getEntityManager()->persist($category);
+        $this->getEntityManager()->flush();
+    }
 }

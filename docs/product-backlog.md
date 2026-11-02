@@ -2,7 +2,7 @@
 
 > Carte des capacités fonctionnelles et backlog priorisé dérivé de `docs/vision.md`.
 
-_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-10-30._
+_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-11-02._
 
 ## Changelog
 
@@ -13,6 +13,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | 2026-10-29 | Création | — | Backlog initial dérivé de la vision |
 | 2026-10-30 | Enrichir | C1.6, C1.7, C1.8, P8, R13, `sources-automatiques` | Sources suivies publiées automatiquement (édition ciblée du principe 4) |
 | 2026-10-30 | Éditer | C1.6 | Relève d'une source à la demande, avec antériorité — sync post-livraison de la story 012-f-sources-automatiques |
+| 2026-11-02 | Éditer | C1.1, C1.3, C1.6, R4 | Une à trois catégories par lien et par source, complément des catégories d'un lien existant depuis l'alerte de doublon — sync post-livraison de la story 013-f-saisie-categories-ajout |
 
 ## Domaines fonctionnels
 
@@ -29,12 +30,12 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 
 ### D1 — Contribution
 
-- **C1.1** — Un membre peut ajouter un lien en collant son URL et en choisissant une ou deux catégories, en moins de 15 secondes.
+- **C1.1** — Un membre peut ajouter un lien en collant son URL et en choisissant une à trois catégories, en moins de 15 secondes.
 - **C1.2** — Un membre peut joindre à son lien une phrase de contexte facultative (pour dire pourquoi c'est utile).
-- **C1.3** — Le système peut signaler qu'un lien existe déjà et renvoyer vers sa carte (pour éviter deux cartes classées différemment).
+- **C1.3** — Le système peut signaler qu'un lien existe déjà, renvoyer vers sa carte et proposer d'y ajouter les catégories choisies, dans la limite de trois (pour éviter deux cartes classées différemment).
 - **C1.4** — Un contributeur peut reprendre un lien de l'historique Chat en conservant sa date et son posteur d'origine (pour amorcer la base avant l'ouverture).
 - **C1.5** — Le posteur peut corriger le contexte de son lien ou retirer ce lien.
-- **C1.6** — Un admin peut enregistrer ou retirer une source (flux RSS ou Atom) avec une ou deux catégories, consulter son état de relève et la relever à la demande (en reprenant au besoin les articles des dernières heures).
+- **C1.6** — Un admin peut enregistrer ou retirer une source (flux RSS ou Atom) avec une à trois catégories, consulter son état de relève et la relever à la demande (en reprenant au besoin les articles des dernières heures).
 - **C1.7** — Le système peut publier automatiquement, avec les catégories de la source et un marqueur « auto », chaque nouvel article d'une source suivie.
 - **C1.8** — Un admin peut gérer la liste des emails admin (pour partager la gestion des sources).
 
@@ -150,7 +151,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 
 ### Workflows et états
 
-- **R4 — Toujours classé** : un lien naît avec une ou deux catégories et n'en a jamais zéro ; on peut en ajouter après coup.
+- **R4 — Toujours classé** : un lien naît avec une à trois catégories et n'en a jamais zéro ; on peut en ajouter après coup.
 - **R5 — Une seule annonce** : un lien est annoncé une fois, à son ajout. Reclassements et corrections ne sont pas annoncés, et les liens d'amorçage ne le sont jamais.
 
 ### Contraintes de gestion

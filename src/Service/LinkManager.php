@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Category;
 use App\Entity\Link;
 use App\Entity\Source;
 use App\Entity\User;
+use App\Exception\CategoryLimitException;
 use App\Exception\DuplicateLinkException;
 use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
@@ -20,7 +22,6 @@ final readonly class LinkManager
     public function __construct(
         private LinkRepository $linkRepository,
         private LinkUrlAnalyzer $urlAnalyzer,
-        private CategoryResolver $categoryResolver,
         private ClockInterface $clock,
         private MessageBusInterface $messageBus,
     ) {}
@@ -59,6 +60,35 @@ final readonly class LinkManager
         return $this->create($submission, $poster, $this->clock->now(), seeded: false, source: $source);
     }
 
+    /**
+     * Ajoute à un lien existant les catégories qu'il n'a pas encore, sans annonce (R5).
+     *
+     * @param iterable<Category> $categories
+     *
+     * @throws CategoryLimitException quand le lien dépasserait trois catégories : rien n'est modifié
+     */
+    public function complete(Link $link, iterable $categories): void
+    {
+        $missing = [];
+        foreach ($categories as $category) {
+            if ($link->getCategories()->contains($category) || in_array($category, $missing, strict: true)) {
+                continue;
+            }
+
+            $missing[] = $category;
+        }
+
+        if (($link->getCategories()->count() + count($missing)) > LinkSubmission::MAX_CATEGORIES) {
+            throw new CategoryLimitException();
+        }
+
+        foreach ($missing as $category) {
+            $link->addCategory($category);
+        }
+
+        $this->linkRepository->save($link);
+    }
+
     /** Lien déjà présent sous cette adresse, une fois normalisée (www, slash final, paramètres de suivi…). */
     public function findDuplicate(string $url): ?Link
     {
@@ -78,20 +108,11 @@ final readonly class LinkManager
             throw new DuplicateLinkException($existing);
         }
 
-        $categories = $submission->categories;
-        $newCategoryName = $submission->newCategoryName();
-        if (null !== $newCategoryName) {
-            $category = $this->categoryResolver->resolve($newCategoryName);
-            if (!in_array($category, $categories, strict: true)) {
-                $categories[] = $category;
-            }
-        }
-
         $context = trim($submission->context ?? '');
         $link = new Link(
             $url,
             $this->urlAnalyzer->normalize($url),
-            $categories,
+            $submission->categories,
             $poster,
             $postedAt,
             $this->urlAnalyzer->sourceType($url),

@@ -24,9 +24,8 @@ final class FeedTest extends LinkWebTestCase
     {
         $client = $this->loggedClient();
         $name = 'Pagination ' . uniqid();
-        $this->submit($client, ['url' => 'https://example.com/' . uniqid('p0-'), 'newCategory' => $name]);
-        $categoryId = $this->categoryId($name);
-        for ($index = 1; $index < 25; ++$index) {
+        $categoryId = $this->createCategory($name);
+        for ($index = 0; $index < 25; ++$index) {
             $this->submit($client, [
                 'url' => 'https://example.com/' . uniqid('p' . $index . '-'),
                 'categories' => [$categoryId],

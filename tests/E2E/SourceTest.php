@@ -49,6 +49,24 @@ final class SourceTest extends E2ETestCase
         $this->expect($this->symfonyRow())->toHaveCount(0);
     }
 
+    public function testAdminCreatesACategoryWithEnter(): void
+    {
+        $this->logIn();
+        $this->page->goto('/sources');
+        // Nom stable : le premier passage la crée, les suivants la retrouvent (aucune catégorie ne se supprime).
+        $name = 'e2e source à l\'entrée';
+
+        $query = $this->page->locator('[data-test="source-categories"] [data-test="category-query"]');
+        $query->fill($name);
+        $query->press('Enter');
+
+        $pill = $this->page->locator(sprintf(
+            '[data-test="source-categories"] [data-test="category-pill"]:has-text("%s")',
+            ucfirst($name),
+        ));
+        $this->expect($pill->locator('input'))->toBeChecked();
+    }
+
     public function testMemberWhoIsNotAdminHasNoSourcesEntry(): void
     {
         $this->page->goto('/login');

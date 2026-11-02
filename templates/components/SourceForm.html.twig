@@ -1,0 +1,15 @@
+<div {{ attributes }}>
+    {{ form_start(form, {action: path('app_source_index'), attr: {class: 'mt-8 space-y-6', 'data-test': 'source-form', novalidate: 'novalidate'}}) }}
+        {{ form_row(form.feedUrl) }}
+
+        {% include 'components/_category_picker.html.twig' with {field: form.categories, test_id: 'source-categories'} %}
+
+        <div class="flex items-center gap-3">
+            <button type="submit" data-test="source-submit"
+                    class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700">
+                <twig:ux:icon name="tabler:rss" class="size-4"/> Suivre
+            </button>
+            <twig:ux:icon name="tabler:loader-2" class="size-4 animate-spin text-gray-900 dark:text-white" data-loading="delay|show" hidden/>
+        </div>
+    {{ form_end(form) }}
+</div>

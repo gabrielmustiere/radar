@@ -14,10 +14,13 @@ final class LinkSearchTest extends LinkWebTestCase
     {
         $client = $this->loggedClient();
         $marker = uniqid('mk');
+        $values = array_map(static fn(string $value): string => str_replace('{mk}', $marker, $value), $values);
+        $category = $values['category'] ?? null;
+        unset($values['category']);
         $this->submit($client, [
             'url' => 'https://example.com/' . $marker,
-            'categories' => [$this->categoryId('Symfony')],
-            ...array_map(static fn(string $value): string => str_replace('{mk}', $marker, $value), $values),
+            'categories' => [null === $category ? $this->categoryId('Symfony') : $this->createCategory($category)],
+            ...$values,
         ]);
 
         $client->request('GET', '/', ['q' => str_replace('{mk}', $marker, $search)]);
@@ -35,7 +38,7 @@ final class LinkSearchTest extends LinkWebTestCase
     {
         yield 'adresse' => ['{mk}', []];
         yield 'contexte' => ['ctx{mk}', ['context' => 'Très utile : ctx{mk} pour la recette.']];
-        yield 'catégorie' => ['cat{mk}', ['newCategory' => 'Besoin cat{mk}']];
+        yield 'catégorie' => ['cat{mk}', ['category' => 'Besoin cat{mk}']];
         yield 'casse ignorée' => ['CTX{mk}', ['context' => 'ctx{mk}']];
     }
 
@@ -108,10 +111,11 @@ final class LinkSearchTest extends LinkWebTestCase
         $client = $this->loggedClient();
         $marker = uniqid('cat');
         $name = 'Filtre ' . uniqid();
-        $this->submit($client, ['url' => 'https://example.com/' . $marker . '-dedans', 'newCategory' => $name]);
+        $categoryId = $this->createCategory($name);
+        $this->submit($client, ['url' => 'https://example.com/' . $marker . '-dedans', 'categories' => [$categoryId]]);
         $this->submit($client, [
             'url' => 'https://example.com/autre-' . uniqid(),
-            'categories' => [$this->categoryId($name)],
+            'categories' => [$categoryId],
         ]);
         $this->submit($client, [
             'url' => 'https://example.com/' . $marker . '-dehors',

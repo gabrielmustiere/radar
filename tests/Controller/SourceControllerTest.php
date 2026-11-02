@@ -36,6 +36,23 @@ final class SourceControllerTest extends SourceWebTestCase
         self::assertSelectorExists('[data-test="nav-admins"]');
     }
 
+    public function testSourceTakesUpToThreeCategories(): void
+    {
+        $client = $this->loggedClient();
+
+        $this->follow($client, 'https://example.com/feed/symfony?run=' . uniqid(), ['Symfony', 'Agents', 'IA']);
+        self::assertResponseRedirects('/sources');
+
+        $this->follow($client, 'https://example.com/feed/symfony?run=' . uniqid(), [
+            'Symfony',
+            'Agents',
+            'IA',
+            'Architecture',
+        ]);
+        self::assertResponseStatusCodeSame(422);
+        self::assertSelectorTextContains('[data-test="source-categories"]', 'au plus trois catégories');
+    }
+
     public function testFollowedFeedIsListedWithItsNameAndPublishesNothingYet(): void
     {
         $client = $this->loggedClient();

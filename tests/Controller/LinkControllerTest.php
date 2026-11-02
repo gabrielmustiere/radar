@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\Category;
-use App\Repository\CategoryRepository;
-
 final class LinkControllerTest extends LinkWebTestCase
 {
     public function testAnonymousUserIsRedirectedToLogin(): void
@@ -38,51 +35,22 @@ final class LinkControllerTest extends LinkWebTestCase
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-context"]', 'Pour la recette mobile.');
     }
 
-    public function testAddLinkCreatesNewCategoryOfferedOnNextAdd(): void
+    public function testThreeCategoriesAreKept(): void
     {
         $client = $this->loggedClient();
-        $name = 'Mesurer la perf ' . uniqid();
-
-        $this->submit($client, ['url' => 'https://example.com/perf', 'newCategory' => $name]);
-
-        self::assertResponseRedirects('/');
-        $client->request('GET', '/liens/ajouter');
-        self::assertSelectorTextContains('[data-test="link-categories"]', $name);
-    }
-
-    public function testCheckedAndCreatedCategoriesAreBothKept(): void
-    {
-        $client = $this->loggedClient();
-        $name = 'Automatiser la recette ' . uniqid();
 
         $this->submit($client, [
-            'url' => 'https://example.com/two-categories',
-            'categories' => [$this->categoryId('Agents')],
-            'newCategory' => $name,
+            'url' => 'https://example.com/' . uniqid('three-'),
+            'categories' => [
+                $this->categoryId('Symfony'),
+                $this->categoryId('Agents'),
+                $this->categoryId('Architecture'),
+            ],
         ]);
 
         self::assertResponseRedirects('/');
         $client->followRedirect();
-        self::assertSelectorCount(2, self::FIRST_CARD . ' [data-test="link-category"]');
-        self::assertSelectorTextContains(self::FIRST_CARD, $name);
-    }
-
-    public function testExistingCategoryNameIsReusedWhateverTheCase(): void
-    {
-        $client = $this->loggedClient();
-
-        $this->submit($client, ['url' => 'https://example.com/reuse', 'newCategory' => 'ARCHITECTURE']);
-
-        self::assertResponseRedirects('/');
-        $client->followRedirect();
-        self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-category"]', 'Architecture');
-        $repository = self::getContainer()->get(CategoryRepository::class);
-        self::assertInstanceOf(CategoryRepository::class, $repository);
-        $matching = array_filter(
-            $repository->findAllOrderedByName(),
-            static fn(Category $category): bool => 'architecture' === mb_strtolower($category->getName()),
-        );
-        self::assertCount(1, $matching);
+        self::assertSelectorCount(3, self::FIRST_CARD . ' [data-test="link-category"]');
     }
 
     public function testLinkWithoutCategoryIsRefused(): void
@@ -95,37 +63,22 @@ final class LinkControllerTest extends LinkWebTestCase
         self::assertSelectorTextContains('[data-test="link-categories"]', 'Choisissez au moins une catégorie');
     }
 
-    public function testLinkWithThreeCategoriesIsRefused(): void
+    public function testLinkWithFourCategoriesIsRefused(): void
     {
         $client = $this->loggedClient();
 
         $this->submit($client, [
-            'url' => 'https://example.com/three',
+            'url' => 'https://example.com/four',
             'categories' => [
                 $this->categoryId('Symfony'),
                 $this->categoryId('Agents'),
+                $this->categoryId('Architecture'),
+                $this->createCategory('Une quatrième ' . uniqid()),
             ],
-            'newCategory' => 'Une troisième ' . uniqid(),
         ]);
 
         self::assertResponseStatusCodeSame(422);
-        self::assertSelectorTextContains('[data-test="link-categories"]', 'au plus deux catégories');
-    }
-
-    public function testTypingTheNameOfACheckedCategoryDoesNotCountTwice(): void
-    {
-        $client = $this->loggedClient();
-
-        $this->submit($client, [
-            'url' => 'https://example.com/same-twice',
-            'categories' => [
-                $this->categoryId('Symfony'),
-                $this->categoryId('Agents'),
-            ],
-            'newCategory' => 'symfony',
-        ]);
-
-        self::assertResponseRedirects('/');
+        self::assertSelectorTextContains('[data-test="link-categories"]', 'au plus trois catégories');
     }
 
     public function testInvalidUrlIsRefusedInFrench(): void

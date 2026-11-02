@@ -6,6 +6,7 @@ namespace App\Tests\Controller;
 
 use App\Repository\CategoryRepository;
 use App\Repository\UserRepository;
+use App\Service\CategoryResolver;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -40,6 +41,15 @@ abstract class LinkWebTestCase extends WebTestCase
         $token = $crawler->filter(sprintf('input[name="%s[_token]"]', $form))->attr('value');
 
         $client->request('POST', $path, [$form => [...$values, '_token' => $token]]);
+    }
+
+    /** Catégorie créée comme depuis le formulaire (majuscule initiale), à appeler une fois le client créé. */
+    protected function createCategory(string $name): int
+    {
+        $resolver = self::getContainer()->get(CategoryResolver::class);
+        self::assertInstanceOf(CategoryResolver::class, $resolver);
+
+        return (int) $resolver->resolve($name)->getId();
     }
 
     protected function categoryId(string $name): int

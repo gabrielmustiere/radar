@@ -1,7 +1,10 @@
-<div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-500/10" role="alert" data-test="link-duplicate">
+<div class="rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-500/30 dark:bg-amber-500/10" role="alert" data-test="link-duplicate">
     <p class="flex items-center gap-2 text-sm font-semibold text-amber-900 dark:text-amber-200">
         <twig:ux:icon name="tabler:copy-check" class="size-5"/> Ce lien est déjà dans Radar
     </p>
+    {% if this.duplicateNotice %}
+        <p class="mt-1 text-sm font-medium text-amber-900 dark:text-amber-200" data-test="link-duplicate-notice">{{ this.duplicateNotice }}</p>
+    {% endif %}
     <p class="mt-1 text-sm text-amber-800 dark:text-amber-300">Pas besoin de l'ajouter une seconde fois : le voici, avec ses catégories.</p>
     <div class="mt-4 max-w-sm">
         {% include 'link/_card.html.twig' with {link: duplicate} %}
@@ -10,4 +13,30 @@
        class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-gray-900 hover:underline dark:text-white">
         Voir la carte <twig:ux:icon name="tabler:arrow-right" class="size-4"/>
     </a>
+
+    {# Les catégories proposées sont celles cochées dans le formulaire : on choisit en (dé)cochant les pastilles. #}
+    {% set candidates = this.duplicateCandidates(duplicate) %}
+    {% set free_slots = this.duplicateFreeSlots(duplicate) %}
+    {% if candidates is not empty and free_slots > 0 %}
+        <div class="mt-4 border-t border-amber-200 pt-4 dark:border-amber-500/30" data-test="link-duplicate-completion">
+            {% if candidates|length <= free_slots %}
+                <p class="text-sm text-amber-900 dark:text-amber-200">Ajouter vos catégories à ce lien :</p>
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                    {% for category in candidates %}
+                        <span class="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-gray-900 ring-1 ring-amber-200 dark:bg-white/10 dark:text-white dark:ring-amber-500/30" data-test="link-duplicate-candidate">{{ category.name }}</span>
+                    {% endfor %}
+                </div>
+                <button type="button" data-test="link-duplicate-complete" data-action="live#action" data-live-action-param="completeDuplicate"
+                        class="mt-3 inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
+                    <twig:ux:icon name="tabler:tag" class="size-4"/> Ajouter mes catégories
+                </button>
+            {% else %}
+                <p class="text-sm text-amber-900 dark:text-amber-200" data-test="link-duplicate-overflow">
+                    Il reste {{ free_slots }} place{{ free_slots > 1 ? 's' }} sur ce lien pour vos {{ candidates|length }} catégories :
+                    décochez-en {{ candidates|length - free_slots }} pour les y ajouter.
+                </p>
+            {% endif %}
+            <p class="mt-2 text-xs text-amber-800 dark:text-amber-300">Votre contexte n'est pas repris : seul le posteur modifie celui de son lien, la discussion continue dans Chat.</p>
+        </div>
+    {% endif %}
 </div>

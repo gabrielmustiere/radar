@@ -11,36 +11,7 @@
             ceux parus sur les dernières heures.
         </p>
 
-        {{ form_start(form, {attr: {class: 'mt-8 space-y-6', 'data-test': 'source-form', novalidate: 'novalidate'}}) }}
-            {{ form_row(form.feedUrl) }}
-
-            <fieldset data-test="source-categories">
-                <legend class="mb-2 block text-sm font-medium text-gray-900 dark:text-gray-100">{{ form.categories.vars.label }}</legend>
-                {% if form.categories|length > 0 %}
-                    <div class="flex flex-wrap gap-2">
-                        {% for choice in form.categories %}
-                            <label class="cursor-pointer">
-                                {# Case brute, sans l'enveloppe du thème Flowbite : elle doit rester sœur de la pastille pour que `peer-checked` s'applique #}
-                                <input type="checkbox" id="{{ choice.vars.id }}" name="{{ choice.vars.full_name }}" value="{{ choice.vars.value }}" class="peer sr-only"
-                                       {%- if choice.vars.checked %} checked{% endif %}>
-                                {% do choice.setRendered %}
-                                <span class="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm text-gray-700 ring-1 ring-gray-200 transition hover:ring-gray-300 peer-checked:bg-gray-900 peer-checked:font-medium peer-checked:text-white peer-checked:ring-gray-900 peer-focus-visible:ring-2 dark:bg-gray-950 dark:text-gray-300 dark:ring-gray-800 dark:peer-checked:bg-white dark:peer-checked:text-gray-900 dark:peer-checked:ring-white">
-                                    {{ choice.vars.label }}
-                                </span>
-                            </label>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Aucune catégorie pour l'instant : créez-en une en ajoutant un lien.</p>
-                {% endif %}
-                {{ form_errors(form.categories) }}
-            </fieldset>
-
-            <button type="submit" data-test="source-submit"
-                    class="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700">
-                <twig:ux:icon name="tabler:rss" class="size-4"/> Suivre
-            </button>
-        {{ form_end(form) }}
+        <twig:SourceForm :form="form"/>
 
         <ul class="mt-10 divide-y divide-gray-100 rounded-2xl ring-1 ring-gray-200/70 dark:divide-gray-800 dark:ring-gray-800" data-test="source-list">
             {% for source in sources %}

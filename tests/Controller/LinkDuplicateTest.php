@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
-use App\Entity\Category;
-use App\Repository\CategoryRepository;
-
 final class LinkDuplicateTest extends LinkWebTestCase
 {
     public function testDuplicateIsRefusedWithExistingCard(): void
     {
         $client = $this->loggedClient();
         $slug = uniqid('doublon-');
-        $category = 'Catégorie du doublon ' . uniqid();
         $this->submit($client, [
             'url' => 'https://example.com/' . $slug,
             'categories' => [$this->categoryId('Symfony')],
@@ -22,7 +18,7 @@ final class LinkDuplicateTest extends LinkWebTestCase
 
         $this->submit($client, [
             'url' => 'http://www.example.com/' . $slug . '/?utm_source=chat#:~:text=haut',
-            'newCategory' => $category,
+            'categories' => [$this->categoryId('Agents')],
         ]);
 
         self::assertResponseStatusCodeSame(422);
@@ -32,10 +28,6 @@ final class LinkDuplicateTest extends LinkWebTestCase
             'https://example.com/' . $slug,
         );
         self::assertSelectorTextContains('[data-test="link-form"]', 'Ce lien est déjà dans Radar.');
-        $repository = self::getContainer()->get(CategoryRepository::class);
-        self::assertInstanceOf(CategoryRepository::class, $repository);
-        $names = array_map(static fn(Category $c): string => $c->getName(), $repository->findAllOrderedByName());
-        self::assertNotContains($category, $names);
 
         $client->clickLink('Voir la carte');
         self::assertResponseIsSuccessful();

@@ -1,0 +1,44 @@
+{
+  "version": 2,
+  "title": "Créer et choisir jusqu'à trois catégories au fil de la saisie",
+  "created": "2026-11-02",
+  "updated": "2026-11-02",
+  "tags": [
+    "contribution",
+    "classement",
+    "formulaire",
+    "categories"
+  ],
+  "changelog": [
+    {
+      "date": "2026-11-02",
+      "type": "Création",
+      "description": "Pitch rédigé : ordre contexte → catégories → URL, création immédiate à l'Entrée avec majuscule initiale, plafond porté à 3 (sources comprises), complément de catégories sur doublon. Édition ciblée du principe 5 à faire."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Planification",
+      "description": "Plan technique rédigé : actions Live createCategory et completeDuplicate, trait et partial partagés avec un nouveau SourceForm, CategoryResolver avec majuscule initiale et flush immédiat, Assert\\Count 1..3, sans migration, 5 étapes."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Implémentation",
+      "description": "5/5 étapes livrées, make lint/phpunit (282)/playwright (26, 1 ignoré) verts, schema:validate OK. Écarts : complément de doublon piloté par la sélection du formulaire, sans cases dédiées (décision user, état en double) ; CategoryPickerTrait inclut ComponentWithFormTrait (Mago) ; CategoryRepository::findByIdsOrderedByName ajouté (candidats) ; LinkManagerCompleteTest et LinkFormTest scindés en 3 (seuil too-many-methods) ; assertion « catégorie non créée sur doublon » retirée (création immédiate) ; helper seed de LinkSeedTest réordonné ; E2E en :has-text() car hasText est ignoré par Playwright PHP."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Review",
+      "description": "Prêt à commiter : 0 bloquant, 0 important, 4 mineurs ouverts ([UX] message « est créée » sur une catégorie existante, [ROBUSTESSE] complément concurrent en 500, 2 [TEST])."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Review",
+      "description": "Prêt à commiter ; 4 mineurs corrigés : [UX] message « est disponible » au plafond, [ROBUSTESSE] complément concurrent re-rendu via CategoryLimitException, [TEST] catégorie vide hors navigation, [TEST] catégories E2E à nom stable."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Sync",
+      "description": "7 écarts (6 réalignés dans le pitch et le plan), 16/17 critères d'acceptation et 7/7 critères de sortie cochés, 3 dettes ; vision (principe 5) et backlog (C1.1, C1.3, C1.6, R4) passés à trois catégories."
+    }
+  ]
+}

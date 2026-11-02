@@ -12,12 +12,9 @@ use App\Exception\DuplicateLinkException;
 use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
 use App\Message\FetchLinkPreview;
-use App\Repository\CategoryRepository;
 use App\Repository\LinkRepository;
-use App\Service\CategoryResolver;
 use App\Service\LinkManager;
 use App\Service\LinkUrlAnalyzer;
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Messenger\Envelope;
@@ -33,32 +30,16 @@ final class LinkManagerTest extends TestCase
         $this->existing = new Category('Tester une app mobile', new \DateTimeImmutable('2026-01-01'));
     }
 
-    public function testReusesExistingCategoryIgnoringCaseAndSpaces(): void
+    public function testKeepsCheckedCategories(): void
     {
-        $submission = $this->submission(newCategory: '  tester une APP mobile ');
-
-        $link = $this->manager()->add($submission, $this->user());
+        $link = $this->manager()->add($this->submission(), $this->user());
 
         self::assertSame([$this->existing], $link->getCategories()->toArray());
     }
 
-    public function testCreatesMissingCategoryAlongsideCheckedOne(): void
-    {
-        $submission = $this->submission(newCategory: 'Choisir un ORM');
-        $submission->categories = [$this->existing];
-
-        $link = $this->manager()->add($submission, $this->user());
-
-        $names = array_map(
-            static fn(Category $category): string => $category->getName(),
-            $link->getCategories()->toArray(),
-        );
-        self::assertSame(['Tester une app mobile', 'Choisir un ORM'], array_values($names));
-    }
-
     public function testSetsPosterDateAndEmptyContextToNull(): void
     {
-        $submission = $this->submission(newCategory: 'Choisir un ORM');
+        $submission = $this->submission();
         $submission->context = '   ';
         $user = $this->user();
 
@@ -75,7 +56,7 @@ final class LinkManagerTest extends TestCase
 
     public function testResolvesSourceTypeAndDispatchesPreviewFetch(): void
     {
-        $submission = $this->submission(newCategory: 'Choisir un ORM');
+        $submission = $this->submission();
         $submission->url = 'https://github.com/symfony/symfony';
         $bus = $this->createMock(MessageBusInterface::class);
         $bus
@@ -91,25 +72,13 @@ final class LinkManagerTest extends TestCase
 
     public function testRefusesDuplicateWithoutPersistingAnything(): void
     {
-        $existing = new Link(
-            'https://example.com/article',
-            'https://example.com/article',
-            [],
-            $this->user(),
-            new \DateTimeImmutable(),
-            SourceType::Article,
-        );
+        $existing = $this->link([]);
         $linkRepository = $this->createMock(LinkRepository::class);
         $linkRepository->method('findOneByNormalizedUrl')->willReturn($existing);
         $linkRepository->expects($this->never())->method('save');
-        $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager->expects($this->never())->method('persist');
 
         try {
-            $this->manager(entityManager: $entityManager, linkRepository: $linkRepository)->add(
-                $this->submission(newCategory: 'Choisir un ORM'),
-                $this->user(),
-            );
+            $this->manager(linkRepository: $linkRepository)->add($this->submission(), $this->user());
             self::fail('Le doublon aurait dû être refusé.');
         } catch (DuplicateLinkException $exception) {
             self::assertSame($existing, $exception->existing);
@@ -131,14 +100,8 @@ final class LinkManagerTest extends TestCase
         self::assertTrue($link->isSeeded());
     }
 
-    private function manager(
-        ?MessageBusInterface $bus = null,
-        ?EntityManagerInterface $entityManager = null,
-        ?LinkRepository $linkRepository = null,
-    ): LinkManager {
-        $repository = $this->createStub(CategoryRepository::class);
-        $repository->method('findAllOrderedByName')->willReturn([$this->existing]);
-
+    private function manager(?MessageBusInterface $bus = null, ?LinkRepository $linkRepository = null): LinkManager
+    {
         if (null === $bus) {
             $bus = $this->createStub(MessageBusInterface::class);
             $bus->method('dispatch')->willReturnCallback(
@@ -151,23 +114,31 @@ final class LinkManagerTest extends TestCase
         return new LinkManager(
             $linkRepository ?? $this->createStub(LinkRepository::class),
             new LinkUrlAnalyzer(),
-            new CategoryResolver(
-                $entityManager ?? $this->createStub(EntityManagerInterface::class),
-                $repository,
-                $clock,
-            ),
             $clock,
             $bus,
         );
     }
 
-    private function submission(?string $newCategory = null): LinkSubmission
+    private function submission(): LinkSubmission
     {
         $submission = new LinkSubmission();
         $submission->url = 'https://example.com/article';
-        $submission->newCategory = $newCategory;
+        $submission->categories = [$this->existing];
 
         return $submission;
+    }
+
+    /** @param list<Category> $categories */
+    private function link(array $categories): Link
+    {
+        return new Link(
+            'https://example.com/article',
+            'https://example.com/article',
+            $categories,
+            $this->user(),
+            new \DateTimeImmutable(),
+            SourceType::Article,
+        );
     }
 
     private function user(): User

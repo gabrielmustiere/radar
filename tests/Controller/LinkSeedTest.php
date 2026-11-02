@@ -31,6 +31,23 @@ final class LinkSeedTest extends LinkWebTestCase
         self::assertSelectorTextNotContains('[data-test="link-poster-select"]', 'radar');
     }
 
+    public function testSeededLinkTakesUpToThreeCategories(): void
+    {
+        $client = $this->loggedClient();
+
+        $this->seed($client, [
+            'url' => 'https://example.com/' . uniqid('chat-'),
+            'postedAt' => '2026-03-15',
+            'categories' => [
+                $this->categoryId('Symfony'),
+                $this->categoryId('Agents'),
+                $this->categoryId('Architecture'),
+            ],
+        ]);
+
+        self::assertResponseRedirects('/');
+    }
+
     public function testSeededLinkKeepsOriginalPosterAndDate(): void
     {
         $client = $this->loggedClient();
@@ -105,8 +122,8 @@ final class LinkSeedTest extends LinkWebTestCase
             $client,
             [
                 'poster' => $this->userId('admin@example.com'),
-                ...$values,
                 'categories' => [$this->categoryId('Architecture')],
+                ...$values,
             ],
             '/liens/reprendre',
             'historical_link',
