@@ -42,10 +42,15 @@
       "date": "2026-11-02",
       "type": "Livraison",
       "description": "Commit 63d4d9e poussé sur main."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Release",
+      "description": "Publiée dans v0.9.0 — Extension navigateur."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v0.9.0",
     "commit": "63d4d9e"
   }
 }
