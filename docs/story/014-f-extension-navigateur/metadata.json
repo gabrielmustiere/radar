@@ -37,6 +37,15 @@
       "date": "2026-11-02",
       "type": "Sync",
       "description": "9 écarts (8 réalignés dans le pitch et le plan), 11/15 critères d'acceptation et 8/8 critères de sortie cochés, 4 dettes dont 1 critique ; backlog enrichi (C1.9, ligne extension-navigateur) et rattaché (champ backlog, accord user)."
+    },
+    {
+      "date": "2026-11-02",
+      "type": "Livraison",
+      "description": "Commit 63d4d9e poussé sur main."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "63d4d9e"
+  }
 }
