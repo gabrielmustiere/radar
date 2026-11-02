@@ -10,6 +10,24 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-02 — Sources suivies & mise en production
+
+### ✨ Fonctionnel
+- **Interface en noir et blanc** — l'accent sarcelle disparaît, en clair comme en sombre ; seules les cartes gardent la couleur de leur plateforme (YouTube, GitHub, X).
+- **Sources suivies** — un admin enregistre un flux RSS ou Atom avec ses catégories : chaque nouvel article est publié automatiquement, avec un badge « auto » et une carte orange, puis annoncé dans Google Chat. Relève toutes les heures, ou à la demande en reprenant les articles des dernières heures.
+- **Gestion des admins** — la page « Administrateurs » liste les personnes autorisées à gérer les sources.
+- **Formulaire d'ajout réorganisé** — on dit d'abord pourquoi c'est utile, puis on choisit les catégories, puis on colle l'adresse.
+- **Catégories créées à la frappe** — taper un nom puis Entrée crée la catégorie, avec une majuscule initiale, et la sélectionne ; la saisie filtre aussi les catégories existantes.
+- **Jusqu'à trois catégories** par lien et par source, au lieu de deux.
+- **Compléter un lien déjà présent** — quand l'adresse existe déjà, l'alerte propose d'ajouter vos catégories au lien existant.
+- **Ancres respectées** — deux adresses qui ne diffèrent que par leur ancre (`#…`) désignent désormais deux liens distincts.
+
+### 🔧 Technique
+- **Déploiement en production** — image FrankenPHP (PHP 8.5), Compose avec web, worker Messenger et migrations, volumes persistants, Caddy de l'hôte ; `deploy.sh` ne s'interrompt plus avant la configuration de Caddy.
+- **Comptes et connexion en production** — commande `app:user:create` pour créer les comptes, tentatives de connexion limitées.
+- **Relève par Symfony Scheduler** — un message par source sur le transport `async`, parseur RSS/Atom maison.
+- **Saisie des catégories en Live Component** — les formulaires des liens et des sources partagent la même saisie ; celui des sources est réservé aux admins.
+
 ## [0.6.0] - 2026-10-30 — Fil en mosaïque
 
 ### ✨ Fonctionnel
@@ -96,7 +114,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/gabrielmustiere/radar/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/gabrielmustiere/radar/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/gabrielmustiere/radar/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/gabrielmustiere/radar/compare/v0.4.0...v0.4.1
