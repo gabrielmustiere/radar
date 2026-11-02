@@ -32,3 +32,6 @@ node_modules
 # Déploiement : secrets de production
 /environments/prod/.env
 /environments/prod/.env.script
+
+# macOS
+.DS_Store
