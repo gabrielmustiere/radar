@@ -10,6 +10,11 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.9.3] - 2026-11-03 — Boutons radio noir et blanc
+
+### ✨ Fonctionnel
+- **Boutons radio assortis aux cases à cocher** — l'option choisie se repère d'un coup d'œil : rond noir avec un point blanc en thème clair, rond blanc avec un point foncé en thème sombre.
+
 ## [0.9.2] - 2026-11-03 — Cases à cocher noir et blanc
 
 ### ✨ Fonctionnel
@@ -151,7 +156,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.9.2...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.9.3...HEAD
+[0.9.3]: https://github.com/gabrielmustiere/radar/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/gabrielmustiere/radar/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/gabrielmustiere/radar/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/gabrielmustiere/radar/compare/v0.8.1...v0.9.0
