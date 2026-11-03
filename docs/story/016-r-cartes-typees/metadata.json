@@ -45,10 +45,15 @@
       "date": "2026-11-03",
       "type": "Livraison",
       "description": "Commit cb62742 sur main : redesign « modèle 5 clair » (cartes typées, filtres en entonnoir, layout sans sidebar, écrans restylés)."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Release",
+      "description": "Publiée en v1.1.0 — Nouveau design et filtres."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v1.1.0",
     "commit": "cb62742"
   }
 }
