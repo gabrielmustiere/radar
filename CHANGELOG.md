@@ -10,6 +10,15 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-03 — Menu allégé et reset de production
+
+### ✨ Fonctionnel
+- **Menu du compte allégé** — les entrées « Mon profil » et « Paramètres », qui ne menaient nulle part, disparaissent.
+
+### 🔧 Technique
+- **Remise à zéro de la production sur demande** — `./deploy.sh --reset`, confirmé en tapant le nom du site, efface la base, rejoue les migrations et recrée le compte admin défini dans le fichier de déploiement local ; `./deploy.sh` seul conserve les données.
+- **`app:user:create --password-stdin`** — le mot de passe peut être lu sur l'entrée standard, sans apparaître dans la ligne de commande.
+
 ## [0.10.0] - 2026-11-03 — Comptes et équipes
 
 ### ✨ Fonctionnel
@@ -169,7 +178,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/gabrielmustiere/radar/compare/v0.10.0...v1.0.0
 [0.10.0]: https://github.com/gabrielmustiere/radar/compare/v0.9.3...v0.10.0
 [0.9.3]: https://github.com/gabrielmustiere/radar/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/gabrielmustiere/radar/compare/v0.9.1...v0.9.2
