@@ -41,7 +41,7 @@ final readonly class CreateUserCommand
         }
 
         try {
-            $this->userManager->create($email, $password);
+            $this->userManager->create($email, $password, team: null, admin: false);
         } catch (EmailAlreadyUsedException $exception) {
             $io->error($exception->getMessage());
 

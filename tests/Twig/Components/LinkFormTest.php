@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Twig\Components;
 
+use App\Enum\Type\Team;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class LinkFormTest extends LinkFormTestCase
@@ -18,6 +19,16 @@ final class LinkFormTest extends LinkFormTestCase
         self::assertTrue($this->pill($crawler, ucfirst($name))->filter('input')->matches(':checked'));
         self::assertSame([$this->category(ucfirst($name))], $this->checkedIds($component));
         self::assertSame('', $this->linkForm($component)->categoryQuery);
+    }
+
+    public function testCreatedCategoryTakesTheTeamOfItsCreator(): void
+    {
+        $name = 'Équipe du créateur ' . uniqid();
+
+        $this->component()->set('categoryQuery', $name)->call('createCategory');
+
+        $category = $this->categories()->find($this->category($name));
+        self::assertSame(Team::Development, $category?->getTeam());
     }
 
     public function testExistingNameInAnotherCaseIsCheckedWithoutCreatingASecondCategory(): void

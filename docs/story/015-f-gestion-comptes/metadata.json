@@ -1,0 +1,49 @@
+{
+  "version": 2,
+  "title": "Gérer les comptes et les équipes depuis Radar, et mettre en avant les catégories de son équipe",
+  "created": "2026-11-03",
+  "updated": "2026-11-03",
+  "tags": [
+    "admin",
+    "comptes",
+    "equipes",
+    "categories"
+  ],
+  "changelog": [
+    {
+      "date": "2026-11-03",
+      "type": "Création",
+      "description": "Pitch rédigé : création de compte par l'admin avec mot de passe provisoire, modification, désactivation/réactivation, statut admin porté par le compte (fin de la liste d'emails, admin permanent conservé), équipes fixes Développement/Produit/QA/Management, catégorie à l'équipe de son créateur corrigible par l'admin, section « Mon équipe » en tête de sidebar avec badge. Édition ciblée de R13 à faire. Questions tranchées : badge en sidebar seulement, emails admin sans compte abandonnés, section « Mon équipe » masquée si vide."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Planification",
+      "description": "Plan technique rédigé : enum Team sur User et Category, booléens admin/active sur User, migration reprenant admin_email puis la supprimant, UserChecker (main + api) et EquatableInterface pour la désactivation, AdminUserController et AdminCategoryController, CategoryResolver recevant le créateur, CategoryNav en deux sections, 4 étapes."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Implémentation",
+      "description": "4/4 étapes livrées ; make lint sans finding, schema:validate vert, PHPUnit 377 verts, E2E 30 verts (6 ignorés : catalogue E2E de la base de dev épuisé). Écarts : (1) UserEdition créé dès l'étape 1, car UserManager::update() le prend en argument ; (2) entrée de menu « Administrateurs » et assertions nav-admins retirées dès l'étape 1, car la route disparaît ; (3) garde « email vide » dans UserManager (normalizeEmail), exigée par l'analyse pour setEmail(non-empty-string) ; (4) la case admin de l'édition est pré-remplie avec le statut effectif (AdminManager::isAdmin), sinon le verrou de l'admin permanent bloquerait toute modification de son compte ; (5) pas de route POST /admin/comptes/{id}/mot-de-passe : les deux formulaires sont traités par l'action edit (distingués par leur nom), car Mago (too-many-methods) refusait 12 méthodes dans AdminUserController ; (6) tests découpés en AdminUserControllerTest, AdminUserStatusTest (+ base AdminUserWebTestCase) et CategoryNavTest au lieu de CategoryControllerTest, même limite de Mago ; (7) le contrôleur renvoie un 404 sur le compte système (non prévu) ; (8) une équipe inconnue reçoit un 400 ; (9) AdminManager perd permanentEmail() et ClockInterface, devenus orphelins ; commentaire de RADAR_ADMIN_EMAIL dans .env mis à jour ; (10) le tri Collator non commité de CategoryNav (WIP antérieur) est inclus dans le diff (choix user)."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Review",
+      "description": "Corrections requises : 0 bloquant, 2 importants ([BUG] clé d'extension d'un compte désactivé rafraîchie, [MIGRATION] down() non documenté), 2 mineurs."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Review",
+      "description": "Prêt à commiter sous réserve (down() de la migration non documenté, décision user) ; 1 important corrigé : [BUG] clé d'extension d'un compte désactivé refusée dans ExtensionKeyManager::authenticate() avant l'enregistrement d'usage ; 2 mineurs laissés ouverts."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Implémentation",
+      "description": "Repasse UI/UX (demande user) : select à chevron dessiné (.select, form theme), boutons d'action visibles (Button outline), listes comptes/catégories en lignes adaptées au mobile au lieu de Table (le tableau débordait), compteurs d'en-tête, sections dans l'édition, mot de passe provisoire affiché en clair (à transmettre), aides de formulaire allégées, page Sources alignée. Écart au pitch (règle 20) : pas de badge d'équipe dans « Mon équipe », dont le titre nomme l'équipe — le badge tronquait les noms dans la sidebar."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Implémentation",
+      "description": "Sidebar réorganisée (demande user) : elle ne porte plus que la lecture (Tous les liens, Mon équipe, autres catégories) ; Sources, Comptes et Catégories passent dans une section « Administration » du menu utilisateur, visible des seuls admins, dont l'en-tête affiche l'équipe et le statut admin. Écart au plan : entrées admin hors de la sidebar."
+    }
+  ]
+}

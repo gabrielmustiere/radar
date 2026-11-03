@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\Type\Team;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -13,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ORM\UniqueConstraint(name: 'UNIQ_USER_EXTENSION_KEY_HASH', fields: ['extensionKeyHash'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, EquatableInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -42,6 +44,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(name: 'extension_key_last_used_at', nullable: true)]
     private ?\DateTimeImmutable $extensionKeyLastUsedAt = null;
+
+    #[ORM\Column(nullable: true, enumType: Team::class)]
+    private ?Team $team = null;
+
+    #[ORM\Column(options: ['default' => false])]
+    private bool $admin = false;
+
+    #[ORM\Column(options: ['default' => true])]
+    private bool $active = true;
 
     public function getId(): ?int
     {
@@ -148,6 +159,70 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function markExtensionKeyUsed(\DateTimeImmutable $usedAt): void
     {
         $this->extensionKeyLastUsedAt = $usedAt;
+    }
+
+    public function getTeam(): ?Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Team $team): static
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(bool $admin): static
+    {
+        $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function activate(): void
+    {
+        $this->active = true;
+    }
+
+    public function deactivate(): void
+    {
+        $this->active = false;
+    }
+
+    /**
+     * Remplace la comparaison par défaut du `ContextListener` : `$this` est le compte lu en session, `$user` celui
+     * rechargé depuis la base. Un compte désactivé fait tomber la session. Les rôles ne sont pas comparés : ils valent
+     * toujours `ROLE_USER`, le statut admin passant par `AdminVoter`.
+     */
+    #[\Override]
+    public function isEqualTo(UserInterface $user): bool
+    {
+        if (!$user instanceof self || !$user->isActive()) {
+            return false;
+        }
+
+        if ($user->getUserIdentifier() !== $this->getUserIdentifier()) {
+            return false;
+        }
+
+        $sessionPassword = $this->password ?? '';
+        $refreshedPassword = $user->getPassword() ?? '';
+
+        return (
+            hash_equals($refreshedPassword, $sessionPassword)
+            || hash_equals(hash('crc32c', $refreshedPassword), $sessionPassword)
+        );
     }
 
     /**

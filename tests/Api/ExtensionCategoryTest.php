@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Api;
 
+use App\Enum\Type\Team;
+use App\Repository\CategoryRepository;
+
 final class ExtensionCategoryTest extends ExtensionApiTestCase
 {
     public function testCategoriesAreListedByName(): void
@@ -26,6 +29,21 @@ final class ExtensionCategoryTest extends ExtensionApiTestCase
         self::assertResponseStatusCodeSame(201);
         self::assertSame(ucfirst($name), $body['name'] ?? null);
         self::assertIsInt($body['id'] ?? null);
+    }
+
+    public function testNewCategoryTakesTheTeamOfTheKeyOwner(): void
+    {
+        $member = $this->member()->setTeam(Team::Qa);
+        $this->users()->save($member);
+
+        $body = $this->api('POST', '/api/extension/categories', $this->keyFor($member), [
+            'name' => 'Équipe de la clé ' . uniqid(),
+        ]);
+
+        self::assertResponseStatusCodeSame(201);
+        $repository = self::getContainer()->get(CategoryRepository::class);
+        self::assertInstanceOf(CategoryRepository::class, $repository);
+        self::assertSame(Team::Qa, $repository->find((int) ($body['id'] ?? 0))?->getTeam());
     }
 
     public function testExistingCategoryIsReusedWhateverTheCase(): void

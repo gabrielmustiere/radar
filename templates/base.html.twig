@@ -59,7 +59,7 @@
                class="flex items-center gap-2 rounded-xl bg-gray-900 px-3 py-2.5 text-sm font-medium text-white hover:bg-gray-700 sm:px-4 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
                 <twig:ux:icon name="tabler:plus" class="size-4"/> <span class="hidden sm:inline">Ajouter un lien</span>
             </a>
-            <button type="button" data-dropdown-toggle="radar-topbar-user-menu" data-test="user-menu-toggle"
+            <button type="button" data-dropdown-toggle="radar-topbar-user-menu" data-dropdown-placement="bottom-end" data-test="user-menu-toggle"
                     class="flex rounded-full focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800">
                 <span class="grid size-9 place-items-center rounded-full bg-white text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-200 dark:bg-gray-900 dark:text-white dark:ring-gray-800">
                     {{ app.user.userIdentifier|first|upper }}
@@ -68,8 +68,10 @@
             <div class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-2xl bg-white text-base shadow-lg ring-1 ring-gray-200/70 dark:divide-gray-800 dark:bg-gray-900 dark:ring-gray-800"
                  id="radar-topbar-user-menu">
                 <div class="px-4 py-3">
-                    <span class="block text-sm font-semibold text-gray-900 dark:text-white">{{ app.user.userIdentifier }}</span>
-                    <span class="block truncate text-xs text-gray-500 dark:text-gray-400">Compte utilisateur</span>
+                    <span class="block truncate text-sm font-semibold text-gray-900 dark:text-white">{{ app.user.userIdentifier }}</span>
+                    <span class="block truncate text-xs text-gray-500 dark:text-gray-400" data-test="user-menu-profile">
+                        {{- app.user.team ? app.user.team.label : 'Sans équipe' }}{{ is_granted('RADAR_ADMIN') ? ' · admin' -}}
+                    </span>
                 </div>
                 <ul class="py-1 text-gray-700 dark:text-gray-300">
                     <li>
@@ -88,6 +90,30 @@
                         </a>
                     </li>
                 </ul>
+                {% if is_granted('RADAR_ADMIN') %}
+                    {% set admin_item = 'flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-white' %}
+                    {% set admin_active = ' font-semibold text-gray-900 dark:text-white' %}
+                    <div class="py-1 text-gray-700 dark:text-gray-300" data-test="user-menu-admin">
+                        <p class="px-4 pt-2 pb-1 text-xs font-semibold tracking-wide text-gray-500 uppercase dark:text-gray-400">Administration</p>
+                        <ul>
+                            <li>
+                                <a href="{{ path('app_source_index') }}" data-test="nav-sources" class="{{ admin_item }}{{ app.current_route == 'app_source_index' ? admin_active }}">
+                                    <twig:ux:icon name="tabler:rss" class="size-4"/> Sources
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('app_admin_user_index') }}" data-test="nav-users" class="{{ admin_item }}{{ app.current_route starts with 'app_admin_user' ? admin_active }}">
+                                    <twig:ux:icon name="tabler:users" class="size-4"/> Comptes
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ path('app_admin_category_index') }}" data-test="nav-categories" class="{{ admin_item }}{{ app.current_route == 'app_admin_category_index' ? admin_active }}">
+                                    <twig:ux:icon name="tabler:tags" class="size-4"/> Catégories
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
                 <ul class="py-1">
                     <li>
                         {# Turbo 8 précharge les liens au survol : jamais celui-ci, un GET /logout déconnecte #}
@@ -122,20 +148,6 @@
                     <span>Tous les liens</span>
                 </a>
             </li>
-            {% if is_granted('RADAR_ADMIN') %}
-                <li>
-                    <a href="{{ path('app_source_index') }}" data-test="nav-sources" class="{{ app.current_route == 'app_source_index' ? nav_active : nav_idle }}">
-                        <twig:ux:icon name="tabler:rss" class="size-5"/>
-                        <span>Sources</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ path('app_admin_index') }}" data-test="nav-admins" class="{{ app.current_route == 'app_admin_index' ? nav_active : nav_idle }}">
-                        <twig:ux:icon name="tabler:shield-check" class="size-5"/>
-                        <span>Administrateurs</span>
-                    </a>
-                </li>
-            {% endif %}
         </ul>
         <twig:CategoryNav :currentId="category.id ?? null"/>
     </div>

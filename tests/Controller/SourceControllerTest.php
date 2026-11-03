@@ -17,23 +17,25 @@ final class SourceControllerTest extends SourceWebTestCase
         $this->logInAs($client, 'marie@example.com');
 
         $client->request('GET', '/');
-        self::assertSelectorNotExists('[data-test="nav-sources"]');
-        self::assertSelectorNotExists('[data-test="nav-admins"]');
+        self::assertSelectorNotExists('[data-test="user-menu-admin"]');
+        self::assertSelectorTextContains('[data-test="user-menu-profile"]', 'Produit');
+        self::assertSelectorTextNotContains('[data-test="user-menu-profile"]', 'admin');
 
         $client->request('GET', '/sources');
         self::assertResponseStatusCodeSame(403);
-        $client->request('GET', '/administrateurs');
-        self::assertResponseStatusCodeSame(403);
     }
 
-    public function testAdminSeesBothMenuEntries(): void
+    public function testAdminFindsTheAdministrationInTheUserMenuNotInTheSidebar(): void
     {
         $client = $this->loggedClient();
 
         $client->request('GET', '/');
 
-        self::assertSelectorExists('[data-test="nav-sources"]');
-        self::assertSelectorExists('[data-test="nav-admins"]');
+        foreach (['nav-sources', 'nav-users', 'nav-categories'] as $entry) {
+            self::assertSelectorExists(sprintf('[data-test="user-menu-admin"] [data-test="%s"]', $entry));
+            self::assertSelectorNotExists(sprintf('#radar-sidebar [data-test="%s"]', $entry));
+        }
+        self::assertSelectorTextContains('[data-test="user-menu-profile"]', 'admin');
     }
 
     public function testSourceTakesUpToThreeCategories(): void

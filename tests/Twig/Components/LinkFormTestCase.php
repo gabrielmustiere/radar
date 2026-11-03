@@ -65,7 +65,7 @@ abstract class LinkFormTestCase extends WebTestCase
         $resolver = self::getContainer()->get(CategoryResolver::class);
         self::assertInstanceOf(CategoryResolver::class, $resolver);
 
-        return (int) $resolver->resolve($name)->getId();
+        return (int) $resolver->resolve($name, null)->getId();
     }
 
     protected function categories(): CategoryRepository

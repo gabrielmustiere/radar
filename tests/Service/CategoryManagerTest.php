@@ -71,6 +71,6 @@ final class CategoryManagerTest extends KernelTestCase
         $resolver = self::getContainer()->get(CategoryResolver::class);
         self::assertInstanceOf(CategoryResolver::class, $resolver);
 
-        return $resolver->resolve($name);
+        return $resolver->resolve($name, null);
     }
 }

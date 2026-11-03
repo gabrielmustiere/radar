@@ -14,3 +14,13 @@
 {% block class_input_radio -%}
     radio
 {%- endblock class_input_radio %}
+
+{# Liste déroulante : même champ que le texte, avec le chevron de `.select` (app.css) #}
+{% block class_select -%}
+    {{ block('class_input_text') }} select pr-9
+{%- endblock class_select %}
+
+{# Aide sous le champ : discrète, au-dessous du libellé et de la saisie #}
+{% block class_help_text -%}
+    mt-1.5 text-xs text-gray-500 dark:text-gray-400
+{%- endblock class_help_text %}

@@ -17,6 +17,7 @@ final class SourceTest extends E2ETestCase
     public function testAdminFollowsTheSymfonyFeedThenRemovesIt(): void
     {
         $this->logIn();
+        $this->page->click('[data-test="user-menu-toggle"]');
         $this->page->locator('[data-test="nav-sources"]')->click();
         $this->expect($this->page->locator('h1'))->toContainText('Sources');
         $this->removeSymfonyFeed();
@@ -76,7 +77,6 @@ final class SourceTest extends E2ETestCase
         $this->expect($this->page)->toHaveURL(self::baseUrl() . '/');
 
         $this->expect($this->page->locator('[data-test="nav-sources"]'))->toHaveCount(0);
-        $this->expect($this->page->locator('[data-test="nav-admins"]'))->toHaveCount(0);
         self::assertSame(403, $this->page->goto('/sources')?->status());
     }
 

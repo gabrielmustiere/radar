@@ -26,6 +26,27 @@ final class CategoryControllerTest extends LinkWebTestCase
         self::assertStringEndsWith('2', trim($item->text()));
     }
 
+    public function testSidebarSortsCategoriesIgnoringCaseAndAccentsWithNaturalNumbers(): void
+    {
+        $client = $this->loggedClient();
+        $prefix = 'Tri ' . uniqid() . ' ';
+        $expected = [$prefix . '2', $prefix . '10', $prefix . 'éclair', $prefix . 'zèbre', $prefix . 'Zinc'];
+        foreach ([$prefix . 'Zinc', $prefix . '10', $prefix . 'zèbre', $prefix . 'éclair', $prefix . '2'] as $name) {
+            $this->submit($client, [
+                'url' => 'https://example.com/' . uniqid('tri-'),
+                'categories' => [$this->createCategory($name)],
+            ]);
+        }
+
+        $crawler = $client->request('GET', '/');
+
+        $names = $crawler
+            ->filter('[data-test="category-nav-item"] span:first-of-type')
+            ->reduce(static fn(Crawler $node): bool => str_starts_with($node->text(), $prefix))
+            ->each(static fn(Crawler $node): string => $node->text());
+        self::assertSame($expected, $names);
+    }
+
     public function testCategoryWithoutLinkIsNotInTheSidebar(): void
     {
         $client = $this->loggedClient();

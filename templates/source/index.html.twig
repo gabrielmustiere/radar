@@ -15,8 +15,8 @@
 
         <ul class="mt-10 divide-y divide-gray-100 rounded-2xl ring-1 ring-gray-200/70 dark:divide-gray-800 dark:ring-gray-800" data-test="source-list">
             {% for source in sources %}
-                <li class="flex items-start gap-4 px-4 py-4 text-sm" data-test="source-row">
-                    <div class="min-w-0 flex-1">
+                <li class="flex flex-wrap items-start gap-x-4 gap-y-3 px-4 py-4 text-sm" data-test="source-row">
+                    <div class="min-w-0 flex-1 basis-64">
                         <p class="font-medium text-gray-900 dark:text-white" data-test="source-name">{{ source.name }}</p>
                         <p class="truncate text-xs text-gray-500 dark:text-gray-400" data-test="source-url">{{ source.feedUrl }}</p>
                         <div class="mt-2 flex flex-wrap gap-1.5">
@@ -37,29 +37,25 @@
                             </p>
                         {% endif %}
                     </div>
-                    <div class="flex shrink-0 items-center gap-1">
-                        <form method="post" action="{{ path('app_source_fetch', {id: source.id}) }}">
+                    <div class="flex shrink-0 flex-wrap items-center gap-2">
+                        <form method="post" action="{{ path('app_source_fetch', {id: source.id}) }}" class="flex items-center gap-2">
                             <input type="hidden" name="_token" value="{{ csrf_token('source-fetch') }}">
-                            <div class="flex items-center rounded-lg ring-1 ring-gray-200 dark:ring-gray-800">
-                                <select name="since" data-test="source-since" aria-label="Reprendre aussi les articles parus depuis"
-                                        title="Reprendre aussi les articles parus depuis, même déjà vus"
-                                        class="rounded-l-lg border-0 bg-transparent py-1 pr-6 pl-2 text-xs text-gray-700 focus:ring-1 focus:ring-gray-900 dark:text-gray-300 dark:focus:ring-gray-400">
-                                    {% for window in windows %}
-                                        <option value="{{ window.value }}">{{ window.label }}</option>
-                                    {% endfor %}
-                                </select>
-                                <button type="submit" data-test="source-fetch" title="Relever le flux maintenant, sans attendre la relève horaire"
-                                        class="inline-flex items-center gap-1 rounded-r-lg px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-white">
-                                    <twig:ux:icon name="tabler:refresh" class="size-3.5"/> Relever
-                                </button>
-                            </div>
+                            <select name="since" data-test="source-since" aria-label="Reprendre aussi les articles parus depuis"
+                                    title="Reprendre aussi les articles parus depuis, même déjà vus"
+                                    class="select rounded-xl border border-gray-200 bg-white py-1.5 pr-9 pl-3 text-xs text-gray-700 shadow-xs focus:border-gray-900 focus:ring-1 focus:ring-gray-900 focus:outline-none dark:border-gray-700 dark:bg-gray-950 dark:text-gray-300 dark:focus:border-gray-400 dark:focus:ring-gray-400">
+                                {% for window in windows %}
+                                    <option value="{{ window.value }}">{{ window.label }}</option>
+                                {% endfor %}
+                            </select>
+                            <twig:Button type="submit" variant="outline" size="xs" data-test="source-fetch" title="Relever le flux maintenant, sans attendre la relève horaire" class="gap-1.5 rounded-xl">
+                                <twig:ux:icon name="tabler:refresh" class="size-3.5"/> Relever
+                            </twig:Button>
                         </form>
                         <form method="post" action="{{ path('app_source_remove', {id: source.id}) }}">
                             <input type="hidden" name="_token" value="{{ csrf_token('source-remove') }}">
-                            <button type="submit" data-test="source-remove"
-                                    class="rounded-lg px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/10 dark:hover:text-white">
-                                Retirer
-                            </button>
+                            <twig:Button type="submit" variant="outline" size="xs" data-test="source-remove" class="gap-1.5 rounded-xl">
+                                <twig:ux:icon name="tabler:trash" class="size-3.5"/> Retirer
+                            </twig:Button>
                         </form>
                     </div>
                 </li>

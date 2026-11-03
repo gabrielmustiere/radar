@@ -47,6 +47,18 @@ final class ExtensionAuthTest extends ExtensionApiTestCase
         self::assertResponseStatusCodeSame(401);
     }
 
+    public function testValidKeyOfADeactivatedAccountIsRejected(): void
+    {
+        $member = $this->member();
+        $key = $this->keyFor($member);
+        $member->deactivate();
+        $this->users()->save($member);
+
+        $this->api('GET', '/api/extension/categories', $key);
+
+        self::assertResponseStatusCodeSame(401);
+    }
+
     public function testRegeneratedKeyReplacesThePreviousOne(): void
     {
         $member = $this->member();

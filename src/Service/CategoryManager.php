@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\Category;
+use App\Enum\Type\Team;
 use App\Exception\CategoryNameTakenException;
 use App\Repository\CategoryRepository;
 
@@ -31,6 +32,12 @@ final readonly class CategoryManager
         }
 
         $category->setName($name);
+        $this->categoryRepository->save($category);
+    }
+
+    public function changeTeam(Category $category, ?Team $team): void
+    {
+        $category->setTeam($team);
         $this->categoryRepository->save($category);
     }
 }

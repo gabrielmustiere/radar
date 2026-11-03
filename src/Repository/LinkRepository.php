@@ -7,6 +7,7 @@ namespace App\Repository;
 use App\Entity\Category;
 use App\Entity\Link;
 use App\Enum\Type\PreviewStatus;
+use App\Enum\Type\Team;
 use App\Search\SearchQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -102,23 +103,28 @@ class LinkRepository extends ServiceEntityRepository
         );
     }
 
-    /** @return list<array{id: int, name: string, linkCount: int}> catégories portant au moins un lien, par nom */
+    /** @return list<array{id: int, name: string, team: ?Team, linkCount: int}> catégories portant au moins un lien */
     public function countByCategory(): array
     {
-        /** @var list<array{id: int|string, name: string, linkCount: int|string}> $rows */
+        /** @var list<array{id: int|string, name: string, team: ?Team, linkCount: int|string}> $rows */
         $rows = $this
             ->createQueryBuilder('l')
-            ->select('c.id', 'c.name', 'COUNT(l.id) AS linkCount')
+            ->select('c.id', 'c.name', 'c.team', 'COUNT(l.id) AS linkCount')
             ->join('l.categories', 'c')
             ->groupBy('c.id')
             ->addGroupBy('c.name')
-            ->orderBy('c.name', 'ASC')
+            ->addGroupBy('c.team')
             ->getQuery()
             ->getArrayResult();
 
         $categories = [];
         foreach ($rows as $row) {
-            $categories[] = ['id' => (int) $row['id'], 'name' => $row['name'], 'linkCount' => (int) $row['linkCount']];
+            $categories[] = [
+                'id' => (int) $row['id'],
+                'name' => $row['name'],
+                'team' => $row['team'],
+                'linkCount' => (int) $row['linkCount'],
+            ];
         }
 
         return $categories;

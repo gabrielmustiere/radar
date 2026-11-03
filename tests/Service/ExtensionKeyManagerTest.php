@@ -69,6 +69,17 @@ final class ExtensionKeyManagerTest extends TestCase
         self::assertEquals($this->clock->now(), $user->getExtensionKeyLastUsedAt());
     }
 
+    public function testKeyOfADeactivatedAccountAuthenticatesNobodyAndIsNotMarkedUsed(): void
+    {
+        $user = new User();
+        $key = $this->manager()->generate($user);
+        $user->deactivate();
+        $this->clock->modify('+1 day');
+
+        self::assertNull($this->manager($user)->authenticate($key));
+        self::assertNull($user->getExtensionKeyLastUsedAt());
+    }
+
     public function testUnknownKeyAuthenticatesNobody(): void
     {
         self::assertNull($this->manager()->authenticate('rdr_inconnue'));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\Type\Team;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,10 +23,14 @@ class Category
     #[ORM\Column(name: 'created_at')]
     private \DateTimeImmutable $createdAt;
 
-    public function __construct(string $name, \DateTimeImmutable $createdAt)
+    #[ORM\Column(nullable: true, enumType: Team::class)]
+    private ?Team $team;
+
+    public function __construct(string $name, \DateTimeImmutable $createdAt, ?Team $team = null)
     {
         $this->name = $name;
         $this->createdAt = $createdAt;
+        $this->team = $team;
     }
 
     public function getId(): ?int
@@ -46,5 +51,15 @@ class Category
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
+    }
+
+    public function getTeam(): ?Team
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?Team $team): void
+    {
+        $this->team = $team;
     }
 }

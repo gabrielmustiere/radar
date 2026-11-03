@@ -85,7 +85,7 @@ final class CategoryRenameFormTest extends WebTestCase
         $resolver = self::getContainer()->get(CategoryResolver::class);
         self::assertInstanceOf(CategoryResolver::class, $resolver);
 
-        return $resolver->resolve($name);
+        return $resolver->resolve($name, null);
     }
 
     private function user(string $email): User

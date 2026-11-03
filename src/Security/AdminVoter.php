@@ -11,7 +11,8 @@ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * Relit la liste à chaque décision : un admin ajouté ou retiré l'est tout de suite, sans reconnexion.
+ * Relit le compte à chaque décision : il est rechargé depuis la base à chaque requête, donc un statut admin accordé ou
+ * retiré s'applique tout de suite, sans reconnexion.
  * Pas de cache en propriété : en mode worker, il survivrait d'une requête à l'autre.
  *
  * @extends Voter<string, mixed>
@@ -40,6 +41,6 @@ final class AdminVoter extends Voter
     ): bool {
         $user = $token->getUser();
 
-        return $user instanceof User && $this->adminManager->isAdmin($user->getUserIdentifier());
+        return $user instanceof User && $this->adminManager->isAdmin($user);
     }
 }

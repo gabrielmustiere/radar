@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Twig\Components;
 
+use App\Entity\User;
 use App\Form\Model\LinkSubmission;
 use App\Service\CategoryResolver;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -36,8 +38,12 @@ trait CategoryPickerTrait
     public ?string $categoryNotice = null;
 
     #[LiveAction]
-    public function createCategory(CategoryResolver $categoryResolver, ValidatorInterface $validator): void
-    {
+    public function createCategory(
+        CategoryResolver $categoryResolver,
+        ValidatorInterface $validator,
+        #[CurrentUser]
+        User $creator,
+    ): void {
         $this->categoryQuery = trim($this->categoryQuery);
         if ('' === $this->categoryQuery) {
             return;
@@ -50,7 +56,7 @@ trait CategoryPickerTrait
             return;
         }
 
-        $category = $categoryResolver->resolve($this->categoryQuery);
+        $category = $categoryResolver->resolve($this->categoryQuery, $creator);
         $this->categoryQuery = '';
         $id = (string) $category->getId();
         $checked = $this->checkedCategoryIds();

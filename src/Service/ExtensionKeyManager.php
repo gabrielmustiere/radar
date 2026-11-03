@@ -39,11 +39,15 @@ final readonly class ExtensionKeyManager
         $this->userRepository->save($user);
     }
 
-    /** Propriétaire d'une clé valide, dont l'usage repousse l'expiration ; null pour une clé inconnue ou expirée. */
+    /**
+     * Propriétaire d'une clé valide, dont l'usage repousse l'expiration ; null pour une clé inconnue, expirée ou dont le
+     * compte est désactivé. Ce dernier cas est refusé ici et non par le seul `UserChecker`, qui passe après : sans quoi
+     * chaque appel refusé repousserait l'expiration de la clé d'un compte désactivé.
+     */
     public function authenticate(#[\SensitiveParameter] string $key): ?User
     {
         $user = $this->userRepository->findOneByExtensionKeyHash(self::hash($key));
-        if (null === $user || $this->isExpired($user)) {
+        if (null === $user || !$user->isActive() || $this->isExpired($user)) {
             return null;
         }
 

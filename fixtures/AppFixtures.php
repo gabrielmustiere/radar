@@ -9,6 +9,7 @@ use App\Entity\Link;
 use App\Entity\Source;
 use App\Entity\SourceItem;
 use App\Entity\User;
+use App\Enum\Type\Team;
 use App\Service\LinkUrlAnalyzer;
 use App\Service\Preview\LinkPreview;
 use App\Service\Preview\PreviewImageStore;
@@ -329,19 +330,26 @@ class AppFixtures extends Fixture
         $user->setEmail('admin@example.com');
         $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
         $user->setRoles(['ROLE_USER']);
+        $user->setTeam(Team::Development);
 
         $users = [
             'admin@example.com' => $user,
-            'marie@example.com' => $this->member('marie@example.com'),
-            'karim@example.com' => $this->member('karim@example.com'),
+            'marie@example.com' => $this->member('marie@example.com', Team::Product),
+            'karim@example.com' => $this->member('karim@example.com', Team::Qa),
         ];
         foreach ($users as $member) {
             $manager->persist($member);
         }
 
         $categories = [];
-        foreach ([self::SYMFONY, self::IA, self::AGENT, self::ARCHITECTURE] as $name) {
-            $category = new Category($name, new \DateTimeImmutable());
+        $teams = [
+            self::SYMFONY => Team::Development,
+            self::IA => null,
+            self::AGENT => Team::Product,
+            self::ARCHITECTURE => Team::Development,
+        ];
+        foreach ($teams as $name => $team) {
+            $category = new Category($name, new \DateTimeImmutable(), $team);
             $manager->persist($category);
             $categories[] = $category;
         }
@@ -454,10 +462,11 @@ class AppFixtures extends Fixture
     }
 
     /** @param non-empty-string $email */
-    private function member(string $email): User
+    private function member(string $email, Team $team): User
     {
         $member = new User();
         $member->setEmail($email);
+        $member->setTeam($team);
         $member->setPassword($this->passwordHasher->hashPassword($member, 'password'));
 
         return $member;
