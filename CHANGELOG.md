@@ -10,6 +10,19 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-11-03 — Comptes et équipes
+
+### ✨ Fonctionnel
+- **Gestion des comptes** — un admin crée les comptes depuis Radar (email, équipe, mot de passe provisoire affiché pour être transmis), les modifie, leur définit un nouveau mot de passe et leur donne ou retire le statut admin, sans passer par le serveur.
+- **Désactivation d'un compte** — un collègue parti ne peut plus se connecter, sa session ouverte est coupée et sa clé d'extension refusée ; ses liens restent, à son nom. Un compte se réactive avec son mot de passe et son équipe.
+- **Admins portés par le compte** — la page « Administrateurs » disparaît : les emails de l'ancienne liste qui ont un compte deviennent admins. Un admin ne peut ni se désactiver ni se retirer le statut, et l'admin permanent reste protégé.
+- **Équipes** — chaque membre appartient à une équipe (Développement, Produit, QA ou Management). Une catégorie prend l'équipe de la personne qui la crée, et un admin peut la corriger depuis la page « Catégories ».
+- **Sidebar centrée sur la lecture** — « Mon équipe » en tête avec les catégories de votre équipe, puis les autres catégories avec leur équipe, triées dans l'ordre alphabétique français. Sources, Comptes et Catégories passent dans une section « Administration » du menu du compte, visible des admins seulement.
+- **Listes d'administration plus lisibles** — boutons d'action visibles, listes déroulantes au chevron bien placé, et pages Comptes, Catégories et Sources adaptées au mobile.
+
+### 🔧 Technique
+- **Migration des admins** — la liste `admin_email` est reprise dans les comptes puis supprimée ; les emails sans compte sont listés dans la sortie de la migration, à lire au déploiement.
+
 ## [0.9.3] - 2026-11-03 — Boutons radio noir et blanc
 
 ### ✨ Fonctionnel
@@ -156,7 +169,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.9.3...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/gabrielmustiere/radar/compare/v0.9.3...v0.10.0
 [0.9.3]: https://github.com/gabrielmustiere/radar/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/gabrielmustiere/radar/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/gabrielmustiere/radar/compare/v0.9.0...v0.9.1
