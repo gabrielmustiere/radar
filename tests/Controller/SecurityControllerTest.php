@@ -26,6 +26,8 @@ final class SecurityControllerTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', 'Se connecter');
+        // Identifiants de test réservés à l'environnement dev
+        self::assertSelectorTextNotContains('body', 'admin@example.com');
     }
 
     public function testLoginWithValidCredentials(): void

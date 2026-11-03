@@ -26,7 +26,7 @@ final class LinkType extends AbstractType
         $builder->add('context', TextareaType::class, [
             'label' => 'Pourquoi c\'est utile (facultatif)',
             'required' => false,
-            'attr' => ['rows' => 3, 'maxlength' => 500, 'autofocus' => true, 'data-test' => 'link-context'],
+            'attr' => ['rows' => 3, 'maxlength' => 500, 'data-test' => 'link-context'],
         ])->add('categories', EntityType::class, [
             'label' => 'Catégories (une à trois)',
             'class' => Category::class,
@@ -38,7 +38,7 @@ final class LinkType extends AbstractType
         ])->add('url', UrlType::class, [
             'label' => 'Adresse du lien',
             'default_protocol' => null,
-            'attr' => ['placeholder' => 'https://…', 'data-test' => 'link-url'],
+            'attr' => ['placeholder' => 'https://…', 'autofocus' => true, 'data-test' => 'link-url'],
         ]);
     }
 

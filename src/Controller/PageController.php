@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Enum\Type\FeedType;
+use App\Enum\Type\Team;
 use App\Repository\LinkRepository;
+use App\Search\LinkFilter;
 use App\Search\SearchQuery;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,8 +26,12 @@ final class PageController extends AbstractController
         string $q = '',
         #[MapQueryParameter(options: ['min_range' => 1])]
         int $page = 1,
+        #[MapQueryParameter]
+        ?Team $team = null,
+        #[MapQueryParameter]
+        ?FeedType $type = null,
     ): Response {
-        $links = $linkRepository->findLatest(SearchQuery::fromString($q), $page);
+        $links = $linkRepository->findFiltered(new LinkFilter(SearchQuery::fromString($q), $team, type: $type), $page);
         if ($links->getPageNumber() > 1 && 0 === $links->count()) {
             throw $this->createNotFoundException();
         }
@@ -33,6 +40,8 @@ final class PageController extends AbstractController
             'links' => $links,
             'q' => $q,
             'page' => $page,
+            'team' => $team,
+            'type' => $type,
         ]);
     }
 

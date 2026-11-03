@@ -1,91 +1,140 @@
 {% set source = link.sourceType %}
 {% set host = link.url|link_host %}
+{% set title = link|link_title %}
 {% set video_id = source.value == 'youtube' ? link.url|youtube_id : null %}
 {% set repository = source.value == 'github' ? link.url|github_repository : null %}
 {% set post = source.value == 'x' %}
-{# Teinte par plateforme (liseré et détails), pour repérer d'un coup d'œil vidéos, dépôts et posts dans le flux ; noir et blanc sinon.
-   Un lien publié par une source suivie prend l'orange des flux RSS, quelle que soit sa plateforme. #}
-{% set neutral = {
-    ring: 'ring-gray-200/70 dark:ring-gray-800',
-    title: 'hover:text-gray-600 dark:hover:text-gray-300',
-    context: 'border-gray-900 dark:border-white',
-    category: 'bg-gray-100 text-gray-900 hover:bg-gray-200 dark:bg-white/10 dark:text-white dark:hover:bg-white/20',
-    avatar: 'text-gray-900 dark:text-white',
-    open: 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-white/10',
-} %}
+{# Une couleur par type (liseré, badge, contexte, « Ouvrir », aperçu de repli et vignette mobile), pour reconnaître d'un coup d'œil ce qu'est le lien.
+   Un lien publié par une source suivie prend l'orange des flux RSS, quelle que soit sa plateforme.
+   Classes écrites en entier : Tailwind ne génère pas les classes composées. #}
+{% set kind = link.source ? 'rss' : source.value %}
 {% set theme = {
     youtube: {
+        tint: 'bg-gray-900 text-white',
+        solid: 'bg-rose-600',
         ring: 'ring-rose-200 dark:ring-rose-500/30',
         title: 'hover:text-rose-700 dark:hover:text-rose-400',
-        context: 'border-rose-500',
-        category: 'bg-rose-50 text-rose-800 hover:bg-rose-100 dark:bg-rose-500/10 dark:text-rose-300 dark:hover:bg-rose-500/20',
+        context: 'border-rose-600 dark:border-rose-500',
         avatar: 'text-rose-700 dark:text-rose-400',
-        open: 'text-rose-700 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-500/10',
+        open: 'text-rose-600 dark:text-rose-400',
     },
     github: {
+        tint: 'bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-300',
+        solid: 'bg-violet-600',
         ring: 'ring-violet-200 dark:ring-violet-500/30',
         title: 'hover:text-violet-700 dark:hover:text-violet-400',
-        context: 'border-violet-500',
-        category: 'bg-violet-50 text-violet-800 hover:bg-violet-100 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/20',
+        context: 'border-violet-600 dark:border-violet-500',
         avatar: 'text-violet-700 dark:text-violet-400',
-        open: 'text-violet-700 hover:bg-violet-50 dark:text-violet-400 dark:hover:bg-violet-500/10',
+        open: 'text-violet-600 dark:text-violet-400',
     },
-    x: neutral|merge({ring: 'ring-gray-800 dark:ring-gray-500'}),
+    x: {
+        tint: 'bg-sky-50 text-sky-800 dark:bg-sky-500/10 dark:text-sky-300',
+        solid: 'bg-sky-700',
+        ring: 'ring-sky-200 dark:ring-sky-500/30',
+        title: 'hover:text-sky-700 dark:hover:text-sky-400',
+        context: 'border-sky-700 dark:border-sky-500',
+        avatar: 'text-sky-700 dark:text-sky-400',
+        open: 'text-sky-700 dark:text-sky-400',
+    },
     rss: {
+        tint: 'bg-orange-50 text-orange-800 dark:bg-orange-500/10 dark:text-orange-300',
+        solid: 'bg-orange-700',
         ring: 'ring-orange-200 dark:ring-orange-500/30',
         title: 'hover:text-orange-700 dark:hover:text-orange-400',
-        context: 'border-orange-500',
-        category: 'bg-orange-50 text-orange-800 hover:bg-orange-100 dark:bg-orange-500/10 dark:text-orange-300 dark:hover:bg-orange-500/20',
+        context: 'border-orange-700 dark:border-orange-500',
         avatar: 'text-orange-700 dark:text-orange-400',
-        open: 'text-orange-700 hover:bg-orange-50 dark:text-orange-400 dark:hover:bg-orange-500/10',
+        open: 'text-orange-700 dark:text-orange-400',
         badge: 'text-orange-700 dark:text-orange-400',
     },
-}[link.source ? 'rss' : source.value] ?? neutral %}
-<article id="link-card-{{ link.id }}" class="flex flex-col overflow-hidden rounded-2xl bg-white ring-1 {{ theme.ring }} transition hover:shadow-md hover:shadow-gray-900/5 dark:bg-gray-950"
+    article: {
+        tint: 'bg-teal-50 text-teal-800 dark:bg-teal-500/10 dark:text-teal-300',
+        solid: 'bg-teal-700',
+        ring: 'ring-teal-200 dark:ring-teal-500/30',
+        title: 'hover:text-teal-700 dark:hover:text-teal-400',
+        context: 'border-teal-700 dark:border-teal-500',
+        avatar: 'text-teal-700 dark:text-teal-400',
+        open: 'text-teal-700 dark:text-teal-400',
+    },
+    image: {
+        tint: 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-300',
+        solid: 'bg-gray-900 dark:bg-gray-700',
+        ring: 'ring-gray-200 dark:ring-gray-800',
+        title: 'hover:text-gray-600 dark:hover:text-gray-300',
+        context: 'border-gray-900 dark:border-white',
+        avatar: 'text-gray-900 dark:text-white',
+        open: 'text-gray-900 dark:text-white',
+    },
+}[kind] %}
+{# « Nouveau » : posté depuis moins de 72 h ; un lien repris de Chat garde sa date d'origine #}
+{% set new = link.postedAt > date('-72 hours') %}
+{% set type_label = kind == 'rss' ? 'Source suivie' : source.label %}
+<article id="link-card-{{ link.id }}" class="link-card relative flex gap-3 overflow-hidden p-3 sm:flex-col sm:gap-0 sm:p-0 rounded-2xl bg-white ring-1 {{ theme.ring }} dark:bg-gray-900"
          data-test="link-card" data-preview-status="{{ link.previewStatus.value }}">
-    {% if video_id %}
-        {# Façade : rien de YouTube ne se charge avant le clic, et la lecture compte comme une ouverture du lien #}
-        <div class="relative aspect-[1.91/1] overflow-hidden" data-test="link-video"
-             data-controller="video-facade{{ link.imagePath ? ' image-fallback' }}"
-             data-video-facade-video-id-value="{{ video_id }}"
-             data-video-facade-play-url-value="{{ path('app_link_play', {id: link.id}) }}"
-             data-video-facade-token-value="{{ csrf_token('link-play') }}"
-             data-video-facade-title-value="{{ link.title ?? link.url }}">
-            {% include 'link/_card_visual.html.twig' %}
-            <button type="button" data-action="video-facade#play" data-test="link-video-play"
-                    aria-label="Lire la vidéo « {{ link.title ?? host }} »"
-                    class="group absolute inset-0 grid cursor-pointer place-items-center">
-                <span class="grid size-14 place-items-center rounded-full bg-gray-950/75 text-white shadow-lg transition group-hover:scale-105 group-hover:bg-rose-600">
-                    <twig:ux:icon name="tabler:player-play-filled" class="size-7"/>
+    {# Sur téléphone, la carte se compacte : vignette du type à la place du visuel (donc sans façade), texte resserré #}
+    <span class="grid size-16 shrink-0 place-items-center rounded-xl sm:hidden {{ theme.tint }}" data-test="link-thumb" aria-hidden="true">
+        <twig:ux:icon name="{{ kind == 'rss' ? 'tabler:rss' : source.icon }}" class="size-6"/>
+    </span>
+    <div class="link-card-media relative overflow-hidden max-sm:hidden">
+        {% if video_id %}
+            {# Façade : rien de YouTube ne se charge avant le clic, et la lecture compte comme une ouverture du lien #}
+            <div class="relative z-10 aspect-[1.91/1] overflow-hidden" data-test="link-video"
+                 data-controller="video-facade{{ link.imagePath ? ' image-fallback' }}"
+                 data-video-facade-video-id-value="{{ video_id }}"
+                 data-video-facade-play-url-value="{{ path('app_link_play', {id: link.id}) }}"
+                 data-video-facade-token-value="{{ csrf_token('link-play') }}"
+                 data-video-facade-title-value="{{ title }}">
+                {% include 'link/_card_visual.html.twig' %}
+                <button type="button" data-action="video-facade#play" data-test="link-video-play"
+                        aria-label="Lire la vidéo « {{ title }} »"
+                        class="group absolute inset-0 grid cursor-pointer place-items-center">
+                    <span class="grid size-14 place-items-center rounded-full bg-gray-950/75 text-white shadow-lg transition group-hover:scale-105 group-hover:bg-rose-600">
+                        <twig:ux:icon name="tabler:player-play-filled" class="size-7"/>
+                    </span>
+                </button>
+            </div>
+        {% elseif repository %}
+            {% include 'link/_card_repository.html.twig' %}
+        {% elseif post %}
+            {% include 'link/_card_post.html.twig' %}
+        {% else %}
+            <div class="relative aspect-[1.91/1] overflow-hidden" {% if link.imagePath %}data-controller="image-fallback"{% endif %}>
+                {% include 'link/_card_visual.html.twig' %}
+            </div>
+        {% endif %}
+        <span class="pointer-events-none absolute top-3 left-3 z-10 inline-flex h-6 items-center rounded-full px-2.5 text-[11px] font-bold tracking-wide text-white uppercase {{ theme.solid }}" data-test="link-type">
+            {{- type_label -}}
+        </span>
+        {% if new %}
+            <span class="pointer-events-none absolute top-3 right-3 z-10 inline-flex h-6 items-center gap-1.5 rounded-full bg-white px-2.5 text-[11px] font-bold text-gray-900 shadow-[0_2px_6px_rgb(23_24_28/0.12)] dark:bg-gray-900 dark:text-white" data-test="link-new">
+                <span class="relative size-1.5">
+                    <span class="absolute inset-0 animate-radar-ping rounded-full {{ theme.solid }}"></span>
+                    <span class="absolute inset-0 rounded-full {{ theme.solid }}"></span>
                 </span>
-            </button>
-        </div>
-    {% elseif repository %}
-        {% include 'link/_card_repository.html.twig' %}
-    {% elseif post %}
-        {% include 'link/_card_post.html.twig' %}
-    {% else %}
-        <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true"
-           class="relative block aspect-[1.91/1] overflow-hidden" {% if link.imagePath %}data-controller="image-fallback"{% endif %}>
-            {% include 'link/_card_visual.html.twig' %}
-        </a>
-    {% endif %}
+                Nouveau
+            </span>
+        {% endif %}
+    </div>
 
-    <div class="flex flex-1 flex-col p-4">
-        <p class="flex items-center gap-1.5 text-xs font-medium text-gray-500 dark:text-gray-400" data-test="link-source">
+    <div class="flex min-w-0 flex-1 flex-col sm:p-4">
+        <p class="flex items-center gap-1.5 text-xs font-bold sm:hidden {{ theme.open }}">
+            {{ type_label }}{% if new %} <span class="text-gray-900 dark:text-white">· nouveau</span>{% endif %}
+        </p>
+        <p class="flex items-center gap-1.5 text-xs font-medium text-gray-500 max-sm:hidden dark:text-gray-400" data-test="link-source">
             <twig:ux:icon name="{{ source.icon }}" class="size-4"/>
             <span>{{ source.label }}</span>
             <span class="size-1 rounded-full bg-gray-300 dark:bg-gray-700"></span>
             <span class="truncate">{{ link.siteName ?? host }}</span>
         </p>
 
-        <h2 class="mt-2 line-clamp-2 font-display text-base font-semibold leading-snug text-gray-900 dark:text-white" data-test="link-title">
-            <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" class="{{ theme.title }}">{{ link.title ?? link.url }}</a>
+        {# Le lien du titre s'étend sur toute la carte : seuls la façade vidéo et « Ouvrir » passent au-dessus (z-10).
+           Le z-10 de la façade est sur son bloc : l'aperçu agrandi au survol (transform) enfermerait celui du bouton. #}
+        <h2 class="mt-1 line-clamp-2 sm:mt-2 font-display text-base font-semibold leading-snug text-gray-900 dark:text-white" data-test="link-title">
+            <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" class="after:absolute after:inset-0 {{ theme.title }}">{{ title }}</a>
         </h2>
 
         {# L'auteur et le texte d'un post X sont déjà dans son visuel #}
         {% if not post and (link.author or link.publishedAt) %}
-            <p class="mt-1.5 text-xs text-gray-500 dark:text-gray-400" data-test="link-byline">
+            <p class="mt-1.5 text-xs text-gray-500 max-sm:hidden dark:text-gray-400" data-test="link-byline">
                 {%- if link.author -%}
                     Par <span class="font-medium text-gray-700 dark:text-gray-300" data-test="link-author">{{ link.author }}</span>
                 {%- endif -%}
@@ -96,20 +145,24 @@
         {% endif %}
 
         {% if link.description and not post %}
-            <p class="mt-1.5 line-clamp-2 text-sm text-gray-600 dark:text-gray-400" data-test="link-description">{{ link.description }}</p>
+            <p class="mt-1.5 line-clamp-2 text-sm text-gray-600 max-sm:hidden dark:text-gray-400" data-test="link-description">{{ link.description }}</p>
         {% endif %}
 
         {% if link.context %}
-            <p class="mt-3 border-l-2 {{ theme.context }} pl-3 text-sm text-gray-700 italic dark:text-gray-300" data-test="link-context">{{ link.context }}</p>
+            <p class="mt-2 border-l-2 {{ theme.context }} pl-3 text-sm text-gray-700 italic max-sm:line-clamp-2 sm:mt-3 dark:text-gray-300" data-test="link-context">{{ link.context }}</p>
         {% endif %}
 
-        <div class="mt-auto flex flex-wrap gap-1.5 pt-4">
+        <p class="mt-1.5 truncate text-xs text-gray-500 sm:hidden dark:text-gray-400">
+            {{ link.siteName ?? host }} · <time datetime="{{ link.postedAt|date('c') }}">{{ link.postedAt|date('d/m/Y') }}</time>
+        </p>
+
+        <div class="mt-auto flex flex-wrap gap-1.5 pt-4 max-sm:hidden">
             {% for category in link.categories %}
-                <a href="{{ path('app_category_show', {id: category.id}) }}" class="rounded-full px-2 py-0.5 text-xs font-medium {{ theme.category }}" data-test="link-category">{{ category.name }}</a>
+                <span class="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-700 dark:bg-white/10 dark:text-gray-300" data-test="link-category">{{ category.name }}</span>
             {% endfor %}
         </div>
 
-        <div class="mt-3 flex items-center gap-1.5 border-t border-gray-100 pt-3 text-xs text-gray-500 dark:border-gray-800 dark:text-gray-400">
+        <div class="mt-3 flex items-center gap-1.5 border-t border-gray-100 pt-3 text-xs max-sm:hidden text-gray-500 dark:border-gray-800 dark:text-gray-400">
             {# Un lien d'une source suivie est toujours posté par l'utilisateur système radar : la source prend sa place #}
             {% if link.source %}
                 <span class="grid size-6 shrink-0 place-items-center rounded-full bg-gray-100 dark:bg-gray-800 {{ theme.avatar }}">
@@ -131,8 +184,8 @@
                 </span>
             {% endif %}
             <a href="{{ path('app_link_open', {id: link.id}) }}" target="_blank" rel="noopener noreferrer" data-test="link-open" title="Ouvrir {{ link.url }}"
-               class="ml-auto inline-flex items-center gap-1 rounded-lg px-2 py-1 font-medium {{ theme.open }}">
-                Ouvrir <twig:ux:icon name="tabler:external-link" class="size-3.5"/>
+               class="link-card-open relative z-10 ml-auto inline-flex items-center font-bold {{ theme.open }}">
+                Ouvrir <twig:ux:icon name="tabler:arrow-up-right" class="size-3.5"/>
             </a>
         </div>
     </div>

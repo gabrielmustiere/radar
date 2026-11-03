@@ -9,24 +9,23 @@ use Symfony\Component\DomCrawler\Crawler;
 
 final class CategoryControllerTest extends LinkWebTestCase
 {
-    public function testSidebarListsCategoriesWithLinkCount(): void
+    public function testFilterBarListsCategoriesWithLinkCount(): void
     {
         $client = $this->loggedClient();
-        $name = 'Sidebar ' . uniqid();
+        $name = 'Filtre ' . uniqid();
         $categories = [$this->createCategory($name)];
         $this->submit($client, ['url' => 'https://example.com/' . uniqid('nav-a-'), 'categories' => $categories]);
         $this->submit($client, ['url' => 'https://example.com/' . uniqid('nav-b-'), 'categories' => $categories]);
 
         $crawler = $client->request('GET', '/');
 
-        $item = $crawler
-            ->filter('[data-test="category-nav-item"]')
-            ->reduce(static fn(Crawler $node): bool => str_contains($node->text(), $name));
-        self::assertCount(1, $item);
-        self::assertStringEndsWith('2', trim($item->text()));
+        $chip = $this->categoryChip($crawler, $name);
+        self::assertCount(1, $chip);
+        self::assertSame('2', $chip->filter('[data-test="filter-count"]')->text());
+        self::assertSame('/categories/' . $this->categoryId($name), $chip->attr('href'));
     }
 
-    public function testSidebarSortsCategoriesIgnoringCaseAndAccentsWithNaturalNumbers(): void
+    public function testFilterBarSortsCategoriesIgnoringCaseAndAccentsWithNaturalNumbers(): void
     {
         $client = $this->loggedClient();
         $prefix = 'Tri ' . uniqid() . ' ';
@@ -41,23 +40,23 @@ final class CategoryControllerTest extends LinkWebTestCase
         $crawler = $client->request('GET', '/');
 
         $names = $crawler
-            ->filter('[data-test="category-nav-item"] span:first-of-type')
+            ->filter('[data-test="filter-category"] [data-test="filter-label"]')
             ->reduce(static fn(Crawler $node): bool => str_starts_with($node->text(), $prefix))
             ->each(static fn(Crawler $node): string => $node->text());
         self::assertSame($expected, $names);
     }
 
-    public function testCategoryWithoutLinkIsNotInTheSidebar(): void
+    public function testCategoryWithoutLinkIsGreyedOutInTheFilterBar(): void
     {
         $client = $this->loggedClient();
         $name = 'Sans lien ' . uniqid();
         $this->createCategory($name);
 
-        $client->request('GET', '/');
+        $crawler = $client->request('GET', '/');
 
-        self::assertSelectorTextNotContains('[data-test="category-nav"]', $name);
-        $client->request('GET', '/liens/ajouter');
-        self::assertSelectorTextContains('[data-test="link-categories"]', $name);
+        $chip = $this->categoryChip($crawler, $name);
+        self::assertSame('0', $chip->filter('[data-test="filter-count"]')->text());
+        self::assertStringContainsString('opacity-40', (string) $chip->attr('class'));
     }
 
     public function testCategoryPageListsOnlyItsLinksMostRecentFirst(): void
@@ -79,13 +78,20 @@ final class CategoryControllerTest extends LinkWebTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', $name);
         self::assertSelectorCount(2, '[data-test="link-card"]');
-        self::assertSelectorTextContains('[data-test="link-list"] > :nth-child(1) [data-test="link-title"]', $newer);
-        self::assertSelectorTextContains('[data-test="link-list"] > :nth-child(2) [data-test="link-title"]', $older);
+        $crawler = $client->getCrawler();
+        self::assertSame(
+            'Ouvrir ' . $newer,
+            $crawler->filter('[data-test="link-list"] > :nth-child(1) [data-test="link-open"]')->attr('title'),
+        );
+        self::assertSame(
+            'Ouvrir ' . $older,
+            $crawler->filter('[data-test="link-list"] > :nth-child(2) [data-test="link-open"]')->attr('title'),
+        );
         self::assertSelectorCount(2, '[data-test="link-list"] > :nth-child(1) [data-test="link-category"]');
-        self::assertSelectorTextContains('[data-test="category-nav-item"][aria-current="page"]', $name);
+        self::assertSelectorTextContains('[data-test="filter-category"][aria-current="true"]', $name);
     }
 
-    public function testCardOpensOriginalLinkAndLinksToCategories(): void
+    public function testCardOpensOriginalLinkAndCategoriesAreNotLinks(): void
     {
         $client = $this->loggedClient();
         $name = 'Rebond ' . uniqid();
@@ -100,8 +106,9 @@ final class CategoryControllerTest extends LinkWebTestCase
         self::assertSame('_blank', $open->attr('target'));
         self::assertSame('noopener noreferrer', $open->attr('rel'));
         self::assertSame($open->attr('href'), $crawler->filter('[data-test="link-title"] a')->attr('href'));
-        $client->click($crawler->filter('[data-test="link-category"]')->link());
-        self::assertSelectorTextContains('h1', $name);
+        $category = $crawler->filter('[data-test="link-category"]');
+        self::assertSame($name, trim($category->text()));
+        self::assertSame('span', $category->nodeName());
     }
 
     public function testOnlyAdminSeesTheRenameButtonOnACategoryPage(): void
@@ -133,5 +140,12 @@ final class CategoryControllerTest extends LinkWebTestCase
         $client->request('GET', '/categories/999999');
 
         self::assertResponseStatusCodeSame(404);
+    }
+
+    private function categoryChip(Crawler $crawler, string $name): Crawler
+    {
+        return $crawler
+            ->filter('[data-test="filter-category"]')
+            ->reduce(static fn(Crawler $node): bool => $node->filter('[data-test="filter-label"]')->text() === $name);
     }
 }

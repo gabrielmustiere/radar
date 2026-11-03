@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "title": "Plan technique — Redesign « modèle 5 clair » : cartes typées, filtres en entonnoir, layout sans sidebar, écrans restylés",
+  "created": "2026-11-03",
+  "updated": "2026-11-03",
+  "tags": [
+    "redesign",
+    "cartes",
+    "design-system",
+    "animations",
+    "mobile"
+  ],
+  "changelog": [
+    {
+      "date": "2026-11-03",
+      "type": "Création",
+      "description": "Plan refacto rédigé : 6 teintes par type, stretched link, badges type et Nouveau (72 h), motion.css, rendu compact mobile, en 8 étapes."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Implémentation",
+      "description": "8 étapes livrées (non commitées, à la demande) : 6 teintes par type, carte entièrement cliquable (2 app_link_open contre 5), badges type et Nouveau (72 h), mouvement branché, rendu compact < sm. QA : lint Mago vert, PHPUnit 387 verts, E2E 42 verts. Écarts : (1) CardOpenTest clique avec force: true, car le lien étendu couvre le visuel et Playwright refuse un clic sur un élément recouvert ; vérifié vert aussi sur les anciens templates. (2) motion.css adapté à la cascade Tailwind 4 : apparition en backwards au lieu de both (sinon transform figé bloque la montée au survol), ombre via --tw-shadow (sinon elle écrase le liseré ring-1), écart de « Ouvrir » porté par .link-card-open (un utilitaire gap-* l'emporterait sur le survol). (3) z-10 sur le bloc de la façade vidéo et non sur le bouton, car l'aperçu agrandi au survol crée un contexte d'empilement ; badges en z-10 pointer-events-none. (4) Ligne « github.com » du visuel dépôt remplacée par un espace réservé et post X en pt-12, pour laisser la place aux badges. (5) Repli et vignette mobile partagent une seule clé tint de la table de thèmes : la table fallback_styles de _card_visual disparaît."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Implémentation",
+      "description": "Périmètre étendu à tout le redesign (ex-017, 018, 019), à la demande : filtres en entonnoir Équipe › Catégorie › Type avec compteurs (FeedType, LinkFilter, LinkFacetRepository), sidebar et CategoryNav supprimés, topbar et mobile (filtres défilants, bouton flottant), titres de repli lisibles (link_title), modale d'ajout (adresse d'abord, type détecté), reprise de Chat, onglets et pages admin, extension, connexion (identifiants en dev seulement), animations menu/modale/badge, DESIGN.md. QA : lint Mago vert, PHPUnit 395 verts, E2E 45 verts. Écarts : (1) pastilles de filtre en liens et non en actions live (catégorie = sa route, URL partageable, rien à synchroniser) ; (2) contenu sans largeur max de 1320 px (maquette) : RichCardTest exige ≥ 5 colonnes à 2560 px ; (3) repli GitHub en propriétaire/dépôt, non prévu par la spec ; (4) équipe en select restylé et non en tuiles radio : AdminUserTest pilote le select ; (5) titres de repli au domaine : tests qui lisaient l'URL dans la carte passés sur le title d'« Ouvrir » ; (6) catégories sans lien listées à 40 % dans la barre (spec) au lieu d'être masquées comme dans la sidebar."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 bloquant, 0 important, 5 mineurs ouverts : [TEST] assertion vide sur #radar-sidebar, [STYLE] pages ajout/reprise sans carte, [TEST] test des pastilles en double, [ARCHI] correspondance FeedType ↔ SourceType implicite, [DOC] titre de story en retard sur le périmètre."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Review",
+      "description": "Prêt à commiter ; 4 mineurs corrigés : [TEST] assertion vide sur #radar-sidebar, [STYLE] pages ajout/reprise sans carte, [TEST] test des pastilles en double, [ARCHI] FeedType::fromSourceType() ; 1 mineur ouvert pour /forge:sync : [DOC] titre de story en retard sur le périmètre."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Sync",
+      "description": "12 écarts relevés (9 réalignés dans le plan, titre élargi au redesign complet), 6/8 critères cochés, 4 non livrés, 4 dettes ; backlog : C4.7 et gestion-comptes édités."
+    }
+  ]
+}

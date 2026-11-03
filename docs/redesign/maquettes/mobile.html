@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Radar · Mobile (clair)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F7F8}
+a{color:#17181C;text-decoration:none}a:hover{color:#17181C}
+.rm-card{animation:rm-in .45s cubic-bezier(.2,.7,.2,1) both;transition:transform .2s ease}
+.rm-card:active{transform:scale(.98)}
+@keyframes rm-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.rm-row{scrollbar-width:none}
+.rm-row::-webkit-scrollbar{display:none}
+.rm-chip:active{transform:scale(.95)}
+.rm-fab{transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+.rm-fab:active{transform:scale(.92)}
+@media (prefers-reduced-motion:reduce){.rm-card{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; min-height: 1600px; background: #F6F7F8; color: #17181C; font-family: Inter, ui-sans-serif, system-ui, sans-serif; overflow: hidden">
+  <header style="display: flex; flex-direction: column; gap: 12px; padding: 14px 16px 12px; background: #FFFFFF; border-bottom: 1px solid #E3E5E9">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <a href="Clair-Liens.dc.html" style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px">
+        <span style="width: 30px; height: 30px; border-radius: 9px; background: #17181C; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 12 18 6"></path><path d="M20 12a8 8 0 1 1-8-8"></path><path d="M16 12a4 4 0 1 1-4-4"></path></svg></span>
+        radar
+      </a>
+      <span style="flex: 1"></span>
+      <button type="button" aria-label="Menu du compte" style="width: 44px; height: 44px; border-radius: 50%; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-weight: 700; cursor: pointer">G</button>
+    </div>
+    <label for="rm-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Rechercher</label>
+    <input id="rm-q" type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Rechercher un lien…" style="height: 44px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; border: 1px solid #D5D8DE; background: #F6F7F8; font: inherit; font-size: 16px; color: #17181C">
+  </header>
+
+  <section aria-label="Filtres" style="display: flex; flex-direction: column; gap: 8px; padding: 12px 0 6px">
+    <div class="rm-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 0 16px">
+      <sc-for list="{{teams}}" as="t" hint-placeholder-count="5">
+        <button class="rm-chip" type="button" onClick="{{t.pick}}" style="flex: none; height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid {{t.bd}}; background: {{t.bg}}; color: {{t.fg}}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; opacity: {{t.op}}">{{t.label}}</button>
+      </sc-for>
+    </div>
+    <div class="rm-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 0 16px">
+      <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+        <button class="rm-chip" type="button" onClick="{{c.pick}}" style="flex: none; height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid {{c.bd}}; background: {{c.bg}}; color: {{c.fg}}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; opacity: {{c.op}}">{{c.label}}</button>
+      </sc-for>
+    </div>
+    <div class="rm-row" style="display: flex; gap: 6px; overflow-x: auto; padding: 0 16px">
+      <sc-for list="{{types}}" as="y" hint-placeholder-count="6">
+        <button class="rm-chip" type="button" onClick="{{y.pick}}" style="flex: none; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 999px; border: 1px solid {{y.bd}}; background: {{y.bg}}; color: {{y.fg}}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; opacity: {{y.op}}"><span style="width: 9px; height: 9px; border-radius: 3px; background: {{y.color}}; display: block"></span>{{y.label}}</button>
+      </sc-for>
+    </div>
+  </section>
+
+  <div style="display: flex; align-items: baseline; gap: 10px; padding: 8px 16px">
+    <h1 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.02em">{{summary}}</h1>
+    <span style="font-size: 13px; color: #5E636E">{{countLabel}}</span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; padding: 4px 16px 100px">
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="5">
+      <a class="rm-card" href="{{it.url}}" target="_blank" rel="noopener noreferrer" style="display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 12px; padding: 12px; border-radius: 16px; background: #FFFFFF; border: 1px solid {{it.ring}}">
+        <span style="width: 64px; height: 64px; border-radius: 12px; background: {{it.mediaBg}}; color: {{it.color}}; display: flex; align-items: center; justify-content: center">
+          <sc-if value="{{it.isVideo}}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg></sc-if>
+          <sc-if value="{{it.isRepo}}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12M18 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 21a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM18 9a9 9 0 0 1-9 9"></path></svg></sc-if>
+          <sc-if value="{{it.isX}}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8zM16.7 19.2h1.7L7.4 4.7H5.6z"></path></svg></sc-if>
+          <sc-if value="{{it.isRss}}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 11a8 8 0 0 1 8 8M5 5a14 14 0 0 1 14 14"></path><circle cx="6" cy="18" r="1.5" fill="currentColor"></circle></svg></sc-if>
+          <sc-if value="{{it.isArticle}}" hint-placeholder-val="{{ true }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 4h14v16H5zM9 8h6M9 12h6M9 16h3"></path></svg></sc-if>
+        </span>
+        <span style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+          <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: {{it.color}}"><span>{{it.typeLabel}}</span><sc-if value="{{it.isNew}}" hint-placeholder-val="{{ false }}"><span style="color: #17181C">· nouveau</span></sc-if></span>
+          <span style="font-size: 15px; font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{it.title}}</span>
+          <sc-if value="{{it.hasContext}}" hint-placeholder-val="{{ false }}"><span style="padding-left: 8px; border-left: 2px solid {{it.color}}; font-size: 13px; line-height: 1.4; font-style: italic; color: #3B3F47; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden">{{it.context}}</span></sc-if>
+          <span style="font-size: 12px; color: #5E636E">{{it.source}} · {{it.when}}</span>
+        </span>
+      </a>
+    </sc-for>
+  </div>
+
+  <a class="rm-fab" href="Clair-Ajouter.dc.html" aria-label="Ajouter un lien" style="position: absolute; right: 16px; bottom: 24px; width: 60px; height: 60px; border-radius: 20px; background: #17181C; color: #FFFFFF; display: flex; align-items: center; justify-content: center; box-shadow: 0 14px 30px -12px rgba(23,24,28,.55)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1600}}'>
+const TYPES = {
+  video: { label: 'Vidéo', plural: 'Vidéos', color: '#E11D48', ring: '#F8C9D2', bg: '#1F1A1C' },
+  repo: { label: 'GitHub', plural: 'GitHub', color: '#7C3AED', ring: '#DCCFFB', bg: '#F3EEFF' },
+  x: { label: 'Post X', plural: 'X', color: '#0369A1', ring: '#BFE0F5', bg: '#ECF6FD' },
+  rss: { label: 'Flux RSS', plural: 'RSS', color: '#C2410C', ring: '#F9D3B3', bg: '#FFF3E8' },
+  article: { label: 'Article', plural: 'Articles', color: '#0F766E', ring: '#B4E6DD', bg: '#ECFAF7' }
+};
+const ORDER = ['video', 'repo', 'x', 'rss', 'article'];
+const CAT_TEAM = { 'Symfony': 'Développement', 'Conférences': 'Développement', 'Sécurité': 'Produit', 'Tests': 'QA', 'Veille': 'Management' };
+const CATS = ['Symfony', 'Conférences', 'Sécurité', 'Tests', 'Veille'];
+const TEAMS = ['Développement', 'Produit', 'QA', 'Management'];
+const LINKS = [
+  { type: 'video', title: 'How Passkeys Work - Computerphile', source: 'YouTube', url: 'https://www.youtube.com/watch?v=xYfiOnufBSk', cats: ['Sécurité'], when: 'aujourd’hui', isNew: true, context: 'Explication très claire du fonctionnement des passkeys, à montrer aux équipes Produit et QA.' },
+  { type: 'video', title: 'Understand passkeys in 4 minutes', source: 'YouTube', url: 'https://www.youtube.com/watch?v=2xdV-xut7EQ', cats: ['Sécurité'], when: 'hier', isNew: true, context: 'La version courte, idéale pour l’onboarding des nouveaux arrivants.' },
+  { type: 'video', title: 'SymfonyTV, la chaîne', source: 'YouTube', url: 'https://www.youtube.com/@SymfonyTV', cats: ['Conférences', 'Symfony'], when: 'hier', isNew: true, context: '' },
+  { type: 'x', title: '@symfony sur X', source: 'x.com', url: 'https://x.com/symfony', cats: ['Symfony', 'Veille'], when: '1 nov.', isNew: false, context: 'Le compte officiel : annonces de releases et avis de sécurité en premier.' },
+  { type: 'repo', title: 'w3c / webauthn', source: 'github.com', url: 'https://github.com/w3c/webauthn', cats: ['Sécurité'], when: '31 oct.', isNew: false, context: '' },
+  { type: 'article', title: 'The Practical Test Pyramid', source: 'martinfowler.com', url: 'https://martinfowler.com/articles/practical-test-pyramid.html', cats: ['Tests'], when: '30 oct.', isNew: false, context: '' },
+  { type: 'repo', title: 'php / frankenphp', source: 'github.com', url: 'https://github.com/php/frankenphp', cats: ['Symfony'], when: '29 oct.', isNew: false, context: '' },
+  { type: 'x', title: '@fabpot sur X', source: 'x.com', url: 'https://x.com/fabpot', cats: ['Symfony'], when: '28 oct.', isNew: false, context: '' },
+  { type: 'rss', title: 'The GitHub Blog', source: 'github.blog', url: 'https://github.blog/feed/', cats: ['Veille'], when: '27 oct.', isNew: false, context: '' },
+  { type: 'repo', title: 'symfony / symfony', source: 'github.com', url: 'https://github.com/symfony/symfony', cats: ['Symfony'], when: '27 oct.', isNew: false, context: '' },
+  { type: 'rss', title: 'PHP.net, actualités', source: 'php.net', url: 'https://www.php.net/feed.atom', cats: ['Symfony', 'Veille'], when: '26 oct.', isNew: false, context: '' },
+  { type: 'article', title: 'Se connecter avec une clé d’accès via le remplissage automatique', source: 'web.dev', url: 'https://web.dev/articles/passkey-form-autofill', cats: ['Sécurité'], when: '25 oct.', isNew: false, context: '' },
+  { type: 'article', title: 'Gabriel Mustiere — CTO freelance à Nantes', source: 'mustiere.fr', url: 'https://mustiere.fr/', cats: ['Symfony'], when: '24 oct.', isNew: false, context: '' },
+  { type: 'article', title: 'Passkeys Developer Resources', source: 'passkeys.dev', url: 'https://passkeys.dev/', cats: ['Sécurité'], when: '20 oct.', isNew: false, context: '' }
+];
+
+class Component extends DCLogic {
+  state = { team: null, cat: null, type: null, q: '' };
+
+  match(l, skip) {
+    const s = this.state;
+    if (skip !== 'team' && s.team && !l.cats.some((c) => CAT_TEAM[c] === s.team)) return false;
+    if (skip !== 'cat' && s.cat && l.cats.indexOf(s.cat) < 0) return false;
+    if (skip !== 'type' && s.type && l.type !== s.type) return false;
+    if (s.q && (l.title + ' ' + l.source + ' ' + l.context + ' ' + l.cats.join(' ')).toLowerCase().indexOf(s.q.toLowerCase()) < 0) return false;
+    return true;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const chip = (on, n) => ({ bd: on ? '#17181C' : '#D5D8DE', bg: on ? '#17181C' : '#FFFFFF', fg: on ? '#FFFFFF' : '#17181C', op: n === 0 ? 0.4 : 1 });
+    const teams = [{ id: null, label: 'Toutes les équipes' }].concat(TEAMS.map((t) => ({ id: t, label: t }))).map((t) => {
+      const n = LINKS.filter((l) => this.match(l, 'team') && (!t.id || l.cats.some((c) => CAT_TEAM[c] === t.id))).length;
+      return { label: t.label, pick: () => this.setState({ team: t.id, cat: null }), ...chip(s.team === t.id, n) };
+    });
+    const catList = s.team ? CATS.filter((c) => CAT_TEAM[c] === s.team) : CATS;
+    const cats = [{ id: null, label: 'Toutes les catégories' }].concat(catList.map((c) => ({ id: c, label: c }))).map((c) => {
+      const n = LINKS.filter((l) => this.match(l, 'cat') && (!c.id || l.cats.indexOf(c.id) >= 0)).length;
+      return { label: c.label, pick: () => this.setState({ cat: c.id }), ...chip(s.cat === c.id, n) };
+    });
+    const types = [{ id: null, label: 'Tous types', color: '#9AA0AA' }].concat(ORDER.map((id) => ({ id, label: TYPES[id].plural, color: TYPES[id].color }))).map((y) => {
+      const n = LINKS.filter((l) => this.match(l, 'type') && (!y.id || l.type === y.id)).length;
+      return { label: y.label, color: y.color, pick: () => this.setState({ type: y.id }), ...chip(s.type === y.id, n) };
+    });
+    const items = LINKS.filter((l) => this.match(l)).map((l) => {
+      const t = TYPES[l.type];
+      return { ...l, typeLabel: t.label, color: t.color, ring: t.ring, mediaBg: t.bg, isVideo: l.type === 'video', isRepo: l.type === 'repo', isX: l.type === 'x', isRss: l.type === 'rss', isArticle: l.type === 'article', hasContext: !!l.context };
+    });
+    const parts = [s.team, s.cat, s.type ? TYPES[s.type].plural : null].filter(Boolean);
+    return {
+      q: s.q, teams, cats, types, items,
+      onQ: (e) => this.setState({ q: e.target.value }),
+      summary: parts.length ? parts.join(' › ') : 'Tous les liens',
+      countLabel: items.length + (items.length > 1 ? ' liens' : ' lien')
+    };
+  }
+}
+</script>
+</body>
+</html>

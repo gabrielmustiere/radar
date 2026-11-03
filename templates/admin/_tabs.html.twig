@@ -1,0 +1,16 @@
+{% set route = app.current_route %}
+{% set tabs = [
+    {label: 'Sources', path: path('app_source_index'), active: route == 'app_source_index'},
+    {label: 'Comptes', path: path('app_admin_user_index'), active: route starts with 'app_admin_user'},
+    {label: 'Catégories', path: path('app_admin_category_index'), active: route == 'app_admin_category_index'},
+] %}
+<nav aria-label="Administration" data-test="admin-tabs"
+     class="inline-flex flex-wrap gap-1 self-start rounded-xl bg-gray-100 p-1 dark:bg-gray-800/70">
+    {% for tab in tabs %}
+        <a href="{{ tab.path }}" data-test="admin-tab"
+           {% if tab.active %}aria-current="page"{% endif %}
+           class="flex h-9 items-center rounded-[9px] px-3.5 text-sm transition {{ tab.active ? 'bg-white font-semibold text-gray-900 shadow-xs dark:bg-gray-950 dark:text-white' : 'font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white' }}">
+            {{- tab.label -}}
+        </a>
+    {% endfor %}
+</nav>

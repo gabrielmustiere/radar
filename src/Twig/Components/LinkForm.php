@@ -6,6 +6,7 @@ namespace App\Twig\Components;
 
 use App\Entity\Category;
 use App\Entity\Link;
+use App\Enum\Type\SourceType;
 use App\Exception\CategoryLimitException;
 use App\Form\HistoricalLinkType;
 use App\Form\LinkType;
@@ -13,6 +14,7 @@ use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
 use App\Repository\CategoryRepository;
 use App\Service\LinkManager;
+use App\Service\LinkUrlAnalyzer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,6 +42,7 @@ final class LinkForm extends AbstractController
     public function __construct(
         private readonly LinkManager $linkManager,
         private readonly CategoryRepository $categoryRepository,
+        private readonly LinkUrlAnalyzer $urlAnalyzer,
     ) {}
 
     #[\Override]
@@ -53,11 +56,17 @@ final class LinkForm extends AbstractController
     /** Signalé dès que l'adresse est saisie, sans attendre la soumission. */
     public function getDuplicate(): ?Link
     {
-        /** @var array{url?: string} $values saisie brute, telle que postée */
-        $values = $this->formValues;
-        $url = trim($values['url'] ?? '');
+        $url = $this->typedUrl();
 
         return '' === $url ? null : $this->linkManager->findDuplicate($url);
+    }
+
+    /** Type reconnu à la saisie, d'après l'adresse seule (aucune requête réseau). */
+    public function getDetectedType(): ?SourceType
+    {
+        $url = $this->typedUrl();
+
+        return 1 === preg_match('#^https?://[^/\s]+\.[^/\s]+#i', $url) ? $this->urlAnalyzer->sourceType($url) : null;
     }
 
     /**
@@ -102,5 +111,13 @@ final class LinkForm extends AbstractController
         $this->addFlash('success', 'Catégories ajoutées.');
 
         return $this->redirectToRoute('app_link_show', ['id' => $duplicate->getId()]);
+    }
+
+    private function typedUrl(): string
+    {
+        /** @var array{url?: string} $values saisie brute, telle que postée */
+        $values = $this->formValues;
+
+        return trim($values['url'] ?? '');
     }
 }

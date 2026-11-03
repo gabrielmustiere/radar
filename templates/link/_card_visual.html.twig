@@ -1,12 +1,5 @@
 {# Visuel de carte : l'image conservée par Radar, ou le repli du type de source avec la favicon du site #}
-{% set fallback_styles = {
-    github: 'bg-gradient-to-br from-gray-900 to-violet-900 text-white',
-    youtube: 'bg-gradient-to-br from-rose-50 to-rose-100 text-rose-600 dark:from-rose-500/10 dark:to-rose-500/20 dark:text-rose-300',
-    x: 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-900 dark:from-gray-800 dark:to-gray-900 dark:text-white',
-    image: 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-600 dark:from-gray-800 dark:to-gray-900 dark:text-gray-300',
-    article: 'bg-gradient-to-br from-gray-50 to-gray-100 text-gray-600 dark:from-gray-800 dark:to-gray-900 dark:text-gray-300',
-} %}
-<div class="absolute inset-0 flex flex-col items-center justify-center gap-2 {{ fallback_styles[source.value] }}"
+<div class="absolute inset-0 flex flex-col items-center justify-center gap-2 {{ theme.tint }}"
      data-test="link-card-fallback" {% if link.imagePath %}data-image-fallback-target="fallback" hidden{% endif %}>
     {% if link.faviconPath %}
         <img src="{{ path('app_media', {path: link.faviconPath}) }}" alt="" loading="lazy"
@@ -17,7 +10,7 @@
     <span class="max-w-[80%] truncate text-sm font-medium opacity-80">{{ host }}</span>
 </div>
 {% if link.imagePath %}
-    <img src="{{ path('app_media', {path: link.imagePath}) }}" alt="{{ link.title ?? host }}" loading="lazy"
+    <img src="{{ path('app_media', {path: link.imagePath}) }}" alt="{{ title }}" loading="lazy"
          class="absolute inset-0 size-full object-cover" data-test="link-card-image"
          data-image-fallback-target="image" data-action="error->image-fallback#fallback">
 {% endif %}

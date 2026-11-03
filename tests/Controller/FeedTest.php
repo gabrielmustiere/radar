@@ -15,7 +15,7 @@ final class FeedTest extends LinkWebTestCase
         $crawler = $client->request('GET', '/');
 
         self::assertSelectorNotExists('[data-test="link-list"] section');
-        self::assertSelectorTextContains(self::FIRST_CARD, $url);
+        self::assertSelectorExists(sprintf('%s [data-test="link-open"][title="Ouvrir %s"]', self::FIRST_CARD, $url));
         $total = (int) $crawler->filter('[data-test="link-count"]')->text();
         self::assertGreaterThanOrEqual(count($crawler->filter('[data-test="link-card"]')), $total);
     }

@@ -1,8 +1,68 @@
 {% set query = this.query %}
 {% set links = this.results %}
+{# Paramètres d'URL des filtres actifs, recomposés par chaque pastille (liens, pas d'action live) #}
+{% set q_params = q is empty ? {} : {q: q} %}
+{% set team_params = team ? {team: team.value} : {} %}
+{% set type_params = type ? {type: type.value} : {} %}
+{% set chip = 'filter-chip inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-[13px] font-semibold whitespace-nowrap sm:h-[34px]' %}
+{% set chip_idle = chip ~ ' border-gray-300 bg-white text-gray-900 hover:border-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:hover:border-gray-500' %}
+{% set chip_active = chip ~ ' border-gray-900 bg-gray-900 text-white dark:border-white dark:bg-white dark:text-gray-900' %}
+{% set row = 'flex items-center gap-1.5 overflow-x-auto [scrollbar-width:none] sm:flex-wrap sm:overflow-visible [&::-webkit-scrollbar]:hidden' %}
+{% set row_label = 'w-24 shrink-0 text-[11px] font-bold tracking-wider text-gray-500 uppercase dark:text-gray-400' %}
+{% set swatches = {
+    youtube: 'bg-rose-600',
+    github: 'bg-violet-600',
+    x: 'bg-sky-700',
+    rss: 'bg-orange-700',
+    article: 'bg-teal-700',
+} %}
+{% macro count(value) %}<span class="font-mono text-xs opacity-70" data-test="filter-count">{{ value }}</span>{% endmacro %}
 <div {{ attributes.defaults({class: 'transition-opacity duration-200'}) }} data-loading="delay|addClass(opacity-60)">
-    <div class="flex items-center gap-3">
-        <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ category ? category.name : 'Tous les liens' }}</h1>
+    <section aria-label="Filtres" class="flex flex-col gap-2.5 rounded-2xl bg-white px-4 py-3.5 ring-1 ring-gray-200 dark:bg-gray-900 dark:ring-gray-800" data-test="filters">
+        <div class="{{ row }}">
+            <span class="{{ row_label }}">1 · Équipe</span>
+            {% for option in this.teamOptions %}
+                {% set params = q_params|merge(type_params)|merge(option.team ? {team: option.team.value} : {}) %}
+                {% set keep_category = category and (option.team is null or category.team is same as(option.team)) %}
+                {% set active = option.team is same as(team) %}
+                <a href="{{ keep_category ? path('app_category_show', params|merge({id: category.id})) : path('app_page', params) }}"
+                   class="{{ active ? chip_active : chip_idle }}{{ option.count == 0 ? ' opacity-40' }}"
+                   {% if active %}aria-current="true"{% endif %} data-test="filter-team">
+                    <span data-test="filter-label">{{ option.team ? option.team.label : 'Toutes' }}</span> {{ _self.count(option.count) }}
+                </a>
+            {% endfor %}
+        </div>
+        <div class="{{ row }}">
+            <span class="{{ row_label }}">2 · Catégorie</span>
+            {% for option in this.categoryOptions %}
+                {% set params = q_params|merge(team_params)|merge(type_params) %}
+                {% set active = option.category ? category and option.category.id == category.id : category is null %}
+                <a href="{{ option.category ? path('app_category_show', params|merge({id: option.category.id})) : path('app_page', params) }}"
+                   class="{{ active ? chip_active : chip_idle }}{{ option.count == 0 ? ' opacity-40' }}"
+                   {% if active %}aria-current="true"{% endif %} data-test="filter-category">
+                    <span data-test="filter-label">{{ option.category ? option.category.name : 'Toutes' }}</span> {{ _self.count(option.count) }}
+                </a>
+            {% endfor %}
+        </div>
+        <div class="{{ row }}">
+            <span class="{{ row_label }}">3 · Type</span>
+            {% for option in this.typeOptions %}
+                {% set params = q_params|merge(team_params)|merge(option.type ? {type: option.type.value} : {}) %}
+                {% set active = option.type is same as(type) %}
+                <a href="{{ category ? path('app_category_show', params|merge({id: category.id})) : path('app_page', params) }}"
+                   class="{{ active ? chip_active : chip_idle }}{{ option.count == 0 ? ' opacity-40' }}"
+                   {% if active %}aria-current="true"{% endif %} data-test="filter-type">
+                    <span class="size-2.5 rounded-[3px] {{ option.type ? swatches[option.type.value] : 'bg-gray-400' }}"></span>
+                    <span data-test="filter-label">{{ option.type ? option.type.label : 'Tous' }}</span> {{ _self.count(option.count) }}
+                </a>
+            {% endfor %}
+        </div>
+    </section>
+
+    {# Le titre suit l'entonnoir : « Développement › Symfony › Dépôts GitHub » #}
+    {% set path_parts = [team ? team.label, category ? category.name, type ? type.label]|filter(part => part) %}
+    <div class="mt-6 flex flex-wrap items-center gap-3">
+        <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ path_parts is empty ? 'Tous les liens' : path_parts|join(' › ') }}</h1>
         {% if category and is_granted('RADAR_ADMIN') %}
             <twig:Modal id="category-rename" class="-ml-2">
                 <twig:Modal:Trigger>
@@ -23,12 +83,19 @@
         {% endif %}
         <span class="size-1 rounded-full bg-gray-400"></span>
         {% include 'link/_count.html.twig' %}
+        {% if this.filtered %}
+            <a href="{{ path('app_page') }}" data-test="filters-reset"
+               class="ml-auto inline-flex h-8 items-center rounded-lg border border-gray-300 bg-white px-3 text-[13px] font-semibold text-gray-900 hover:border-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white">Réinitialiser</a>
+        {% endif %}
     </div>
 
     {% if links.items is empty and not query.empty %}
         {% include 'link/_search_empty.html.twig' %}
-    {% elseif links.items is empty and category %}
-        <p class="py-16 text-center text-sm text-gray-700 dark:text-gray-300">Aucun lien dans cette catégorie pour l'instant.</p>
+    {% elseif links.items is empty and this.filtered %}
+        <div class="mt-8 flex flex-col items-center gap-2.5 rounded-2xl border border-dashed border-gray-300 p-12 text-center dark:border-gray-700" data-test="filter-empty">
+            <p class="font-semibold text-gray-900 dark:text-white">Aucun lien pour ce filtre.</p>
+            <a href="{{ path('app_page') }}" class="inline-flex h-9 items-center rounded-xl border border-gray-300 bg-white px-3.5 text-sm font-semibold text-gray-900 hover:border-gray-500 dark:border-gray-700 dark:bg-gray-900 dark:text-white">Tout réafficher</a>
+        </div>
     {% elseif links.items is empty %}
         <div class="flex flex-col items-center py-16 text-center md:py-24">
             <twig:ux:icon name="doodles:laying" class="h-auto w-full max-w-md text-gray-900 dark:text-gray-200" aria-hidden="true"/>
@@ -40,7 +107,7 @@
         {# Autant de colonnes que la largeur le permet : une carte reste entre 280 px et ~580 px, sous les 600 px des visuels conservés #}
         <div class="mt-8 grid grid-cols-[repeat(auto-fill,minmax(min(100%,17.5rem),1fr))] gap-5" data-controller="masonry" data-test="link-list">
             {% for link in links.items %}
-                <div class="min-w-0 self-start" data-masonry-target="item">
+                <div class="min-w-0 self-start" data-masonry-target="item" style="--i: {{ loop.index0 }}">
                     {% include 'link/_list_card.html.twig' %}
                 </div>
             {% endfor %}
@@ -50,7 +117,7 @@
         {# Rendu live, la requête courante est celle du composant : route et paramètres passés au pager #}
         {% include 'link/_pager.html.twig' with {
             pager_route: category ? 'app_category_show' : 'app_page',
-            pager_params: (category ? {id: category.id} : {})|merge(q is empty ? {} : {q: q}),
+            pager_params: (category ? {id: category.id} : {})|merge(q_params)|merge(team_params)|merge(type_params),
         } %}
     {% endif %}
 </div>

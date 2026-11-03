@@ -6,6 +6,7 @@ namespace App\Tests\Controller;
 
 use App\Service\Preview\LinkPreview;
 use App\Service\Preview\PreviewImageStore;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class LinkCardVariantsTest extends EnrichedLinkWebTestCase
 {
@@ -26,6 +27,7 @@ final class LinkCardVariantsTest extends EnrichedLinkWebTestCase
         self::assertSelectorExists($card . ' button[data-test="link-video-play"][aria-label*="20 Years of Symfony"]');
         self::assertSelectorNotExists($card . ' iframe');
         self::assertSelectorTextContains($card . ' [data-test="link-author"]', 'Symfony');
+        self::assertSelectorTextSame($card . ' [data-test="link-type"]', 'Vidéo YouTube');
     }
 
     public function testRepositoryVisualIsRebuiltFromMetadataInsteadOfGitHubImage(): void
@@ -45,6 +47,7 @@ final class LinkCardVariantsTest extends EnrichedLinkWebTestCase
         self::assertSelectorTextContains($card . ' [data-test="link-stars"]', '30 812');
         self::assertSelectorTextContains($card . ' [data-test="link-language"]', 'PHP');
         self::assertSelectorNotExists($card . ' [data-test="link-card-image"]');
+        self::assertSelectorTextSame($card . ' [data-test="link-type"]', 'Dépôt GitHub');
     }
 
     public function testArticleShowsAuthorAndPublicationDateApartFromAddedDate(): void
@@ -63,6 +66,7 @@ final class LinkCardVariantsTest extends EnrichedLinkWebTestCase
 
         self::assertSelectorTextSame($card . ' [data-test="link-byline"]', 'Par Camille Martin · publié le 12/03/2025');
         self::assertSelectorTextSame($card . ' [data-test="link-date"]', new \DateTimeImmutable()->format('d/m/Y'));
+        self::assertSelectorTextSame($card . ' [data-test="link-type"]', 'Article');
     }
 
     public function testXPostShowsAuthorAndPlainText(): void
@@ -88,6 +92,7 @@ final class LinkCardVariantsTest extends EnrichedLinkWebTestCase
         );
         self::assertSelectorNotExists($card . ' [data-test="link-description"] b');
         self::assertSelectorCount(1, $card . ' [data-test="link-description"]');
+        self::assertSelectorTextSame($card . ' [data-test="link-type"]', 'Post X');
     }
 
     public function testFallbackShowsStoredFaviconInsteadOfSourceIcon(): void
@@ -108,5 +113,28 @@ final class LinkCardVariantsTest extends EnrichedLinkWebTestCase
             $favicon,
         ));
         self::assertSelectorNotExists($card . ' [data-test="link-card-image"]');
+    }
+
+    /** @return iterable<string, array{string, string}> */
+    public static function fallbackTitles(): iterable
+    {
+        yield 'profil X' => ['https://x.com/symfony', '@symfony sur X'];
+        yield 'chaîne YouTube' => ['https://www.youtube.com/@SymfonyTV/videos', '@SymfonyTV'];
+        yield 'dépôt GitHub' => ['https://github.com/symfony/ux', 'symfony/ux'];
+        yield 'article' => ['https://www.example.org/un/article', 'example.org'];
+    }
+
+    #[DataProvider('fallbackTitles')]
+    public function testLinkWithoutTitleShowsReadableFallback(string $url, string $title): void
+    {
+        $client = $this->loggedClient();
+        $link = $this->enrichedLink(
+            $url . (str_contains($url, '?') ? '&' : '?') . 'u=' . uniqid(),
+            new LinkPreview(description: 'Sans titre'),
+        );
+
+        $card = $this->showCard($client, $link);
+
+        self::assertSelectorTextSame($card . ' [data-test="link-title"]', $title);
     }
 }

@@ -2,29 +2,55 @@
 
 {% block title %}Connexion · Radar{% endblock %}
 
-{% set field = 'block w-full rounded-xl border-0 bg-white px-4 py-3 text-sm text-gray-900 ring-1 ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-gray-900 focus:outline-none dark:bg-gray-950 dark:text-white dark:ring-gray-800 dark:placeholder:text-gray-500 dark:focus:ring-gray-400' %}
+{% set field = 'block h-[46px] w-full rounded-xl border border-gray-300 bg-white px-3.5 text-[15px] text-gray-900 transition placeholder:text-gray-400 focus:border-gray-900 focus:ring-4 focus:ring-gray-900/10 focus:outline-none dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-gray-400 dark:focus:ring-white/10' %}
+{% set mini_card = 'absolute flex flex-col gap-2 rounded-[14px] bg-white p-3.5 shadow-[0_12px_30px_-18px_rgb(23_24_28/0.4)] ring-1 animate-radar-float dark:bg-gray-900 dark:shadow-none' %}
+{% set mini_badge = 'self-start rounded-full px-2 py-[3px] text-[10px] font-bold tracking-[.04em] text-white uppercase' %}
+{% set mini_line = 'block h-2 rounded-sm bg-gray-200 dark:bg-gray-700' %}
+{% set mini_line_soft = 'block h-2 rounded-sm bg-gray-100 dark:bg-gray-800' %}
 
 {% block body %}
-    <div class="flex min-h-screen items-center justify-center p-4 sm:p-8">
-        <div class="grid w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-xl shadow-gray-900/5 ring-1 ring-gray-200/70 md:grid-cols-2 dark:bg-gray-900 dark:shadow-none dark:ring-gray-800">
+    <div class="flex min-h-screen items-center justify-center px-4 py-8">
+        <div class="flex w-full max-w-[1040px] animate-radar-card-in flex-wrap overflow-hidden rounded-[28px] bg-white shadow-[0_40px_80px_-40px_rgb(23_24_28/0.25)] ring-1 ring-gray-200/70 dark:bg-gray-900 dark:shadow-none dark:ring-gray-800">
 
-            {# Illustration #}
-            <div class="flex flex-col border-b border-gray-200 bg-gray-50 p-8 md:border-r md:border-b-0 dark:border-gray-800 dark:bg-gray-950/40">
+            <div class="relative flex flex-1 basis-[420px] flex-col gap-7 overflow-hidden bg-gray-100 p-8 md:min-h-[520px] md:p-10 dark:bg-gray-950/60">
                 {% include 'common/logo.html.twig' %}
-                <p class="mt-3 text-sm text-gray-700 dark:text-gray-300">
-                    Ce que l'équipe a repéré, <span class="font-semibold text-gray-900 dark:text-white">retrouvable des mois plus tard</span>.
+                <p class="max-w-[360px] text-[26px] leading-tight font-bold tracking-tight text-gray-900 dark:text-white">
+                    Ce que l'équipe a repéré, <span class="text-gray-500 dark:text-gray-400">retrouvable des mois plus tard.</span>
                 </p>
-                <twig:ux:icon name="doodles:reading-side" class="mt-auto hidden h-auto w-full pt-8 text-gray-900 md:block dark:text-gray-200" aria-hidden="true"/>
+
+                {# Pile de cartes typées, purement décorative : elles flottent en décalé #}
+                <div aria-hidden="true" class="relative hidden min-h-60 flex-1 md:block">
+                    <div class="{{ mini_card }} top-2.5 left-0 w-[230px] -rotate-4 ring-rose-200 dark:ring-rose-500/30">
+                        <span class="{{ mini_badge }} bg-rose-600">Vidéo</span>
+                        <span class="{{ mini_line }} w-4/5"></span>
+                        <span class="{{ mini_line_soft }} w-[55%]"></span>
+                    </div>
+                    <div class="{{ mini_card }} top-[70px] left-[170px] w-[230px] rotate-3 ring-violet-200 [animation-delay:-1.5s] dark:ring-violet-500/30">
+                        <span class="{{ mini_badge }} bg-violet-600">GitHub</span>
+                        <span class="{{ mini_line }} w-[70%]"></span>
+                        <span class="{{ mini_line_soft }} w-[45%]"></span>
+                    </div>
+                    <div class="{{ mini_card }} top-[150px] left-[30px] w-[230px] -rotate-1 ring-teal-200 [animation-delay:-3s] dark:ring-teal-500/30">
+                        <span class="{{ mini_badge }} bg-teal-700">Article</span>
+                        <span class="{{ mini_line }} w-[85%]"></span>
+                        <span class="{{ mini_line_soft }} w-3/5"></span>
+                    </div>
+                    <div class="{{ mini_card }} top-[190px] left-[230px] w-[180px] rotate-5 ring-orange-200 [animation-delay:-4.5s] dark:ring-orange-500/30">
+                        <span class="{{ mini_badge }} bg-orange-700">Source suivie</span>
+                        <span class="{{ mini_line }} w-3/4"></span>
+                    </div>
+                </div>
             </div>
 
-            {# Formulaire #}
-            <div class="p-8 sm:p-10">
-                <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Se connecter</h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    Identifiez-vous pour accéder à la veille de l'équipe.
-                </p>
+            <div class="flex flex-1 basis-[380px] flex-col justify-center px-8 py-10 sm:px-11 sm:py-12">
+                <div class="flex flex-col gap-1.5">
+                    <h1 class="font-display text-[28px] font-bold tracking-tight text-gray-900 dark:text-white">Se connecter</h1>
+                    <p class="text-[15px] text-gray-500 dark:text-gray-400">
+                        Identifiez-vous pour accéder à la veille de l'équipe.
+                    </p>
+                </div>
 
-                <form method="post" class="mt-8 space-y-4">
+                <form method="post" class="mt-6 flex flex-col gap-[18px]">
                     {% if error %}
                         <div role="alert" class="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-3 dark:border-rose-900/50 dark:bg-rose-900/30">
                             <twig:ux:icon name="tabler:alert-circle" class="mt-0.5 size-5 shrink-0 text-rose-600 dark:text-rose-400"/>
@@ -44,16 +70,16 @@
                         </div>
                     {% endif %}
 
-                    <div>
-                        <label for="username" class="mb-1.5 block text-sm font-medium text-gray-900 dark:text-gray-100">Email</label>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="username" class="text-sm font-semibold text-gray-900 dark:text-gray-100">Email</label>
                         <input id="username" type="email" name="_username" value="{{ last_username }}"
                                required autocomplete="email" autofocus
                                placeholder="vous@exemple.com"
                                class="{{ field }}"/>
                     </div>
 
-                    <div>
-                        <label for="password" class="mb-1.5 block text-sm font-medium text-gray-900 dark:text-gray-100">Mot de passe</label>
+                    <div class="flex flex-col gap-1.5">
+                        <label for="password" class="text-sm font-semibold text-gray-900 dark:text-gray-100">Mot de passe</label>
                         <input id="password" type="password" name="_password" required
                                autocomplete="current-password"
                                placeholder="••••••••"
@@ -63,24 +89,26 @@
                     <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
                            value="{{ csrf_token('authenticate') }}">
 
-                    <div class="flex items-center justify-between">
-                        <label class="inline-flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
+                    <div class="flex flex-wrap items-center justify-between gap-2.5">
+                        <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
                             <twig:Checkbox id="_remember_me" name="_remember_me"/>
                             Se souvenir de moi
                         </label>
-                        <a href="#" class="text-sm font-medium text-gray-900 hover:text-gray-600 dark:text-white dark:hover:text-gray-300">Mot de passe oublié ?</a>
+                        <a href="#" class="text-sm font-semibold text-gray-900 hover:underline dark:text-white">Mot de passe oublié ?</a>
                     </div>
 
                     <button type="submit"
-                            class="flex w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 py-3 text-sm font-medium text-white transition hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700">
+                            class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gray-900 px-4 text-[15px] font-semibold text-white transition hover:-translate-y-px hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none motion-reduce:hover:translate-y-0 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700">
                         Se connecter
                         <twig:ux:icon name="tabler:arrow-right" class="size-4"/>
                     </button>
                 </form>
 
-                <p class="mt-8 text-center text-xs text-gray-500">
-                    Identifiants de test : <span class="font-mono text-gray-700 dark:text-gray-300">admin@example.com</span> / <span class="font-mono text-gray-700 dark:text-gray-300">password</span>
-                </p>
+                {% if app.environment == 'dev' %}
+                    <p class="mt-8 text-center text-xs text-gray-500">
+                        Identifiants de test : <span class="font-mono text-gray-700 dark:text-gray-300">admin@example.com</span> / <span class="font-mono text-gray-700 dark:text-gray-300">password</span>
+                    </p>
+                {% endif %}
             </div>
         </div>
     </div>

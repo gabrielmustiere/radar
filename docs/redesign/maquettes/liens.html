@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Radar · Tous les liens (clair)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F7F8}
+a{color:#17181C;text-decoration:none}a:hover{color:#17181C}
+.rc-card{animation:rc-in .5s cubic-bezier(.2,.7,.2,1) both;transition:transform .28s cubic-bezier(.3,1.3,.5,1),box-shadow .28s ease}
+.rc-card:hover{transform:translateY(-4px);box-shadow:0 18px 36px -20px rgba(23,24,28,.35)}
+.rc-card .rc-media>span{transition:transform .6s cubic-bezier(.2,.7,.1,1)}
+.rc-card:hover .rc-media>span{transform:scale(1.04)}
+.rc-card .rc-open{transition:gap .2s ease}
+.rc-card:hover .rc-open{gap:10px}
+@keyframes rc-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rc-chip{transition:background .15s ease,border-color .15s ease,transform .12s ease}
+.rc-chip:hover{border-color:#9AA0AA}
+.rc-chip:active{transform:scale(.96)}
+.rc-ping{animation:rc-ping 1.8s cubic-bezier(0,0,.2,1) infinite}
+@keyframes rc-ping{0%{transform:scale(1);opacity:.7}80%,100%{transform:scale(2.6);opacity:0}}
+.rc-menu{animation:rc-drop .18s cubic-bezier(.2,.7,.2,1) both;transform-origin:top right}
+@keyframes rc-drop{from{opacity:0;transform:scale(.96) translateY(-4px)}to{opacity:1;transform:none}}
+.rc-mi{transition:background .12s ease}
+.rc-mi:hover{background:#F1F2F4}
+.rc-modal{animation:rc-fade .2s ease both}
+.rc-dialog{animation:rc-pop .28s cubic-bezier(.3,1.3,.5,1) both}
+@keyframes rc-fade{from{opacity:0}to{opacity:1}}
+@keyframes rc-pop{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+.rc-btn{transition:transform .15s ease,background .15s ease}
+.rc-btn:hover{transform:translateY(-1px)}
+@media (prefers-reduced-motion:reduce){.rc-card,.rc-ping,.rc-menu,.rc-modal,.rc-dialog{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; min-height: 100vh; background: #F6F7F8; color: #17181C; font-family: Inter, ui-sans-serif, system-ui, sans-serif">
+  <header style="position: relative; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px clamp(16px, 3vw, 32px); background: #FFFFFF; border-bottom: 1px solid #E3E5E9">
+    <a href="Clair-Liens.dc.html" style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -0.01em">
+      <span style="width: 30px; height: 30px; border-radius: 9px; background: #17181C; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 12 18 6"></path><path d="M20 12a8 8 0 1 1-8-8"></path><path d="M16 12a4 4 0 1 1-4-4"></path></svg></span>
+      radar
+    </a>
+    <label for="rc-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Rechercher</label>
+    <input id="rc-q" type="search" value="{{q}}" onChange="{{onQ}}" placeholder="Rechercher un lien…   /" style="flex: 1 1 260px; max-width: 520px; margin: 0 auto; height: 42px; box-sizing: border-box; padding: 0 14px; border-radius: 10px; border: 1px solid #D5D8DE; background: #F6F7F8; color: #17181C; font: inherit; font-size: 15px">
+    <a class="rc-btn" href="Clair-Ajouter.dc.html" style="display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 16px; border-radius: 10px; background: #17181C; color: #FFFFFF; font-size: 15px; font-weight: 600">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+      Ajouter un lien
+    </a>
+    <div style="position: relative">
+      <button type="button" onClick="{{toggleMenu}}" aria-label="Menu du compte" aria-expanded="{{menu}}" style="width: 42px; height: 42px; border-radius: 50%; border: 1px solid #D5D8DE; background: #FFFFFF; color: #17181C; font: inherit; font-weight: 700; cursor: pointer">G</button>
+      <sc-if value="{{menu}}" hint-placeholder-val="{{ false }}">
+        <div class="rc-menu" style="position: absolute; right: 0; top: 50px; width: 260px; padding: 8px; border-radius: 14px; background: #FFFFFF; border: 1px solid #E3E5E9; box-shadow: 0 20px 40px -20px rgba(23,24,28,.35); display: flex; flex-direction: column; gap: 2px">
+          <div style="padding: 8px 10px 10px; border-bottom: 1px solid #EEF0F2; margin-bottom: 4px">
+            <p style="margin: 0; font-size: 14px; font-weight: 600">mustiere.gabriel@gmail.com</p>
+            <p style="margin: 2px 0 0; font-size: 13px; color: #5E636E">Sans équipe · admin</p>
+          </div>
+          <a class="rc-mi" href="Clair-Extension.dc.html" style="padding: 9px 10px; border-radius: 8px; font-size: 14px">Extension navigateur</a>
+          <p style="margin: 8px 10px 4px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #5E636E">Administration</p>
+          <a class="rc-mi" href="Clair-Sources.dc.html" style="padding: 9px 10px; border-radius: 8px; font-size: 14px">Sources</a>
+          <a class="rc-mi" href="Clair-Comptes.dc.html" style="padding: 9px 10px; border-radius: 8px; font-size: 14px">Comptes</a>
+          <a class="rc-mi" href="Clair-Categories.dc.html" style="padding: 9px 10px; border-radius: 8px; font-size: 14px">Catégories</a>
+          <a class="rc-mi" href="Clair-Connexion.dc.html" style="padding: 9px 10px; border-radius: 8px; font-size: 14px; color: #B42318; border-top: 1px solid #EEF0F2; margin-top: 4px">Déconnexion</a>
+        </div>
+      </sc-if>
+    </div>
+  </header>
+
+  <div style="max-width: 1320px; margin: 0 auto; padding: 20px clamp(16px, 3vw, 32px) 48px; display: flex; flex-direction: column; gap: 18px">
+    <section aria-label="Filtres" style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid #E3E5E9">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px">
+        <span style="width: 96px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5E636E">1 · Équipe</span>
+        <sc-for list="{{teams}}" as="t" hint-placeholder-count="5">
+          <button class="rc-chip" type="button" onClick="{{t.pick}}" style="display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid {{t.bd}}; background: {{t.bg}}; color: {{t.fg}}; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; opacity: {{t.op}}">{{t.label}} <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: .7">{{t.count}}</span></button>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px">
+        <span style="width: 96px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5E636E">2 · Catégorie</span>
+        <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+          <button class="rc-chip" type="button" onClick="{{c.pick}}" style="display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid {{c.bd}}; background: {{c.bg}}; color: {{c.fg}}; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; opacity: {{c.op}}">{{c.label}} <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: .7">{{c.count}}</span></button>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px">
+        <span style="width: 96px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5E636E">3 · Type</span>
+        <sc-for list="{{types}}" as="y" hint-placeholder-count="6">
+          <button class="rc-chip" type="button" onClick="{{y.pick}}" style="display: inline-flex; align-items: center; gap: 7px; height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid {{y.bd}}; background: {{y.bg}}; color: {{y.fg}}; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; opacity: {{y.op}}"><span style="width: 10px; height: 10px; border-radius: 3px; background: {{y.color}}; display: block"></span>{{y.label}} <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; opacity: .7">{{y.count}}</span></button>
+        </sc-for>
+      </div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+      <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.02em">{{summary}}</h1>
+      <sc-if value="{{canRename}}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{openRename}}" aria-label="Renommer la catégorie" style="width: 32px; height: 32px; border-radius: 8px; border: 1px solid #D5D8DE; background: #FFFFFF; color: #3B3F47; display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg></button>
+      </sc-if>
+      <span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #5E636E">{{countLabel}}</span>
+      <span style="flex: 1"></span>
+      <sc-if value="{{hasFilter}}" hint-placeholder-val="{{ false }}">
+        <button type="button" onClick="{{reset}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #D5D8DE; background: #FFFFFF; color: #17181C; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer">Réinitialiser</button>
+      </sc-if>
+    </div>
+
+    <div style="columns: 290px; column-gap: 16px">
+      <sc-for list="{{items}}" as="it" hint-placeholder-count="6">
+        <a class="rc-card" href="{{it.url}}" target="_blank" rel="noopener noreferrer" style="display: flex; flex-direction: column; break-inside: avoid; margin-bottom: 16px; border-radius: 16px; overflow: hidden; background: #FFFFFF; border: 1px solid {{it.ring}}">
+          <span class="rc-media" style="position: relative; display: block; aspect-ratio: {{it.ratio}}; overflow: hidden; background: {{it.mediaBg}}">
+            <span style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; padding: 18px; box-sizing: border-box">
+              <sc-if value="{{it.isVideo}}" hint-placeholder-val="{{ false }}">
+                <span style="width: 58px; height: 58px; border-radius: 50%; background: #E11D48; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px -8px rgba(225,29,72,.6)"><svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"></path></svg></span>
+                <span style="font-size: 13px; font-weight: 600; color: #FFFFFF">{{it.media}}</span>
+              </sc-if>
+              <sc-if value="{{it.isRepo}}" hint-placeholder-val="{{ false }}">
+                <span style="align-self: stretch; display: flex; flex-direction: column; gap: 2px; font-family: 'JetBrains Mono', monospace; font-size: 15px; color: #6D28D9">{{it.owner}} /<span style="font-family: Inter, sans-serif; font-size: 30px; font-weight: 700; color: #2E1065; letter-spacing: -0.02em">{{it.repo}}</span></span>
+              </sc-if>
+              <sc-if value="{{it.isX}}" hint-placeholder-val="{{ false }}">
+                <span style="align-self: stretch; display: flex; align-items: center; gap: 12px">
+                  <span style="width: 44px; height: 44px; border-radius: 50%; background: #17181C; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-weight: 700">{{it.initial}}</span>
+                  <span style="flex: 1; font-size: 15px; font-weight: 600; color: #0C3B5C">{{it.media}}</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#17181C" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8zM16.7 19.2h1.7L7.4 4.7H5.6z"></path></svg>
+                </span>
+              </sc-if>
+              <sc-if value="{{it.isRss}}" hint-placeholder-val="{{ false }}">
+                <span style="width: 52px; height: 52px; border-radius: 14px; background: #EA580C; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M5 11a8 8 0 0 1 8 8M5 5a14 14 0 0 1 14 14"></path><circle cx="6" cy="18" r="1.5" fill="#FFFFFF"></circle></svg></span>
+                <span style="font-size: 13px; font-weight: 600; color: #7C2D12">{{it.media}}</span>
+              </sc-if>
+              <sc-if value="{{it.isArticle}}" hint-placeholder-val="{{ true }}">
+                <span style="font-size: 32px; font-weight: 700; letter-spacing: -0.03em; color: #115E59">{{it.media}}</span>
+              </sc-if>
+            </span>
+            <span style="position: absolute; left: 12px; top: 12px; height: 24px; padding: 0 9px; border-radius: 999px; background: {{it.color}}; color: #FFFFFF; display: flex; align-items: center; font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; transform: none">{{it.typeLabel}}</span>
+            <sc-if value="{{it.isNew}}" hint-placeholder-val="{{ false }}">
+              <span style="position: absolute; right: 12px; top: 12px; height: 24px; padding: 0 9px; border-radius: 999px; background: #FFFFFF; color: #17181C; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; transform: none; box-shadow: 0 2px 6px rgba(23,24,28,.12)"><span style="position: relative; width: 6px; height: 6px; display: block"><span class="rc-ping" style="position: absolute; inset: 0; border-radius: 50%; background: {{it.color}}; display: block"></span><span style="position: absolute; inset: 0; border-radius: 50%; background: {{it.color}}; display: block"></span></span>Nouveau</span>
+            </sc-if>
+          </span>
+          <span style="padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 12px; font-weight: 500; color: #5E636E">{{it.source}}</span>
+            <span style="font-size: 16px; font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; color: #17181C">{{it.title}}</span>
+            <sc-if value="{{it.hasContext}}" hint-placeholder-val="{{ false }}">
+              <span style="padding: 2px 0 2px 12px; border-left: 2px solid {{it.color}}; font-size: 14px; line-height: 1.5; font-style: italic; color: #3B3F47">{{it.context}}</span>
+            </sc-if>
+            <span style="display: flex; flex-wrap: wrap; gap: 6px">
+              <sc-for list="{{it.cats}}" as="cc" hint-placeholder-count="1"><span style="font-size: 12px; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: #F1F2F4; color: #3B3F47">{{cc}}</span></sc-for>
+            </span>
+            <span style="display: flex; align-items: center; gap: 8px; padding-top: 10px; margin-top: 2px; border-top: 1px solid #EEF0F2; font-size: 12px; color: #5E636E">
+              <span style="width: 22px; height: 22px; border-radius: 50%; background: #F1F2F4; color: #3B3F47; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700">G</span>
+              <span style="flex: 1">gabriel · {{it.when}}</span>
+              <span class="rc-open" style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: {{it.color}}">Ouvrir<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"></path></svg></span>
+            </span>
+          </span>
+        </a>
+      </sc-for>
+    </div>
+    <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 48px; border: 1px dashed #C9CDD4; border-radius: 16px; background: #FFFFFF; text-align: center; display: flex; flex-direction: column; gap: 10px; align-items: center">
+        <p style="margin: 0; font-size: 16px; font-weight: 600">Aucun lien pour ce filtre.</p>
+        <button type="button" onClick="{{reset}}" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Tout réafficher</button>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{rename}}" hint-placeholder-val="{{ false }}">
+    <div class="rc-modal" style="position: fixed; inset: 0; z-index: 20; background: rgba(23,24,28,.35); display: flex; align-items: center; justify-content: center; padding: 16px">
+      <div class="rc-dialog" role="dialog" aria-modal="true" aria-labelledby="rc-rn" style="width: 100%; max-width: 420px; padding: 22px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 30px 60px -20px rgba(23,24,28,.4); display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <h2 id="rc-rn" style="margin: 0; font-size: 18px; font-weight: 700">Renommer la catégorie</h2>
+          <button type="button" onClick="{{closeRename}}" aria-label="Fermer" style="width: 34px; height: 34px; border-radius: 8px; border: 0; background: #F1F2F4; cursor: pointer; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#17181C" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+        </div>
+        <label for="rc-lbl" style="font-size: 14px; font-weight: 600">Libellé</label>
+        <input id="rc-lbl" type="text" value="{{renameValue}}" readonly style="height: 44px; box-sizing: border-box; padding: 0 12px; border-radius: 10px; border: 1.5px solid #17181C; font: inherit; font-size: 15px">
+        <div style="display: flex; justify-content: flex-end; gap: 8px">
+          <button type="button" onClick="{{closeRename}}" style="height: 42px; padding: 0 16px; border-radius: 10px; border: 0; background: transparent; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">Annuler</button>
+          <button type="button" onClick="{{closeRename}}" style="height: 42px; padding: 0 16px; border-radius: 10px; border: 0; background: #17181C; color: #FFFFFF; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer">Enregistrer</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+const TYPES = {
+  video: { label: 'Vidéo', plural: 'Vidéos', color: '#E11D48', ring: '#F8C9D2', bg: '#1F1A1C', ratio: '16 / 9' },
+  repo: { label: 'GitHub', plural: 'Dépôts GitHub', color: '#7C3AED', ring: '#DCCFFB', bg: '#F3EEFF', ratio: '1.91 / 1' },
+  x: { label: 'Post X', plural: 'Posts X', color: '#0369A1', ring: '#BFE0F5', bg: '#ECF6FD', ratio: '3.2 / 1' },
+  rss: { label: 'Flux RSS', plural: 'Flux RSS', color: '#C2410C', ring: '#F9D3B3', bg: '#FFF3E8', ratio: '2.6 / 1' },
+  article: { label: 'Article', plural: 'Articles', color: '#0F766E', ring: '#B4E6DD', bg: '#ECFAF7', ratio: '2.4 / 1' }
+};
+const ORDER = ['video', 'repo', 'x', 'rss', 'article'];
+const CAT_TEAM = { 'Symfony': 'Développement', 'Conférences': 'Développement', 'Sécurité': 'Produit', 'Tests': 'QA', 'Veille': 'Management' };
+const CATS = ['Symfony', 'Conférences', 'Sécurité', 'Tests', 'Veille'];
+const TEAMS = ['Développement', 'Produit', 'QA', 'Management'];
+const LINKS = [
+  { type: 'video', title: 'How Passkeys Work - Computerphile', source: 'YouTube · par Computerphile', media: 'Computerphile', url: 'https://www.youtube.com/watch?v=xYfiOnufBSk', cats: ['Sécurité'], when: 'aujourd’hui', isNew: true, context: 'Explication très claire du fonctionnement des passkeys, à montrer aux équipes Produit et QA.' },
+  { type: 'video', title: 'Understand passkeys in 4 minutes', source: 'YouTube · par Chrome for Developers', media: 'Chrome for Developers', url: 'https://www.youtube.com/watch?v=2xdV-xut7EQ', cats: ['Sécurité'], when: 'hier', isNew: true, context: 'La version courte, idéale pour l’onboarding des nouveaux arrivants.' },
+  { type: 'video', title: 'SymfonyTV, la chaîne', source: 'YouTube · chaîne', media: '@SymfonyTV', url: 'https://www.youtube.com/@SymfonyTV', cats: ['Conférences', 'Symfony'], when: 'hier', isNew: true, context: 'Les talks des SymfonyCon et SymfonyLive, à regarder avant de choisir nos sujets de veille.' },
+  { type: 'x', title: '@symfony sur X', source: 'x.com · profil', media: 'Symfony', initial: 'S', url: 'https://x.com/symfony', cats: ['Symfony', 'Veille'], when: '1 nov.', isNew: false, context: 'Le compte officiel : annonces de releases et avis de sécurité en premier.' },
+  { type: 'repo', title: 'Web Authentication: An API for accessing Public Key Credentials', source: 'github.com · w3c/webauthn', owner: 'w3c', repo: 'webauthn', url: 'https://github.com/w3c/webauthn', cats: ['Sécurité'], when: '31 oct.', isNew: false, context: 'La spécification WebAuthn, pour trancher quand un navigateur se comporte bizarrement.' },
+  { type: 'article', title: 'The Practical Test Pyramid', source: 'martinfowler.com', media: 'martinfowler', url: 'https://martinfowler.com/articles/practical-test-pyramid.html', cats: ['Tests'], when: '30 oct.', isNew: false, context: 'Référence pour cadrer notre stratégie de tests, à relire avant chaque rétro QA.' },
+  { type: 'repo', title: 'The modern PHP app server', source: 'github.com · php/frankenphp', owner: 'php', repo: 'frankenphp', url: 'https://github.com/php/frankenphp', cats: ['Symfony'], when: '29 oct.', isNew: false, context: '' },
+  { type: 'x', title: '@fabpot sur X', source: 'x.com · profil', media: 'Fabien Potencier', initial: 'F', url: 'https://x.com/fabpot', cats: ['Symfony'], when: '28 oct.', isNew: false, context: '' },
+  { type: 'rss', title: 'The GitHub Blog', source: 'Flux RSS · github.blog', media: 'github.blog/feed', url: 'https://github.blog/feed/', cats: ['Veille'], when: '27 oct.', isNew: false, context: 'Le flux du blog GitHub, à brancher dans nos sources si on veut les annonces produit.' },
+  { type: 'repo', title: 'The Symfony PHP framework', source: 'github.com · symfony/symfony', owner: 'symfony', repo: 'symfony', url: 'https://github.com/symfony/symfony', cats: ['Symfony'], when: '27 oct.', isNew: false, context: 'Le dépôt Symfony, pour suivre les changements avant chaque montée de version.' },
+  { type: 'rss', title: 'PHP.net, actualités', source: 'Flux Atom · php.net', media: 'php.net/feed.atom', url: 'https://www.php.net/feed.atom', cats: ['Symfony', 'Veille'], when: '26 oct.', isNew: false, context: '' },
+  { type: 'article', title: 'Se connecter avec une clé d’accès via le remplissage automatique', source: 'web.dev', media: 'web.dev', url: 'https://web.dev/articles/passkey-form-autofill', cats: ['Sécurité'], when: '25 oct.', isNew: false, context: 'Le pattern conditional UI pour proposer la passkey directement dans le champ email.' },
+  { type: 'article', title: 'Gabriel Mustiere — CTO freelance à Nantes', source: 'mustiere.fr', media: 'mustiere.fr', url: 'https://mustiere.fr/', cats: ['Symfony'], when: '24 oct.', isNew: false, context: '' },
+  { type: 'article', title: 'Passkeys Developer Resources', source: 'passkeys.dev', media: 'passkeys.dev', url: 'https://passkeys.dev/', cats: ['Sécurité'], when: '20 oct.', isNew: false, context: 'La référence officielle sur WebAuthn et les passkeys, utile pour nos parcours SCA.' }
+];
+
+class Component extends DCLogic {
+  state = { team: null, cat: null, type: null, q: '', menu: false, rename: false };
+
+  match(l, skip) {
+    const s = this.state;
+    if (skip !== 'team' && s.team && !l.cats.some((c) => CAT_TEAM[c] === s.team)) return false;
+    if (skip !== 'cat' && s.cat && l.cats.indexOf(s.cat) < 0) return false;
+    if (skip !== 'type' && s.type && l.type !== s.type) return false;
+    if (s.q) {
+      const h = (l.title + ' ' + l.source + ' ' + l.context + ' ' + l.cats.join(' ')).toLowerCase();
+      if (h.indexOf(s.q.toLowerCase()) < 0) return false;
+    }
+    return true;
+  }
+
+  renderVals() {
+    const s = this.state;
+    const chip = (on, n) => ({ bd: on ? '#17181C' : '#D5D8DE', bg: on ? '#17181C' : '#FFFFFF', fg: on ? '#FFFFFF' : '#17181C', op: n === 0 ? 0.4 : 1 });
+    const teams = [{ id: null, label: 'Toutes' }].concat(TEAMS.map((t) => ({ id: t, label: t }))).map((t) => {
+      const n = LINKS.filter((l) => this.match(l, 'team') && (!t.id || l.cats.some((c) => CAT_TEAM[c] === t.id))).length;
+      return { label: t.label, count: n, pick: () => this.setState({ team: t.id, cat: t.id && s.cat && CAT_TEAM[s.cat] !== t.id ? null : s.cat }), ...chip(s.team === t.id, n) };
+    });
+    const catList = s.team ? CATS.filter((c) => CAT_TEAM[c] === s.team) : CATS;
+    const cats = [{ id: null, label: 'Toutes' }].concat(catList.map((c) => ({ id: c, label: c }))).map((c) => {
+      const n = LINKS.filter((l) => this.match(l, 'cat') && (!c.id || l.cats.indexOf(c.id) >= 0)).length;
+      return { label: c.label, count: n, pick: () => this.setState({ cat: c.id }), ...chip(s.cat === c.id, n) };
+    });
+    const types = [{ id: null, label: 'Tous', color: '#9AA0AA' }].concat(ORDER.map((id) => ({ id, label: TYPES[id].plural, color: TYPES[id].color }))).map((y) => {
+      const n = LINKS.filter((l) => this.match(l, 'type') && (!y.id || l.type === y.id)).length;
+      return { label: y.label, color: y.color, count: n, pick: () => this.setState({ type: y.id }), ...chip(s.type === y.id, n) };
+    });
+    const items = LINKS.filter((l) => this.match(l)).map((l) => {
+      const t = TYPES[l.type];
+      return {
+        ...l, typeLabel: t.label, color: t.color, ring: t.ring, mediaBg: t.bg, ratio: t.ratio,
+        isVideo: l.type === 'video', isRepo: l.type === 'repo', isX: l.type === 'x', isRss: l.type === 'rss', isArticle: l.type === 'article',
+        hasContext: !!l.context
+      };
+    });
+    const parts = [s.team, s.cat, s.type ? TYPES[s.type].plural : null].filter(Boolean);
+    return {
+      q: s.q, teams, cats, types, items, menu: s.menu, rename: s.rename,
+      toggleMenu: () => this.setState({ menu: !s.menu }),
+      canRename: !!s.cat, renameValue: s.cat || '',
+      openRename: () => this.setState({ rename: true }),
+      closeRename: () => this.setState({ rename: false }),
+      onQ: (e) => this.setState({ q: e.target.value }),
+      reset: () => this.setState({ team: null, cat: null, type: null, q: '' }),
+      hasFilter: !!(s.team || s.cat || s.type || s.q),
+      summary: parts.length ? parts.join(' › ') : 'Tous les liens',
+      countLabel: items.length + (items.length > 1 ? ' liens' : ' lien'),
+      empty: items.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

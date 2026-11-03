@@ -19,15 +19,9 @@
 </head>
 <body class="antialiased bg-gray-50 font-body text-gray-800 dark:bg-gray-950 dark:text-gray-200">
 
-{# Topbar #}
-<nav class="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between gap-2 bg-gray-50 px-4 sm:gap-4 dark:bg-gray-950 md:px-6">
-    <div class="flex shrink-0 items-center md:w-58">
-        <button data-drawer-target="radar-sidebar" data-drawer-toggle="radar-sidebar"
-                aria-controls="radar-sidebar" type="button"
-                class="mr-2 rounded-lg p-2 text-gray-600 hover:bg-white hover:text-gray-900 md:hidden dark:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-white">
-            <twig:ux:icon name="tabler:menu-2" class="size-6"/>
-            <span class="sr-only">Ouvrir le menu</span>
-        </button>
+{# Topbar : sur téléphone, logo et avatar sur une ligne, recherche pleine largeur dessous #}
+<nav class="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-x-2 gap-y-3 border-b border-gray-200 bg-white px-4 py-3 sm:h-16 sm:flex-nowrap sm:gap-4 sm:py-0 md:px-6 dark:border-gray-800 dark:bg-gray-900">
+    <div class="flex shrink-0 items-center">
         <a href="{{ path('app_page') }}">
             {% include 'common/logo.html.twig' with {compact: true} %}
         </a>
@@ -35,17 +29,17 @@
 
     {# Sur une liste (fil, catégorie), la recherche la filtre au fil de la frappe ; ailleurs, elle mène au fil filtré #}
     {% set filters_list = app.current_route in ['app_page', 'app_category_show'] %}
-    <form action="{{ path('app_page') }}" method="GET" role="search" class="flex min-w-0 flex-1 justify-center"
+    <form action="{{ path('app_page') }}" method="GET" role="search" class="order-last flex w-full min-w-0 justify-center sm:order-none sm:w-auto sm:flex-1"
           data-controller="search-shortcut{{ filters_list ? ' search-filter' }}"
           data-action="keydown@window->search-shortcut#focus{{ filters_list ? ' input->search-filter#filter submit->search-filter#filter:prevent' }}">
         <label for="topbar-search" class="sr-only">Rechercher</label>
-        <div class="group relative w-full max-w-sm">
+        <div class="group relative w-full sm:max-w-lg">
             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <twig:ux:icon name="tabler:search" class="size-4 text-gray-400"/>
             </div>
             <input type="search" name="q" id="topbar-search" value="{{ app.request.query.get('q') }}" data-test="topbar-search"
                    data-search-shortcut-target="input" aria-keyshortcuts="/" autocomplete="off"
-                   class="block w-full rounded-xl border-0 bg-white py-2.5 pr-3 pl-9 text-sm text-gray-900 shadow-xs ring-1 ring-gray-200/70 placeholder:text-gray-400 focus:ring-2 focus:ring-gray-900 focus:outline-none md:pr-10 dark:bg-gray-900 dark:text-white dark:ring-gray-800 dark:focus:ring-gray-400"
+                   class="block w-full rounded-xl border-0 bg-gray-50 py-2.5 pr-3 pl-9 text-[15px] text-gray-900 ring-1 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-gray-900 focus:outline-none md:pr-10 dark:bg-gray-950 dark:text-white dark:ring-gray-700 dark:focus:ring-gray-400"
                    placeholder="Rechercher un lien…"/>
             <div class="pointer-events-none absolute inset-y-0 right-0 hidden items-center pr-2.5 group-focus-within:hidden md:flex">
                 <twig:Kbd class="px-1.5 py-0.5">/</twig:Kbd>
@@ -56,17 +50,18 @@
     <div class="flex shrink-0 items-center gap-2 sm:gap-3">
         {% if app.user %}
             <a href="{{ path('app_link_new') }}" data-test="add-link" data-turbo-frame="link-modal-frame"
-               class="flex items-center gap-2 rounded-xl bg-gray-900 px-3 py-2.5 text-sm font-medium text-white hover:bg-gray-700 sm:px-4 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
-                <twig:ux:icon name="tabler:plus" class="size-4"/> <span class="hidden sm:inline">Ajouter un lien</span>
+               class="hidden items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-700 sm:flex dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200">
+                <twig:ux:icon name="tabler:plus" class="size-4"/> Ajouter un lien
             </a>
             <button type="button" data-dropdown-toggle="radar-topbar-user-menu" data-dropdown-placement="bottom-end" data-test="user-menu-toggle"
                     class="flex rounded-full focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800">
-                <span class="grid size-9 place-items-center rounded-full bg-white text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-200 dark:bg-gray-900 dark:text-white dark:ring-gray-800">
+                <span class="grid size-10 place-items-center rounded-full bg-white text-sm font-bold text-gray-900 ring-1 ring-gray-300 dark:bg-gray-900 dark:text-white dark:ring-gray-700">
                     {{ app.user.userIdentifier|first|upper }}
                 </span>
             </button>
-            <div class="z-50 my-4 hidden w-56 list-none divide-y divide-gray-100 rounded-2xl bg-white text-base shadow-lg ring-1 ring-gray-200/70 dark:divide-gray-800 dark:bg-gray-900 dark:ring-gray-800"
-                 id="radar-topbar-user-menu">
+            {# Animation sur le contenu : Flowbite positionne le menu lui-même par transform #}
+            <div class="z-50 my-4 hidden w-64 list-none" id="radar-topbar-user-menu">
+              <div class="origin-top-right animate-radar-drop divide-y divide-gray-100 rounded-2xl bg-white text-base shadow-[0_20px_40px_-20px_rgb(23_24_28/0.35)] ring-1 ring-gray-200 dark:divide-gray-800 dark:bg-gray-900 dark:ring-gray-800">
                 <div class="px-4 py-3">
                     <span class="block truncate text-sm font-semibold text-gray-900 dark:text-white">{{ app.user.userIdentifier }}</span>
                     <span class="block truncate text-xs text-gray-500 dark:text-gray-400" data-test="user-menu-profile">
@@ -113,6 +108,7 @@
                         </a>
                     </li>
                 </ul>
+              </div>
             </div>
         {% else %}
             <a href="{{ path('app_login') }}"
@@ -123,40 +119,26 @@
     </div>
 </nav>
 
-{# Sidebar #}
-{% set nav_item = 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition' %}
-{% set nav_idle = nav_item ~ ' text-gray-700 hover:bg-white hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-900 dark:hover:text-white' %}
-{% set nav_active = nav_item ~ ' bg-white font-semibold text-gray-900 shadow-xs ring-1 ring-gray-200/70 dark:bg-gray-900 dark:text-white dark:ring-gray-800' %}
-<aside id="radar-sidebar"
-       class="fixed top-0 left-0 z-40 h-screen w-64 -translate-x-full bg-gray-50 pt-16 transition-transform md:translate-x-0 dark:bg-gray-950"
-       aria-label="Sidebar">
-    <div class="h-full overflow-y-auto px-4 py-4">
-        <ul class="space-y-1">
-            <li>
-                <a href="{{ path('app_page') }}" class="{{ app.current_route == 'app_page' ? nav_active : nav_idle }}">
-                    <twig:ux:icon name="tabler:bookmarks" class="size-5"/>
-                    <span>Tous les liens</span>
-                </a>
-            </li>
-        </ul>
-        <twig:CategoryNav :currentId="category.id ?? null"/>
-    </div>
-</aside>
-
-<main class="pt-16 [view-transition-name:main] md:ml-64">
-    <div class="min-h-[calc(100vh-4rem)] bg-white p-4 sm:p-6 md:rounded-tl-4xl md:p-10 dark:bg-gray-900">
+<main class="[view-transition-name:main]">
+    <div class="min-h-[calc(100vh-4rem)] px-4 pt-5 pb-24 sm:px-6 sm:pb-12 md:px-8">
         {% block body %}{% endblock %}
     </div>
 </main>
-{# Coin arrondi du panneau figé sous la topbar : le contenu qui défile passe dessous au lieu de l'aplatir #}
-<div aria-hidden="true"
-     class="pointer-events-none fixed top-16 left-64 z-30 hidden size-8 bg-[radial-gradient(circle_at_100%_100%,transparent_1.95rem,var(--color-gray-50)_2rem)] md:block dark:bg-[radial-gradient(circle_at_100%_100%,transparent_1.95rem,var(--color-gray-950)_2rem)]"></div>
+
+{% if app.user %}
+    {# Sur téléphone, le bouton flottant remplace « Ajouter un lien » de la topbar #}
+    <a href="{{ path('app_link_new') }}" data-test="add-link-fab" data-turbo-frame="link-modal-frame"
+       class="fixed right-4 bottom-4 z-40 grid size-15 place-items-center rounded-full bg-gray-900 text-white shadow-[0_12px_28px_-10px_rgb(23_24_28/0.6)] transition active:scale-95 sm:hidden dark:bg-white dark:text-gray-900">
+        <twig:ux:icon name="tabler:plus" class="size-7"/>
+        <span class="sr-only">Ajouter un lien</span>
+    </a>
+{% endif %}
 
 {# Modale d'ajout : « Ajouter un lien » y charge le formulaire (Turbo Frame), la page dédiée reste le repli. #}
 {% if app.user and app.current_route not in ['app_link_new', 'app_link_seed'] %}
     <dialog data-controller="link-modal" data-test="link-modal" aria-label="Ajouter un lien"
             data-action="turbo:before-fetch-request->link-modal#open close->link-modal#reset click->link-modal#closeOnBackdrop turbo:before-cache@document->link-modal#close"
-            class="m-auto w-[calc(100%-2rem)] max-w-2xl rounded-3xl bg-white p-6 text-gray-800 opacity-0 shadow-2xl ring-1 ring-gray-200/70 transition duration-200 transition-discrete backdrop:bg-gray-950/40 backdrop:backdrop-blur-xs open:opacity-100 starting:open:translate-y-2 starting:open:opacity-0 sm:p-8 dark:bg-gray-900 dark:text-gray-200 dark:ring-gray-800">
+            class="m-auto w-[calc(100%-2rem)] max-w-2xl rounded-3xl bg-white p-6 text-gray-800 opacity-0 shadow-2xl ring-1 ring-gray-200/70 transition duration-[280ms] ease-radar-spring transition-discrete backdrop:bg-gray-950/40 backdrop:backdrop-blur-xs open:opacity-100 starting:open:translate-y-2.5 starting:open:scale-97 starting:open:opacity-0 motion-reduce:transition-none sm:p-8 dark:bg-gray-900 dark:text-gray-200 dark:ring-gray-800">
         <button type="button" data-action="link-modal#close" data-test="link-modal-close"
                 class="absolute top-4 right-4 grid size-8 place-items-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-800 dark:hover:text-white">
             <twig:ux:icon name="tabler:x" class="size-5"/>

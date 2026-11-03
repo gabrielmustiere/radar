@@ -3,5 +3,5 @@
 {% block title %}{{ category.name }} · Radar{% endblock %}
 
 {% block body %}
-    <twig:LinkList :links="links" :category="category" :q="q" :page="page"/>
+    <twig:LinkList :links="links" :category="category" :q="q" :page="page" :team="team" :type="type"/>
 {% endblock %}

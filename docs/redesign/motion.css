@@ -1,0 +1,94 @@
+/*
+ * Redesign Radar : animations à intégrer dans assets/styles/app.css (Tailwind 4).
+ * Les couleurs de type sont les palettes Tailwind par défaut (rose, violet, sky, orange, teal) : aucun token à ajouter.
+ * Tout est neutralisé sous prefers-reduced-motion.
+ */
+
+@theme {
+    --ease-radar: cubic-bezier(.2, .7, .2, 1);
+    --ease-radar-spring: cubic-bezier(.3, 1.3, .5, 1);
+
+    --animate-radar-card-in: radar-card-in 500ms var(--ease-radar) both;
+    --animate-radar-pop: radar-pop 280ms var(--ease-radar-spring) both;
+    --animate-radar-drop: radar-drop 180ms var(--ease-radar) both;
+    --animate-radar-badge: radar-badge 400ms var(--ease-radar-spring) both;
+    --animate-radar-ping: radar-ping 1.8s cubic-bezier(0, 0, .2, 1) infinite;
+}
+
+@keyframes radar-card-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes radar-pop {
+    from { opacity: 0; transform: translateY(10px) scale(.97); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes radar-drop {
+    from { opacity: 0; transform: scale(.96) translateY(-4px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes radar-badge {
+    from { opacity: 0; transform: scale(.9); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes radar-ping {
+    0% { transform: scale(1); opacity: .7; }
+    80%, 100% { transform: scale(2.6); opacity: 0; }
+}
+
+@layer components {
+    /* Carte de lien : apparition décalée (style="--i: N" posé par la boucle Twig, plafonné à 10) et survol en ressort */
+    .link-card {
+        animation: var(--animate-radar-card-in);
+        animation-delay: calc(min(var(--i, 0), 10) * 40ms);
+        transition: transform 280ms var(--ease-radar-spring), box-shadow 280ms ease;
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 36px -20px rgb(23 24 28 / .35);
+        }
+
+        & .link-card-media > * {
+            transition: transform 600ms cubic-bezier(.2, .7, .1, 1);
+        }
+
+        &:hover .link-card-media > * {
+            transform: scale(1.04);
+        }
+
+        & .link-card-open {
+            transition: gap 200ms ease;
+        }
+
+        &:hover .link-card-open {
+            gap: .625rem;
+        }
+    }
+
+    /* Pastille de filtre : retour tactile au clic */
+    .filter-chip {
+        transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 120ms ease;
+
+        &:active {
+            transform: scale(.96);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .link-card,
+    [class*='animate-radar'] {
+        animation: none !important;
+    }
+
+    .link-card,
+    .link-card:hover,
+    .link-card .link-card-media > * {
+        transform: none !important;
+        transition: none !important;
+    }
+}

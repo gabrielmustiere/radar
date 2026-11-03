@@ -66,18 +66,30 @@ final class AddLinkTest extends E2ETestCase
         $this->expect($modal->locator('[data-test="link-categories"] input[type="checkbox"]')->nth(3))->toBeDisabled();
     }
 
-    public function testFormStartsWithTheContextThenCategoriesThenAddress(): void
+    public function testFormStartsWithTheAddressThenCategoriesThenContext(): void
     {
         $this->logIn();
         $modal = $this->openModal();
 
-        $this->expect($modal->locator('[data-test="link-context"]'))->toBeFocused();
+        $this->expect($modal->locator('[data-test="link-url"]'))->toBeFocused();
         self::assertSame(
-            ['link-context', 'link-categories', 'link-url'],
+            ['link-url', 'link-categories', 'link-context'],
             $this->page->evaluate(
                 "[...document.querySelectorAll('[data-test=\"link-modal\"] [data-test=\"link-context\"], [data-test=\"link-modal\"] [data-test=\"link-categories\"], [data-test=\"link-modal\"] [data-test=\"link-url\"]')].map(e => e.dataset.test)",
             ),
         );
+    }
+
+    public function testTypedAddressShowsItsDetectedType(): void
+    {
+        $this->logIn();
+        $modal = $this->openModal();
+
+        $modal->locator('[data-test="link-url"]')->fill('https://github.com/symfony/ux');
+        $this->expect($modal->locator('[data-test="link-detected-type"]'))->toHaveText('Dépôt GitHub');
+
+        $modal->locator('[data-test="link-url"]')->fill('https://www.youtube.com/watch?v=qjSAMOkrdIQ');
+        $this->expect($modal->locator('[data-test="link-detected-type"]'))->toHaveText('Vidéo YouTube');
     }
 
     public function testEnterCreatesAndChecksACategoryWithoutSubmitting(): void

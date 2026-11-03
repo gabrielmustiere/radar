@@ -3,63 +3,74 @@
 {% block title %}Comptes · Radar{% endblock %}
 
 {% block body %}
-    <div class="mx-auto max-w-3xl">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div class="min-w-0">
-                <div class="flex items-center gap-3">
-                    <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Comptes</h1>
-                    <span class="text-sm text-gray-500 dark:text-gray-400" data-test="user-count">{{ accounts|length }} compte{{ accounts|length > 1 ? 's' }}</span>
+    <div class="mx-auto flex max-w-3xl flex-col gap-6">
+        {% include 'admin/_tabs.html.twig' %}
+
+        <div class="flex flex-wrap items-end justify-between gap-4">
+            <div class="flex max-w-[560px] min-w-0 flex-col gap-2">
+                <div class="flex items-baseline gap-3">
+                    <h1 class="font-display text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Comptes</h1>
+                    <span class="text-sm font-medium text-gray-500 dark:text-gray-400" data-test="user-count">{{ accounts|length }} compte{{ accounts|length > 1 ? 's' }}</span>
                 </div>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <p class="text-[15px] leading-relaxed text-gray-500 dark:text-gray-400">
                     Les personnes qui ont accès à Radar. Un compte désactivé ne peut plus se connecter, mais ses liens restent à son nom.
                 </p>
             </div>
             <a href="{{ path('app_admin_user_new') }}" data-test="user-new"
-               class="inline-flex shrink-0 items-center gap-2 self-start rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700">
+               class="inline-flex h-11 shrink-0 items-center gap-2 rounded-xl bg-gray-900 px-4 text-[15px] font-semibold text-white transition hover:-translate-y-px hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none motion-reduce:hover:translate-y-0 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700">
                 <twig:ux:icon name="tabler:user-plus" class="size-4"/> Nouveau compte
             </a>
         </div>
 
-        <ul class="mt-8 divide-y divide-gray-100 rounded-2xl ring-1 ring-gray-200/70 dark:divide-gray-800 dark:ring-gray-800" data-test="user-list">
+        <ul class="divide-y divide-gray-100 overflow-hidden rounded-[20px] bg-white ring-1 ring-gray-200/70 dark:divide-gray-800 dark:bg-gray-900 dark:ring-gray-800" data-test="user-list">
             {% for account in accounts %}
                 {% set user = account.user %}
                 {% set locked = account.permanent or user.userIdentifier == app.user.userIdentifier %}
-                <li class="flex flex-wrap items-center gap-x-4 gap-y-3 px-4 py-3.5 text-sm" data-test="user-row">
-                    <div class="min-w-0 flex-1 basis-56 {{ user.active ? '' : 'opacity-60' }}">
-                        <p class="truncate font-medium text-gray-900 dark:text-white" data-test="user-email">{{ user.email }}</p>
-                        <div class="mt-1 flex min-h-5 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500 dark:text-gray-400">
-                            <span data-test="user-team">{{ user.team ? user.team.label : 'Sans équipe' }}</span>
+                <li class="grid grid-cols-[2.75rem_minmax(0,1fr)] items-center gap-x-3.5 gap-y-3 px-4.5 py-4 text-sm transition-colors hover:bg-gray-50/70 sm:grid-cols-[2.75rem_minmax(0,1fr)_auto] dark:hover:bg-white/[0.03]" data-test="user-row">
+                    <span class="grid size-11 place-items-center rounded-full bg-gray-900 font-bold text-white dark:bg-white dark:text-gray-900 {{ user.active ? '' : 'opacity-60' }}" aria-hidden="true">
+                        {{- user.email|first|upper -}}
+                    </span>
+                    <div class="flex min-w-0 flex-col gap-1.5 {{ user.active ? '' : 'opacity-60' }}">
+                        <p class="truncate text-[15px] font-semibold text-gray-900 dark:text-white" data-test="user-email">{{ user.email }}</p>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <span class="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-700 dark:bg-white/10 dark:text-gray-200" data-test="user-team">{{ user.team ? user.team.label : 'Sans équipe' }}</span>
                             {% if account.permanent %}
-                                <twig:Badge variant="gray" shape="pill" data-test="user-permanent" title="Désigné par la configuration de Radar : ne peut être ni désactivé ni privé du statut admin">
-                                    <twig:ux:icon name="tabler:lock" class="me-1 size-3"/> admin permanent
+                                <twig:Badge variant="gray" shape="pill" data-test="user-permanent" title="Désigné par la configuration de Radar : ne peut être ni désactivé ni privé du statut admin"
+                                            class="gap-1 bg-gray-900 px-2.5 py-0.5 font-semibold text-white dark:bg-white dark:text-gray-900">
+                                    <twig:ux:icon name="tabler:lock" class="size-3"/> admin permanent
                                 </twig:Badge>
                             {% elseif account.admin %}
-                                <twig:Badge variant="gray" shape="pill" data-test="user-admin-badge">admin</twig:Badge>
+                                <twig:Badge variant="gray" shape="pill" data-test="user-admin-badge"
+                                            class="bg-gray-900 px-2.5 py-0.5 font-semibold text-white dark:bg-white dark:text-gray-900">admin</twig:Badge>
                             {% endif %}
                             {% if user.active %}
-                                <span class="sr-only" data-test="user-state">Actif</span>
+                                <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400" data-test="user-state">
+                                    <span class="size-1.5 rounded-full bg-emerald-600 dark:bg-emerald-500" aria-hidden="true"></span>
+                                    Actif
+                                </span>
                             {% else %}
-                                <twig:Badge variant="danger" shape="pill" data-test="user-state">désactivé</twig:Badge>
+                                <twig:Badge variant="danger" shape="pill" data-test="user-state" class="px-2.5 py-0.5 font-semibold">désactivé</twig:Badge>
                             {% endif %}
                         </div>
                     </div>
-                    <div class="flex shrink-0 items-center gap-2">
+                    <div class="col-span-2 flex flex-wrap items-center gap-2 sm:col-span-1 sm:justify-end">
                         {% if not user.active %}
                             <form method="post" action="{{ path('app_admin_user_activate', {id: user.id}) }}">
                                 <input type="hidden" name="_token" value="{{ csrf_token('user-activate') }}">
-                                <twig:Button type="submit" variant="outline" size="xs" data-test="user-activate" class="gap-1.5 rounded-xl">
+                                <twig:Button type="submit" variant="outline" size="sm" data-test="user-activate" class="h-[38px] gap-1.5 rounded-[10px] px-3.5 py-0 font-semibold shadow-none">
                                     <twig:ux:icon name="tabler:user-check" class="size-3.5"/> Réactiver
                                 </twig:Button>
                             </form>
                         {% elseif not locked %}
                             <form method="post" action="{{ path('app_admin_user_deactivate', {id: user.id}) }}">
                                 <input type="hidden" name="_token" value="{{ csrf_token('user-deactivate') }}">
-                                <twig:Button type="submit" variant="outline" size="xs" data-test="user-deactivate" class="gap-1.5 rounded-xl">
+                                <twig:Button type="submit" variant="outline" size="sm" data-test="user-deactivate" class="h-[38px] gap-1.5 rounded-[10px] px-3.5 py-0 font-semibold shadow-none">
                                     <twig:ux:icon name="tabler:user-off" class="size-3.5"/> Désactiver
                                 </twig:Button>
                             </form>
                         {% endif %}
-                        <twig:Button as="a" href="{{ path('app_admin_user_edit', {id: user.id}) }}" variant="outline" size="xs" data-test="user-edit" class="gap-1.5 rounded-xl">
+                        <twig:Button as="a" href="{{ path('app_admin_user_edit', {id: user.id}) }}" variant="outline" size="sm" data-test="user-edit"
+                                     class="h-[38px] gap-1.5 rounded-[10px] px-3.5 py-0 font-semibold shadow-none hover:border-gray-900 hover:bg-gray-900 hover:text-white dark:hover:border-white dark:hover:bg-white dark:hover:text-gray-900">
                             <twig:ux:icon name="tabler:pencil" class="size-3.5"/> Modifier
                         </twig:Button>
                     </div>

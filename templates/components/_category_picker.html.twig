@@ -41,7 +41,8 @@
                            {%- if choice.vars.checked %} checked{% endif %}{% if locked %} disabled{% endif %}>
                     {% do choice.setRendered %}
                     <span class="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm text-gray-700 ring-1 ring-gray-200 transition hover:ring-gray-300 peer-checked:bg-gray-900 peer-checked:font-medium peer-checked:text-white peer-checked:ring-gray-900 peer-focus-visible:ring-2 peer-disabled:opacity-40 peer-disabled:hover:ring-gray-200 dark:bg-gray-950 dark:text-gray-300 dark:ring-gray-800 dark:peer-checked:bg-white dark:peer-checked:text-gray-900 dark:peer-checked:ring-white">
-                        {{ choice.vars.label }}
+                        <twig:ux:icon name="tabler:check" class="mr-1 hidden size-3.5 [:checked+*>&]:inline-block"/>
+                        {{- choice.vars.label -}}
                     </span>
                 </label>
             {% endfor %}

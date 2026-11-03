@@ -73,7 +73,7 @@ final class LinkSearchTest extends LinkWebTestCase
         $client->request('GET', '/', ['q' => $marker . ' beta']);
 
         self::assertSelectorCount(1, '[data-test="link-card"]');
-        self::assertSelectorTextContains('[data-test="link-card"]', $marker . '-b');
+        self::assertSelectorExists(sprintf('[data-test="link-card"] [data-test="link-open"][title*="%s-b"]', $marker));
     }
 
     public function testNoResultIsExplicitAndQueryIsKept(): void
@@ -125,7 +125,10 @@ final class LinkSearchTest extends LinkWebTestCase
         $client->request('GET', '/categories/' . $this->categoryId($name), ['q' => $marker]);
 
         self::assertSelectorCount(1, '[data-test="link-card"]');
-        self::assertSelectorTextContains('[data-test="link-card"]', $marker . '-dedans');
+        self::assertSelectorExists(sprintf(
+            '[data-test="link-card"] [data-test="link-open"][title*="%s-dedans"]',
+            $marker,
+        ));
     }
 
     public function testSearchFormFiltersTheCurrentListOrLeadsToTheFeed(): void

@@ -3,11 +3,11 @@
 {% block title %}Reprendre un lien de Chat · Radar{% endblock %}
 
 {% block body %}
-    {# Ouverte directement ou chargée dans la modale d'ajout (même frame) #}
-    <twig:Turbo:Frame id="link-modal-frame" class="mx-auto block max-w-2xl">
+    {# Ouverte directement ou chargée dans la modale d'ajout (même frame) : la modale ne reprend que le contenu, pas cette carte #}
+    <twig:Turbo:Frame id="link-modal-frame" class="mx-auto block max-w-2xl rounded-[20px] bg-white p-6 ring-1 ring-gray-200/70 sm:p-8 dark:bg-gray-900 dark:ring-gray-800">
         <h1 class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Reprendre un lien de Chat</h1>
         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Pour amorcer Radar avec les meilleurs liens déjà postés : ils gardent leur date et leur posteur d'origine, et ne sont pas réannoncés.
+            Pour amorcer Radar avec les meilleurs liens déjà postés dans Google Chat.
         </p>
 
         <twig:LinkForm :form="form" :historical="true"/>

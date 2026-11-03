@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Radar · Connexion (clair)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F7F8}
+a{color:#17181C;text-decoration:none}a:hover{color:#17181C;text-decoration:underline}
+.cx-f1{animation:cx-float 6s ease-in-out infinite}
+.cx-f2{animation:cx-float 6s ease-in-out infinite -1.5s}
+.cx-f3{animation:cx-float 6s ease-in-out infinite -3s}
+.cx-f4{animation:cx-float 6s ease-in-out infinite -4.5s}
+@keyframes cx-float{0%,100%{translate:0 0}50%{translate:0 -10px}}
+.cx-in{animation:cx-in .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes cx-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.cx-field{transition:border-color .15s ease,box-shadow .15s ease}
+.cx-field:focus{outline:none;border-color:#17181C;box-shadow:0 0 0 4px rgba(23,24,28,.08)}
+.cx-btn{transition:transform .15s ease}
+.cx-btn:hover{transform:translateY(-1px);text-decoration:none}
+@media (prefers-reduced-motion:reduce){.cx-f1,.cx-f2,.cx-f3,.cx-f4,.cx-in{animation:none}}
+</style>
+</helmet>
+<div style="min-height: 100vh; box-sizing: border-box; background: #F6F7F8; color: #17181C; font-family: Inter, ui-sans-serif, system-ui, sans-serif; display: flex; align-items: center; justify-content: center; padding: 32px 16px">
+  <div class="cx-in" style="width: 100%; max-width: 1040px; display: flex; flex-wrap: wrap; border-radius: 28px; overflow: hidden; background: #FFFFFF; border: 1px solid #E3E5E9; box-shadow: 0 40px 80px -40px rgba(23,24,28,.25)">
+    <div style="flex: 1 1 420px; min-height: 520px; padding: 40px; box-sizing: border-box; background: #F1F2F4; display: flex; flex-direction: column; gap: 28px; position: relative; overflow: hidden">
+      <div style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px">
+        <span style="width: 34px; height: 34px; border-radius: 10px; background: #17181C; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 12 18 6"></path><path d="M20 12a8 8 0 1 1-8-8"></path><path d="M16 12a4 4 0 1 1-4-4"></path></svg></span>
+        radar
+      </div>
+      <p style="margin: 0; max-width: 360px; font-size: 26px; font-weight: 700; line-height: 1.2; letter-spacing: -0.02em">Ce que l'équipe a repéré, <span style="color: #5E636E">retrouvable des mois plus tard.</span></p>
+      <div aria-hidden="true" style="position: relative; flex: 1; min-height: 240px">
+        <div class="cx-f1" style="position: absolute; left: 0; top: 10px; width: 230px; padding: 14px; border-radius: 14px; background: #FFFFFF; border: 1px solid #F8C9D2; box-shadow: 0 12px 30px -18px rgba(23,24,28,.4); transform: rotate(-4deg); display: flex; flex-direction: column; gap: 8px">
+          <span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #E11D48; color: #FFFFFF; font-size: 10px; font-weight: 700; letter-spacing: .04em">VIDÉO</span>
+          <span style="height: 8px; width: 80%; border-radius: 4px; background: #E3E5E9; display: block"></span>
+          <span style="height: 8px; width: 55%; border-radius: 4px; background: #EEF0F2; display: block"></span>
+        </div>
+        <div class="cx-f2" style="position: absolute; left: 170px; top: 70px; width: 230px; padding: 14px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCCFFB; box-shadow: 0 12px 30px -18px rgba(23,24,28,.4); transform: rotate(3deg); display: flex; flex-direction: column; gap: 8px">
+          <span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #7C3AED; color: #FFFFFF; font-size: 10px; font-weight: 700; letter-spacing: .04em">GITHUB</span>
+          <span style="height: 8px; width: 70%; border-radius: 4px; background: #E3E5E9; display: block"></span>
+          <span style="height: 8px; width: 45%; border-radius: 4px; background: #EEF0F2; display: block"></span>
+        </div>
+        <div class="cx-f3" style="position: absolute; left: 30px; top: 150px; width: 230px; padding: 14px; border-radius: 14px; background: #FFFFFF; border: 1px solid #B4E6DD; box-shadow: 0 12px 30px -18px rgba(23,24,28,.4); transform: rotate(-1deg); display: flex; flex-direction: column; gap: 8px">
+          <span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #0F766E; color: #FFFFFF; font-size: 10px; font-weight: 700; letter-spacing: .04em">ARTICLE</span>
+          <span style="height: 8px; width: 85%; border-radius: 4px; background: #E3E5E9; display: block"></span>
+          <span style="height: 8px; width: 60%; border-radius: 4px; background: #EEF0F2; display: block"></span>
+        </div>
+        <div class="cx-f4" style="position: absolute; left: 230px; top: 190px; width: 180px; padding: 14px; border-radius: 14px; background: #FFFFFF; border: 1px solid #F9D3B3; box-shadow: 0 12px 30px -18px rgba(23,24,28,.4); transform: rotate(5deg); display: flex; flex-direction: column; gap: 8px">
+          <span style="align-self: flex-start; padding: 3px 8px; border-radius: 999px; background: #C2410C; color: #FFFFFF; font-size: 10px; font-weight: 700; letter-spacing: .04em">FLUX RSS</span>
+          <span style="height: 8px; width: 75%; border-radius: 4px; background: #E3E5E9; display: block"></span>
+        </div>
+      </div>
+    </div>
+
+    <form style="flex: 1 1 380px; padding: 48px 44px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px; justify-content: center">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <h1 style="margin: 0; font-size: 28px; font-weight: 700; letter-spacing: -0.02em">Se connecter</h1>
+        <p style="margin: 0; font-size: 15px; color: #5E636E">Identifiez-vous pour accéder à la veille de l'équipe.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="cx-email" style="font-size: 14px; font-weight: 600">Email</label>
+        <input class="cx-field" id="cx-email" type="email" placeholder="vous@exemple.com" style="height: 46px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 15px">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="cx-pw" style="font-size: 14px; font-weight: 600">Mot de passe</label>
+        <input class="cx-field" id="cx-pw" type="password" style="height: 46px; box-sizing: border-box; padding: 0 14px; border-radius: 12px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 15px">
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px">
+        <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer"><input type="checkbox" style="width: 18px; height: 18px; accent-color: #17181C"> Se souvenir de moi</label>
+        <a href="#" style="font-size: 14px; font-weight: 600">Mot de passe oublié ?</a>
+      </div>
+      <a class="cx-btn" href="Clair-Liens.dc.html" style="height: 48px; border-radius: 12px; background: #17181C; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px; font-weight: 600">Se connecter
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+      </a>
+    </form>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

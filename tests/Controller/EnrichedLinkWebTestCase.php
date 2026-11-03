@@ -40,6 +40,7 @@ abstract class EnrichedLinkWebTestCase extends LinkWebTestCase
         LinkPreview $preview,
         ?string $imagePath = null,
         ?string $faviconPath = null,
+        ?\DateTimeImmutable $postedAt = null,
     ): Link {
         $users = self::getContainer()->get(UserRepository::class);
         self::assertInstanceOf(UserRepository::class, $users);
@@ -52,7 +53,7 @@ abstract class EnrichedLinkWebTestCase extends LinkWebTestCase
             $analyzer->normalize($url),
             [],
             $poster,
-            new \DateTimeImmutable(),
+            $postedAt ?? new \DateTimeImmutable(),
             $analyzer->sourceType($url),
         );
         $link->applyPreview($preview, $imagePath, $faviconPath, new \DateTimeImmutable());

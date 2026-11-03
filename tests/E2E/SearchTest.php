@@ -47,8 +47,8 @@ final class SearchTest extends E2ETestCase
     public function testTypingFiltersTheCurrentCategory(): void
     {
         $this->logIn();
-        $item = $this->page->locator('[data-test="category-nav-item"]')->first();
-        $name = trim((string) $item->locator('span.truncate')->textContent());
+        $item = $this->page->locator('[data-test="filter-category"][href^="/categories/"]:not(.opacity-40)')->first();
+        $name = trim((string) $item->locator('[data-test="filter-label"]')->textContent());
         $item->click();
         $this->expect($this->page->locator('h1'))->toHaveText($name);
         $categoryUrl = $this->page->url();

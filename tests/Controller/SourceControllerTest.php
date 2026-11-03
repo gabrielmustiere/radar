@@ -25,7 +25,7 @@ final class SourceControllerTest extends SourceWebTestCase
         self::assertResponseStatusCodeSame(403);
     }
 
-    public function testAdminFindsTheAdministrationInTheUserMenuNotInTheSidebar(): void
+    public function testAdminFindsTheAdministrationOnlyInTheUserMenu(): void
     {
         $client = $this->loggedClient();
 
@@ -33,7 +33,7 @@ final class SourceControllerTest extends SourceWebTestCase
 
         foreach (['nav-sources', 'nav-users', 'nav-categories'] as $entry) {
             self::assertSelectorExists(sprintf('[data-test="user-menu-admin"] [data-test="%s"]', $entry));
-            self::assertSelectorNotExists(sprintf('#radar-sidebar [data-test="%s"]', $entry));
+            self::assertSelectorCount(1, sprintf('[data-test="%s"]', $entry));
         }
         self::assertSelectorTextContains('[data-test="user-menu-profile"]', 'admin');
     }

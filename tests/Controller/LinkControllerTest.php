@@ -29,7 +29,7 @@ final class LinkControllerTest extends LinkWebTestCase
         self::assertResponseRedirects('/');
         $client->followRedirect();
         self::assertSelectorTextContains('[role="alert"]', 'Lien ajouté.');
-        self::assertSelectorTextContains(self::FIRST_CARD, $url);
+        self::assertSelectorExists(sprintf('%s [data-test="link-open"][title="Ouvrir %s"]', self::FIRST_CARD, $url));
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-poster"]', 'admin');
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-category"]', 'Symfony');
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-context"]', 'Pour la recette mobile.');

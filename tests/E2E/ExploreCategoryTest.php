@@ -10,14 +10,12 @@ final class ExploreCategoryTest extends E2ETestCase
     {
         $this->logIn();
 
-        $item = $this->page->locator('[data-test="category-nav-item"]')->first();
-        $name = trim((string) $item->locator('span.truncate')->textContent());
+        $item = $this->page->locator('[data-test="filter-category"][href^="/categories/"]:not(.opacity-40)')->first();
+        $name = trim((string) $item->locator('[data-test="filter-label"]')->textContent());
         $item->click();
 
         $this->expect($this->page->locator('h1'))->toHaveText($name);
-        $this->expect($this->page->locator('[data-test="category-nav-item"][aria-current="page"]'))->toContainText(
-            $name,
-        );
+        $this->expect($this->page->locator('[data-test="filter-category"][aria-current="true"]'))->toContainText($name);
 
         $open = $this->page->locator('[data-test="link-card"]')->first()->locator('[data-test="link-open"]');
         $destination = substr((string) $open->getAttribute('title'), offset: strlen('Ouvrir '));
@@ -29,14 +27,14 @@ final class ExploreCategoryTest extends E2ETestCase
     public function testAdminRenamesTheCategoryFromItsPage(): void
     {
         $this->logIn();
-        $item = $this->page->locator('[data-test="category-nav-item"]')->first();
-        $name = trim((string) $item->locator('span.truncate')->textContent());
+        $item = $this->page->locator('[data-test="filter-category"][href^="/categories/"]:not(.opacity-40)')->first();
+        $name = trim((string) $item->locator('[data-test="filter-label"]')->textContent());
         $item->click();
         $this->expect($this->page->locator('h1'))->toHaveText($name);
 
         $this->rename($name . ' renommée');
         $this->expect($this->page->locator('h1'))->toHaveText($name . ' renommée');
-        $this->expect($this->page->locator('[data-test="category-nav-item"][aria-current="page"]'))->toContainText($name
+        $this->expect($this->page->locator('[data-test="filter-category"][aria-current="true"]'))->toContainText($name
         . ' renommée');
 
         // Retour au nom d'origine : la base de dev reste stable d'un passage à l'autre.

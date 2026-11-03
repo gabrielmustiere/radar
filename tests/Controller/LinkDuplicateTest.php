@@ -23,15 +23,18 @@ final class LinkDuplicateTest extends LinkWebTestCase
 
         self::assertResponseStatusCodeSame(422);
         self::assertSelectorTextContains('[data-test="link-duplicate"]', 'Ce lien est déjà dans Radar');
-        self::assertSelectorTextContains(
-            '[data-test="link-duplicate"] [data-test="link-card"]',
-            'https://example.com/' . $slug,
-        );
+        self::assertSelectorExists(sprintf(
+            '[data-test="link-duplicate"] [data-test="link-card"] [data-test="link-open"][title="Ouvrir https://example.com/%s"]',
+            $slug,
+        ));
         self::assertSelectorTextContains('[data-test="link-form"]', 'Ce lien est déjà dans Radar.');
 
         $client->clickLink('Voir la carte');
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('[data-test="link-card"]', 'https://example.com/' . $slug);
+        self::assertSelectorExists(sprintf(
+            '[data-test="link-card"] [data-test="link-open"][title="Ouvrir https://example.com/%s"]',
+            $slug,
+        ));
     }
 
     public function testYoutubeShortLinkIsADuplicate(): void

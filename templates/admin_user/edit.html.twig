@@ -2,47 +2,77 @@
 
 {% block title %}{{ account.email }} · Comptes · Radar{% endblock %}
 
-{% set button_primary = 'inline-flex items-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700' %}
-{% set section = 'mt-8 rounded-2xl p-5 ring-1 ring-gray-200/70 sm:p-6 dark:ring-gray-800' %}
+{% set card = 'flex flex-col gap-5 rounded-[20px] bg-white p-6 ring-1 ring-gray-200/70 dark:bg-gray-900 dark:ring-gray-800' %}
+{% set badge = 'rounded-full px-2.5 py-0.5 text-xs font-semibold' %}
+{# Statut admin effectif : une case verrouillée garde la valeur calculée par le contrôleur (admin permanent compris), sinon le booléen stocké fait foi #}
+{% set is_admin = form.admin.vars.disabled ? form.admin.vars.data : account.admin %}
 
 {% block body %}
-    <div class="mx-auto max-w-2xl">
-        <a href="{{ path('app_admin_user_index') }}" class="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+    <div class="mx-auto flex max-w-2xl flex-col gap-6">
+        {% include 'admin/_tabs.html.twig' %}
+
+        <a href="{{ path('app_admin_user_index') }}" class="inline-flex items-center gap-1.5 self-start text-sm font-semibold text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
             <twig:ux:icon name="tabler:arrow-left" class="size-4"/> Comptes
         </a>
-        <h1 class="mt-2 flex flex-wrap items-center gap-2 font-display text-2xl font-bold tracking-tight break-all text-gray-900 dark:text-white">
-            {{ account.email }}
-            {% if not account.active %}
-                <twig:Badge variant="danger" shape="pill" class="font-sans tracking-normal">désactivé</twig:Badge>
-            {% endif %}
-        </h1>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Changer l'email ou le mot de passe déconnecte la personne : elle se reconnecte avec ses nouveaux identifiants.
-        </p>
 
-        <section class="{{ section }}">
-            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Compte</h2>
-            {{ form_start(form, {attr: {class: 'mt-5 space-y-6', 'data-test': 'user-form', novalidate: 'novalidate'}}) }}
+        <div class="flex items-center gap-4">
+            <span class="grid size-14 shrink-0 place-items-center rounded-full bg-gray-900 text-[22px] font-bold text-white dark:bg-white dark:text-gray-900" aria-hidden="true">
+                {{- account.email|first|upper -}}
+            </span>
+            <div class="flex min-w-0 flex-col gap-1">
+                <h1 class="font-display text-[26px] font-bold tracking-tight break-all text-gray-900 dark:text-white">{{ account.email }}</h1>
+                <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="{{ badge }} bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-200">{{ account.team ? account.team.label : 'Sans équipe' }}</span>
+                    {% if is_admin %}
+                        <span class="{{ badge }} bg-gray-900 text-white dark:bg-white dark:text-gray-900">admin</span>
+                    {% endif %}
+                    {% if account.active %}
+                        <span class="{{ badge }} bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">Actif</span>
+                    {% else %}
+                        <twig:Badge variant="danger" shape="pill" class="px-2.5 py-0.5 font-semibold">désactivé</twig:Badge>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-3 rounded-[14px] bg-amber-50 px-4 py-3.5 text-amber-900 dark:bg-amber-500/10 dark:text-amber-200">
+            <twig:ux:icon name="tabler:alert-triangle" class="size-5 shrink-0" aria-hidden="true"/>
+            <p class="text-sm leading-normal">
+                Changer l'email ou le mot de passe déconnecte la personne : elle se reconnecte avec ses nouveaux identifiants.
+            </p>
+        </div>
+
+        <section class="{{ card }}">
+            <h2 class="text-[17px] font-bold text-gray-900 dark:text-white">Compte</h2>
+            {{ form_start(form, {attr: {class: 'flex flex-col gap-2', 'data-test': 'user-form', novalidate: 'novalidate'}}) }}
                 {{ form_row(form.email) }}
                 {{ form_row(form.team) }}
-                {{ form_row(form.admin) }}
+                <div class="rounded-xl bg-gray-50 px-3.5 pt-3.5 pb-0.5 dark:bg-white/5">
+                    {{ form_row(form.admin) }}
+                </div>
                 {{ form_rest(form) }}
 
-                <button type="submit" data-test="user-submit" class="{{ button_primary }}">
-                    <twig:ux:icon name="tabler:device-floppy" class="size-4"/> Enregistrer
-                </button>
+                <div class="mt-3">
+                    <button type="submit" data-test="user-submit"
+                            class="inline-flex h-[46px] items-center gap-2 rounded-xl bg-gray-900 px-5 text-[15px] font-semibold text-white transition hover:-translate-y-px hover:bg-gray-700 focus:ring-4 focus:ring-gray-300 focus:outline-none motion-reduce:hover:translate-y-0 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 dark:focus:ring-gray-700">
+                        <twig:ux:icon name="tabler:device-floppy" class="size-4"/> Enregistrer
+                    </button>
+                </div>
             {{ form_end(form) }}
         </section>
 
-        <section class="{{ section }}">
-            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Mot de passe</h2>
-            {{ form_start(passwordForm, {attr: {class: 'mt-5 space-y-6', 'data-test': 'user-password-form', novalidate: 'novalidate'}}) }}
+        <section class="{{ card }}">
+            <h2 class="text-[17px] font-bold text-gray-900 dark:text-white">Mot de passe</h2>
+            {{ form_start(passwordForm, {attr: {class: 'flex flex-col gap-2', 'data-test': 'user-password-form', novalidate: 'novalidate'}}) }}
                 {{ form_row(passwordForm.password) }}
                 {{ form_rest(passwordForm) }}
 
-                <button type="submit" data-test="user-password-submit" class="{{ button_primary }}">
-                    <twig:ux:icon name="tabler:key" class="size-4"/> Définir le mot de passe
-                </button>
+                <div class="mt-3">
+                    <button type="submit" data-test="user-password-submit"
+                            class="inline-flex h-[46px] items-center gap-2 rounded-xl border border-gray-300 bg-white px-[18px] text-[15px] font-semibold text-gray-900 transition hover:-translate-y-px hover:border-gray-400 focus:ring-4 focus:ring-gray-200 focus:outline-none motion-reduce:hover:translate-y-0 dark:border-gray-700 dark:bg-gray-950 dark:text-white dark:hover:border-gray-500 dark:focus:ring-gray-800">
+                        <twig:ux:icon name="tabler:key" class="size-4"/> Définir le mot de passe
+                    </button>
+                </div>
             {{ form_end(passwordForm) }}
         </section>
     </div>

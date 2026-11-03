@@ -44,7 +44,7 @@ final class LinkCardTest extends LinkWebTestCase
         $client->followRedirect();
         $card = self::FIRST_CARD;
         self::assertSelectorExists($card . '[data-preview-status="unavailable"]');
-        self::assertSelectorTextContains($card . ' [data-test="link-title"]', $url);
+        self::assertSelectorTextSame($card . ' [data-test="link-title"]', substr($url, strlen('https://github.com/')));
         self::assertSelectorTextContains($card . ' [data-test="link-source"]', 'Dépôt GitHub');
         self::assertSelectorTextSame($card . ' [data-test="link-repository-owner"]', 'acme /');
         self::assertSelectorNotExists($card . ' img');

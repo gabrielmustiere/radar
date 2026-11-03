@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Category;
 use App\Entity\Link;
+use App\Enum\Type\FeedType;
 use App\Enum\Type\PreviewStatus;
 use App\Enum\Type\Team;
+use App\Search\LinkFilter;
 use App\Search\SearchQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -28,21 +29,18 @@ class LinkRepository extends ServiceEntityRepository
         parent::__construct($registry, Link::class);
     }
 
-    /** @return WindowPage<Link> liens contenant chacun des mots recherchés */
-    public function findLatest(SearchQuery $query, int $page = 1): WindowPage
+    /** @return WindowPage<Link> liens répondant à tous les filtres, plus récents d'abord, chacun avec toutes ses catégories */
+    public function findFiltered(LinkFilter $filter, int $page = 1): WindowPage
     {
         return $this->paginate(
-            $this->filter(
-                $this
-                    ->createQueryBuilder('l')
-                    ->addSelect('u', 'c', 's')
-                    ->join('l.postedBy', 'u')
-                    ->leftJoin('l.source', 's')
-                    ->leftJoin('l.categories', 'c')
-                    ->orderBy('l.postedAt', 'DESC')
-                    ->addOrderBy('l.id', 'DESC'),
-                $query,
-            ),
+            $this
+                ->filtered($filter)
+                ->addSelect('u', 'c', 's')
+                ->join('l.postedBy', 'u')
+                ->leftJoin('l.source', 's')
+                ->leftJoin('l.categories', 'c')
+                ->orderBy('l.postedAt', 'DESC')
+                ->addOrderBy('l.id', 'DESC'),
             $page,
         );
     }
@@ -82,27 +80,6 @@ class LinkRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
-    /** @return WindowPage<Link> liens de la catégorie contenant chacun des mots recherchés, chacun avec toutes ses catégories */
-    public function findByCategory(Category $category, SearchQuery $query, int $page = 1): WindowPage
-    {
-        return $this->paginate(
-            $this->filter(
-                $this
-                    ->createQueryBuilder('l')
-                    ->addSelect('u', 'c', 's')
-                    ->join('l.postedBy', 'u')
-                    ->leftJoin('l.source', 's')
-                    ->join('l.categories', 'filter', 'WITH', 'filter = :category')
-                    ->leftJoin('l.categories', 'c')
-                    ->setParameter('category', $category)
-                    ->orderBy('l.postedAt', 'DESC')
-                    ->addOrderBy('l.id', 'DESC'),
-                $query,
-            ),
-            $page,
-        );
-    }
-
     /** @return list<array{id: int, name: string, team: ?Team, linkCount: int}> catégories portant au moins un lien */
     public function countByCategory(): array
     {
@@ -128,6 +105,44 @@ class LinkRepository extends ServiceEntityRepository
         }
 
         return $categories;
+    }
+
+    /** Liens répondant aux filtres, base de la liste et des compteurs de `LinkFacetRepository`. */
+    public function filtered(LinkFilter $filter): QueryBuilder
+    {
+        $builder = $this->filter($this->createQueryBuilder('l'), $filter->query);
+        if (null !== $filter->category) {
+            $builder->join('l.categories', 'filter', 'WITH', 'filter = :category')->setParameter(
+                'category',
+                $filter->category,
+            );
+        }
+
+        if (null !== $filter->team) {
+            $teamMatch = $this
+                ->getEntityManager()
+                ->createQueryBuilder()
+                ->select('1')
+                ->from(Link::class, 'lt')
+                ->join('lt.categories', 'ct')
+                ->where('lt = l AND ct.team = :team')
+                ->getDQL();
+            $builder->andWhere(sprintf('EXISTS(%s)', $teamMatch))->setParameter('team', $filter->team);
+        }
+
+        if (FeedType::Followed === $filter->type) {
+            $builder->andWhere('l.source IS NOT NULL');
+        }
+
+        $sourceType = $filter->type?->sourceType();
+        if (null !== $sourceType) {
+            $builder->andWhere('l.source IS NULL AND l.sourceType = :sourceType')->setParameter(
+                'sourceType',
+                $sourceType,
+            );
+        }
+
+        return $builder;
     }
 
     /** Chaque mot doit se retrouver dans un des champs texte du lien ou une de ses catégories. */

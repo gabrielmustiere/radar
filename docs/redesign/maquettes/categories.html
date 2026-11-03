@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Radar · Catégories (clair)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F7F8}
+a{color:#17181C;text-decoration:none}a:hover{color:#17181C}
+.fm-in{animation:fm-in .5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes fm-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.ca-row{transition:background .15s ease}
+.ca-row:hover{background:#FAFAFB}
+.ca-row:hover .ca-name{text-decoration:underline;text-underline-offset:3px}
+.ca-bar{transform-origin:left;animation:ca-grow .8s cubic-bezier(.2,.7,.1,1) both .2s}
+@keyframes ca-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.ca-save{transition:background .15s ease,color .15s ease}
+.ca-save:hover{background:#17181C;color:#FFFFFF}
+@media (prefers-reduced-motion:reduce){.fm-in,.ca-bar{animation:none}}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F6F7F8; color: #17181C; font-family: Inter, ui-sans-serif, system-ui, sans-serif">
+  <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px clamp(16px, 3vw, 32px); background: #FFFFFF; border-bottom: 1px solid #E3E5E9">
+    <a href="Clair-Liens.dc.html" style="display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px">
+      <span style="width: 30px; height: 30px; border-radius: 9px; background: #17181C; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 12 18 6"></path><path d="M20 12a8 8 0 1 1-8-8"></path><path d="M16 12a4 4 0 1 1-4-4"></path></svg></span>
+      radar
+    </a>
+    <label for="h-q" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Rechercher</label>
+    <input id="h-q" type="search" placeholder="Rechercher un lien…   /" style="flex: 1 1 260px; max-width: 520px; margin: 0 auto; height: 42px; box-sizing: border-box; padding: 0 14px; border-radius: 10px; border: 1px solid #D5D8DE; background: #F6F7F8; font: inherit; font-size: 15px">
+    <a href="Clair-Ajouter.dc.html" style="display: flex; align-items: center; gap: 8px; height: 42px; padding: 0 16px; border-radius: 10px; background: #17181C; color: #FFFFFF; font-size: 15px; font-weight: 600"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Ajouter un lien</a>
+    <button type="button" aria-label="Menu du compte" style="width: 42px; height: 42px; border-radius: 50%; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-weight: 700; cursor: pointer">G</button>
+  </header>
+
+  <main class="fm-in" style="max-width: 880px; margin: 0 auto; padding: 32px clamp(16px, 3vw, 32px) 56px; display: flex; flex-direction: column; gap: 22px">
+    <nav aria-label="Administration" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 4px; border-radius: 12px; background: #ECEEF1; align-self: flex-start">
+      <a href="Clair-Sources.dc.html" style="height: 36px; padding: 0 14px; border-radius: 9px; display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #3B3F47">Sources</a>
+      <a href="Clair-Comptes.dc.html" style="height: 36px; padding: 0 14px; border-radius: 9px; display: flex; align-items: center; font-size: 14px; font-weight: 500; color: #3B3F47">Comptes</a>
+      <a href="Clair-Categories.dc.html" aria-current="page" style="height: 36px; padding: 0 14px; border-radius: 9px; background: #FFFFFF; display: flex; align-items: center; font-size: 14px; font-weight: 600; box-shadow: 0 1px 2px rgba(23,24,28,.08)">Catégories</a>
+    </nav>
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <h1 style="margin: 0; display: flex; align-items: baseline; gap: 12px; font-size: 30px; font-weight: 700; letter-spacing: -0.02em">Catégories <span style="font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 500; color: #5E636E">5</span></h1>
+      <p style="margin: 0; max-width: 680px; font-size: 15px; line-height: 1.55; color: #5E636E">Une catégorie prend l'équipe de la personne qui la crée. Les membres de cette équipe la voient en tête de leurs filtres, et tout le monde la voit.</p>
+    </div>
+
+    <div style="border-radius: 20px; background: #FFFFFF; border: 1px solid #E3E5E9; overflow: hidden">
+      <div class="ca-row" style="display: grid; grid-template-columns: minmax(0, 1fr) 200px auto; gap: 14px; align-items: center; padding: 16px 18px; border-bottom: 1px solid #EEF0F2">
+        <a href="Clair-Liens.dc.html" style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><span class="ca-name" style="font-size: 15px; font-weight: 600">Symfony</span><span style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #5E636E"><span style="width: 120px; height: 6px; border-radius: 6px; background: #EEF0F2; display: block; overflow: hidden"><span class="ca-bar" style="width: 100%; height: 100%; background: #17181C; display: block"></span></span>7 liens</span></a>
+        <label style="display: flex; flex-direction: column; gap: 4px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Équipe de Symfony</span><select style="height: 40px; padding: 0 10px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px"><option>Aucune équipe</option><option selected="selected">Développement</option><option>Produit</option><option>QA</option><option>Management</option></select></label>
+        <button class="ca-save" type="button" style="height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Enregistrer</button>
+      </div>
+      <div class="ca-row" style="display: grid; grid-template-columns: minmax(0, 1fr) 200px auto; gap: 14px; align-items: center; padding: 16px 18px; border-bottom: 1px solid #EEF0F2">
+        <a href="Clair-Liens.dc.html" style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><span class="ca-name" style="font-size: 15px; font-weight: 600">Sécurité</span><span style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #5E636E"><span style="width: 120px; height: 6px; border-radius: 6px; background: #EEF0F2; display: block; overflow: hidden"><span class="ca-bar" style="width: 71%; height: 100%; background: #17181C; display: block"></span></span>5 liens</span></a>
+        <label style="display: flex; flex-direction: column; gap: 4px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Équipe de Sécurité</span><select style="height: 40px; padding: 0 10px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px"><option>Aucune équipe</option><option>Développement</option><option selected="selected">Produit</option><option>QA</option><option>Management</option></select></label>
+        <button class="ca-save" type="button" style="height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Enregistrer</button>
+      </div>
+      <div class="ca-row" style="display: grid; grid-template-columns: minmax(0, 1fr) 200px auto; gap: 14px; align-items: center; padding: 16px 18px; border-bottom: 1px solid #EEF0F2">
+        <a href="Clair-Liens.dc.html" style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><span class="ca-name" style="font-size: 15px; font-weight: 600">Veille</span><span style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #5E636E"><span style="width: 120px; height: 6px; border-radius: 6px; background: #EEF0F2; display: block; overflow: hidden"><span class="ca-bar" style="width: 43%; height: 100%; background: #17181C; display: block"></span></span>3 liens</span></a>
+        <label style="display: flex; flex-direction: column; gap: 4px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Équipe de Veille</span><select style="height: 40px; padding: 0 10px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px"><option>Aucune équipe</option><option>Développement</option><option>Produit</option><option>QA</option><option selected="selected">Management</option></select></label>
+        <button class="ca-save" type="button" style="height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Enregistrer</button>
+      </div>
+      <div class="ca-row" style="display: grid; grid-template-columns: minmax(0, 1fr) 200px auto; gap: 14px; align-items: center; padding: 16px 18px; border-bottom: 1px solid #EEF0F2">
+        <a href="Clair-Liens.dc.html" style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><span class="ca-name" style="font-size: 15px; font-weight: 600">Conférences</span><span style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #5E636E"><span style="width: 120px; height: 6px; border-radius: 6px; background: #EEF0F2; display: block; overflow: hidden"><span class="ca-bar" style="width: 14%; height: 100%; background: #17181C; display: block"></span></span>1 lien</span></a>
+        <label style="display: flex; flex-direction: column; gap: 4px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Équipe de Conférences</span><select style="height: 40px; padding: 0 10px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px"><option>Aucune équipe</option><option selected="selected">Développement</option><option>Produit</option><option>QA</option><option>Management</option></select></label>
+        <button class="ca-save" type="button" style="height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Enregistrer</button>
+      </div>
+      <div class="ca-row" style="display: grid; grid-template-columns: minmax(0, 1fr) 200px auto; gap: 14px; align-items: center; padding: 16px 18px">
+        <a href="Clair-Liens.dc.html" style="display: flex; flex-direction: column; gap: 6px; min-width: 0"><span class="ca-name" style="font-size: 15px; font-weight: 600">Tests</span><span style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #5E636E"><span style="width: 120px; height: 6px; border-radius: 6px; background: #EEF0F2; display: block; overflow: hidden"><span class="ca-bar" style="width: 14%; height: 100%; background: #17181C; display: block"></span></span>1 lien</span></a>
+        <label style="display: flex; flex-direction: column; gap: 4px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Équipe de Tests</span><select style="height: 40px; padding: 0 10px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px"><option>Aucune équipe</option><option>Développement</option><option>Produit</option><option selected="selected">QA</option><option>Management</option></select></label>
+        <button class="ca-save" type="button" style="height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid #D5D8DE; background: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Enregistrer</button>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

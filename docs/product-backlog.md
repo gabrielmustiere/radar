@@ -17,6 +17,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | 2026-11-02 | Enrichir | C1.9, P1, `extension-navigateur` | Ajout depuis le navigateur par une extension à clé personnelle — sync post-livraison de la story 014-f-extension-navigateur |
 | 2026-11-03 | Éditer | C1.8, R2, R13 | Statut admin porté par le compte (fin de la liste d'emails), gestion des comptes et de l'équipe des catégories réservée aux admins — sync post-livraison de la story 015-f-gestion-comptes |
 | 2026-11-03 | Enrichir | C3.5, C4.7, `gestion-comptes` | Comptes gérés depuis Radar, équipes sur les comptes et les catégories, sidebar « Mon équipe » — sync post-livraison de la story 015-f-gestion-comptes |
+| 2026-11-03 | Éditer | C4.7, `gestion-comptes` | Sidebar « Mon équipe » remplacée par le filtre Équipe de la barre de filtres — sync post-livraison de la story 016-r-cartes-typees |
 
 ## Domaines fonctionnels
 
@@ -67,7 +68,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **C4.4** — Un membre peut consulter le fil des derniers liens ajoutés.
 - **C4.5** — Un membre peut filtrer les liens par type de source (vidéos, dépôts, articles…).
 - **C4.6** — Un membre peut voir ce qui a été ajouté depuis sa dernière visite.
-- **C4.7** — Un membre peut trouver en tête de sidebar les catégories de son équipe, puis les autres avec le nom de leur équipe.
+- **C4.7** — Un membre peut filtrer le fil par équipe (un lien en fait partie si l'une de ses catégories a cette équipe) et ne voir alors que les catégories de cette équipe.
 
 ### D5 — Diffusion Chat
 
@@ -245,7 +246,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [x] `extension-navigateur` — Permettre à un membre d'ajouter la page qu'il lit depuis son navigateur (icône ou clic droit), avec une clé personnelle limitée à l'ajout, pour que partager dans Radar coûte moins qu'un post Chat.
   - Story `014-f-extension-navigateur` · **livrée** v0.9.0
   - C1.9 · P1 · dép. `ajout-lien`, `doublon-lien` · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
-- [x] `gestion-comptes` — Permettre à un admin de gérer les comptes et les équipes depuis Radar, et à chaque membre de trouver d'abord les catégories de son équipe, pour ouvrir Radar aux métiers non-développeurs.
+- [x] `gestion-comptes` — Permettre à un admin de gérer les comptes et les équipes depuis Radar, et à chaque membre de filtrer le fil par équipe, pour ouvrir Radar aux métiers non-développeurs.
   - Story `015-f-gestion-comptes` · **livrée** v0.10.0
   - C1.8, C3.5, C4.7 · P2 · dép. `exploration-categories` · Vision : utilisateurs secondaires / seuil à 1 an « 3 contributeurs non-développeurs »
 
@@ -270,7 +271,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 ### Parcours supportés
 
 - **P1** : entièrement supporté en MVP ; cartes par source (C2.2) et ajout depuis le navigateur (C1.9) livrés en V2.
-- **P2** : entièrement supporté en MVP ; catégories de son équipe en tête de sidebar (C4.7) livrées en V2 (filtre par type de source C4.5 reporté en V2).
+- **P2** : entièrement supporté en MVP ; filtre par équipe (C4.7) livré en V2 (filtre par type de source C4.5 planifié en V2).
 - **P3** : partiellement supporté en MVP (reclassement C3.2 reporté en V2).
 - **P4** : entièrement supporté en MVP via le fil C4.4 (C4.6 en V2).
 - **P5** : non supporté en MVP (C3.2, C3.3, C3.4 en V2).
