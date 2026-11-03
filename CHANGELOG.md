@@ -10,6 +10,22 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-03 — Nouveau design et filtres
+
+### ✨ Fonctionnel
+- **Une couleur par type de lien** — vidéos en rose, dépôts GitHub en violet, posts X en bleu ciel, sources suivies en orange, articles en turquoise : le liseré, le badge de type et « Ouvrir » disent tout de suite ce qu'est le lien.
+- **Toute la carte ouvre le lien** — un clic n'importe où sur la carte ouvre le lien d'origine ; la vidéo YouTube se lit toujours dans la carte, et les catégories de la carte ne sont plus des liens.
+- **Badge « Nouveau »** — les liens postés il y a moins de 72 h sont signalés sur leur carte.
+- **Filtres en entonnoir** — une barre Équipe › Catégorie › Type remplace la barre latérale ; chaque pastille indique combien de liens on obtiendrait en la choisissant, le titre suit les filtres et « Réinitialiser » repart de zéro.
+- **Sur téléphone** — cartes compactes, filtres qui défilent, recherche en pleine largeur et bouton flottant « Ajouter ».
+- **Titres lisibles sans aperçu** — « @symfony sur X », « @SymfonyTV » ou le nom du dépôt plutôt que l'adresse brute.
+- **Ajout plus direct** — l'adresse d'abord, avec le type reconnu dès la saisie, puis les catégories (la catégorie choisie porte une coche) et le « pourquoi ».
+- **Animations discrètes** — apparition des cartes, survol, menu du compte et fenêtre d'ajout, coupées si votre système demande moins de mouvement.
+- **Administration et connexion restylées** — onglets Sources · Comptes · Catégories en tête des pages admin, nouvelles pages Extension et Connexion.
+
+### 🔧 Technique
+- **Identifiants de test masqués hors développement** sur la page de connexion.
+
 ## [1.0.0] - 2026-11-03 — Menu allégé et reset de production
 
 ### ✨ Fonctionnel
@@ -178,7 +194,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/gabrielmustiere/radar/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/gabrielmustiere/radar/compare/v0.10.0...v1.0.0
 [0.10.0]: https://github.com/gabrielmustiere/radar/compare/v0.9.3...v0.10.0
 [0.9.3]: https://github.com/gabrielmustiere/radar/compare/v0.9.2...v0.9.3
