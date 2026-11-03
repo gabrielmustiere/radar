@@ -40,6 +40,15 @@
       "date": "2026-11-03",
       "type": "Sync",
       "description": "12 écarts relevés (9 réalignés dans le plan, titre élargi au redesign complet), 6/8 critères cochés, 4 non livrés, 4 dettes ; backlog : C4.7 et gestion-comptes édités."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Livraison",
+      "description": "Commit cb62742 sur main : redesign « modèle 5 clair » (cartes typées, filtres en entonnoir, layout sans sidebar, écrans restylés)."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "cb62742"
+  }
 }
