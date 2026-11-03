@@ -246,7 +246,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `014-f-extension-navigateur` · **livrée** v0.9.0
   - C1.9 · P1 · dép. `ajout-lien`, `doublon-lien` · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
 - [x] `gestion-comptes` — Permettre à un admin de gérer les comptes et les équipes depuis Radar, et à chaque membre de trouver d'abord les catégories de son équipe, pour ouvrir Radar aux métiers non-développeurs.
-  - Story `015-f-gestion-comptes` · **livrée**
+  - Story `015-f-gestion-comptes` · **livrée** v0.10.0
   - C1.8, C3.5, C4.7 · P2 · dép. `exploration-categories` · Vision : utilisateurs secondaires / seuil à 1 an « 3 contributeurs non-développeurs »
 
 ### V3 — Long terme

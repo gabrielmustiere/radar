@@ -55,10 +55,15 @@
       "date": "2026-11-03",
       "type": "Sync",
       "description": "13 écarts réalignés dans le plan et le pitch (dont la règle 20), 12/13 critères d'acceptation cochés, backlog enrichi (gestion-comptes, C3.5, C4.7) et édité (C1.8, R2, R13), 7 dettes ouvertes dont 1 critique."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Release",
+      "description": "Publiée dans v0.10.0 — Comptes et équipes."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v0.10.0",
     "commit": "ac397e7"
   }
 }
