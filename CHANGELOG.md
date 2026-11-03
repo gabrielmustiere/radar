@@ -10,6 +10,11 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [0.9.2] - 2026-11-03 — Cases à cocher noir et blanc
+
+### ✨ Fonctionnel
+- **Cases à cocher aux couleurs du site** — fini le bleu du navigateur : la case est noire une fois cochée en thème clair, blanche en thème sombre, comme le reste de l'interface (« Se souvenir de moi » à la connexion compris).
+
 ## [0.9.1] - 2026-11-02 — Extension branchée sur la production
 
 ### ✨ Fonctionnel
@@ -146,7 +151,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v0.9.2...HEAD
+[0.9.2]: https://github.com/gabrielmustiere/radar/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/gabrielmustiere/radar/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/gabrielmustiere/radar/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/gabrielmustiere/radar/compare/v0.8.0...v0.8.1
