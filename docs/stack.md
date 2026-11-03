@@ -63,7 +63,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **Pipeline CI** : _non en place_ (aucun `.github/workflows/`)
 - **Tests** : PHPUnit `13.3.5` (Unit + Functional) (`composer.lock`, `phpunit.dist.xml`) ; Playwright PHP `1.5.0` (E2E, testsuite `e2e` dans `tests/E2E/`) (`composer.lock`, `phpunit.dist.xml`)
 - **Analyse statique / style** : Mago `1.59.0` — formatter, linter (intégrations Symfony + PHPUnit) et analyseur statique en mode strict, zéro finding sans baseline (`composer.lock`, `mago.toml`)
-- **Déploiement** : `./deploy.sh` depuis le poste — git pull sur le VPS, copie du `.env`, build, arrêt web + worker, migrations (jamais de fixtures), redémarrage, Caddy ; premier compte par `bin/console app:user:create <email>` dans le conteneur `app` (`deploy.sh`, `src/Command/CreateUserCommand.php`)
+- **Déploiement** : `./deploy.sh` depuis le poste — git pull sur le VPS, copie du `.env`, build, arrêt web + worker, migrations (jamais de fixtures), redémarrage, Caddy ; `./deploy.sh --reset` (confirmation par le nom du site) efface d'abord la base et recrée le compte `RADAR_USER_EMAIL` / `RADAR_USER_PASSWORD` de `environments/prod/.env.script`, mot de passe passé par l'entrée standard (`app:user:create --password-stdin`) ; autres comptes par `bin/console app:user:create <email>` dans le conteneur `app` (`deploy.sh`, `src/Command/CreateUserCommand.php`)
 
 ## Monitoring / observabilité
 

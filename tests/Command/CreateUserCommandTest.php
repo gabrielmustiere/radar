@@ -51,6 +51,22 @@ final class CreateUserCommandTest extends KernelTestCase
         self::assertTrue($hasher->isPasswordValid($user, 's3cret-Passw0rd'));
     }
 
+    public function testReadsThePasswordFromStandardInputForDeployment(): void
+    {
+        $tester = $this->tester();
+        $tester->setInputs(['s3cret-Passw0rd']);
+
+        self::assertSame(Command::SUCCESS, $tester->execute(['email' => self::EMAIL, '--password-stdin' => true], [
+            'interactive' => false,
+        ]));
+
+        $user = $this->users->findOneByEmail(self::EMAIL);
+        self::assertInstanceOf(User::class, $user);
+        $hasher = self::getContainer()->get(UserPasswordHasherInterface::class);
+        self::assertInstanceOf(UserPasswordHasherInterface::class, $hasher);
+        self::assertTrue($hasher->isPasswordValid($user, 's3cret-Passw0rd'));
+    }
+
     public function testRefusesAnEmailAlreadyUsed(): void
     {
         $tester = $this->tester();
