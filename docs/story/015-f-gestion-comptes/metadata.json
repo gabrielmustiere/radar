@@ -44,6 +44,15 @@
       "date": "2026-11-03",
       "type": "Implémentation",
       "description": "Sidebar réorganisée (demande user) : elle ne porte plus que la lecture (Tous les liens, Mon équipe, autres catégories) ; Sources, Comptes et Catégories passent dans une section « Administration » du menu utilisateur, visible des seuls admins, dont l'en-tête affiche l'équipe et le statut admin. Écart au plan : entrées admin hors de la sidebar."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Livraison",
+      "description": "Commitée en ac397e7 sur main, sans /sync préalable : report.md non écrit, backlog (R2, R13, C1.8) pas encore réaligné."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "ac397e7"
+  }
 }
