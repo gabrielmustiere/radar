@@ -9,6 +9,7 @@
     "equipes",
     "categories"
   ],
+  "backlog": "gestion-comptes",
   "changelog": [
     {
       "date": "2026-11-03",
@@ -49,6 +50,11 @@
       "date": "2026-11-03",
       "type": "Livraison",
       "description": "Commitée en ac397e7 sur main, sans /sync préalable : report.md non écrit, backlog (R2, R13, C1.8) pas encore réaligné."
+    },
+    {
+      "date": "2026-11-03",
+      "type": "Sync",
+      "description": "13 écarts réalignés dans le plan et le pitch (dont la règle 20), 12/13 critères d'acceptation cochés, backlog enrichi (gestion-comptes, C3.5, C4.7) et édité (C1.8, R2, R13), 7 dettes ouvertes dont 1 critique."
     }
   ],
   "delivery": {

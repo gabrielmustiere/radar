@@ -76,23 +76,23 @@ La vision vise une cinquantaine de personnes de métiers différents. Un product
 17. Pour un membre qui a une équipe, la sidebar montre d'abord une section « Mon équipe » avec les catégories de son équipe, puis une section avec toutes les autres (autres équipes et sans équipe).
 18. Pour un membre sans équipe, la sidebar est inchangée : une seule liste.
 19. Chaque section est triée par ordre alphabétique (casse et accents ignorés, nombres dans l'ordre naturel).
-20. Dans la sidebar, chaque catégorie qui a une équipe porte un badge discret avec le nom de cette équipe.
+20. Dans la sidebar, la section « Mon équipe » nomme l'équipe du membre dans son titre ; dans la section des autres catégories, chaque catégorie qui a une équipe porte un badge discret avec le nom de cette équipe.
 
 ## Critères d'acceptation
 
-- [ ] Un membre qui n'est pas admin n'accède ni à la gestion des comptes ni à la gestion des catégories, et ne voit pas leurs entrées de menu.
-- [ ] Un admin crée un compte avec un email, l'équipe « QA » et un mot de passe ; la personne se connecte avec ce mot de passe.
-- [ ] La création d'un compte avec un email déjà utilisé, quelle que soit sa casse, est refusée avec un message.
-- [ ] Un admin change l'équipe d'un compte ; le changement apparaît dans la liste des comptes.
-- [ ] Un admin définit un nouveau mot de passe ; l'ancien ne fonctionne plus, le nouveau oui.
-- [ ] Un admin passe un compte admin ; la personne accède à la page des sources à sa requête suivante.
-- [ ] Un admin désactive un compte : la personne ne peut plus se connecter, sa session ouverte est coupée, sa clé d'extension est refusée, ses liens restent visibles à son nom.
-- [ ] Un admin réactive le compte : la personne se connecte de nouveau avec son mot de passe.
-- [ ] Un admin ne peut ni se désactiver ni se retirer le statut admin ; l'admin permanent ne peut être ni désactivé ni privé du statut admin.
+- [x] Un membre qui n'est pas admin n'accède ni à la gestion des comptes ni à la gestion des catégories, et ne voit pas leurs entrées de menu.
+- [x] Un admin crée un compte avec un email, l'équipe « QA » et un mot de passe ; la personne se connecte avec ce mot de passe.
+- [x] La création d'un compte avec un email déjà utilisé, quelle que soit sa casse, est refusée avec un message.
+- [x] Un admin change l'équipe d'un compte ; le changement apparaît dans la liste des comptes.
+- [x] Un admin définit un nouveau mot de passe ; l'ancien ne fonctionne plus, le nouveau oui.
+- [x] Un admin passe un compte admin ; la personne accède à la page des sources à sa requête suivante.
+- [x] Un admin désactive un compte : la personne ne peut plus se connecter, sa session ouverte est coupée, sa clé d'extension est refusée, ses liens restent visibles à son nom.
+- [x] Un admin réactive le compte : la personne se connecte de nouveau avec son mot de passe.
+- [x] Un admin ne peut ni se désactiver ni se retirer le statut admin ; l'admin permanent ne peut être ni désactivé ni privé du statut admin.
 - [ ] Les emails de l'ancienne liste admin qui ont un compte sont admins après la mise en production.
-- [ ] Une catégorie créée par un membre de l'équipe « Produit » apparaît dans la section « Mon équipe » de la sidebar d'un autre membre de « Produit », avec le badge « Produit », et dans la section des autres catégories pour un membre de « Développement ».
-- [ ] Un admin change l'équipe d'une catégorie ; elle change de section dans la sidebar des membres concernés.
-- [ ] Pour un membre sans équipe, la sidebar présente une seule liste triée.
+- [x] Une catégorie créée par un membre de l'équipe « Produit » apparaît dans la section « Mon équipe » (titrée « Produit ») de la sidebar d'un autre membre de « Produit », et dans la section des autres catégories, avec le badge « Produit », pour un membre de « Développement ».
+- [x] Un admin change l'équipe d'une catégorie ; elle change de section dans la sidebar des membres concernés.
+- [x] Pour un membre sans équipe, la sidebar présente une seule liste triée.
 
 ## Hors scope
 

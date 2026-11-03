@@ -2,7 +2,7 @@
 
 > Carte des capacités fonctionnelles et backlog priorisé dérivé de `docs/vision.md`.
 
-_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-11-02._
+_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-11-03._
 
 ## Changelog
 
@@ -15,6 +15,8 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | 2026-10-30 | Éditer | C1.6 | Relève d'une source à la demande, avec antériorité — sync post-livraison de la story 012-f-sources-automatiques |
 | 2026-11-02 | Éditer | C1.1, C1.3, C1.6, R4 | Une à trois catégories par lien et par source, complément des catégories d'un lien existant depuis l'alerte de doublon — sync post-livraison de la story 013-f-saisie-categories-ajout |
 | 2026-11-02 | Enrichir | C1.9, P1, `extension-navigateur` | Ajout depuis le navigateur par une extension à clé personnelle — sync post-livraison de la story 014-f-extension-navigateur |
+| 2026-11-03 | Éditer | C1.8, R2, R13 | Statut admin porté par le compte (fin de la liste d'emails), gestion des comptes et de l'équipe des catégories réservée aux admins — sync post-livraison de la story 015-f-gestion-comptes |
+| 2026-11-03 | Enrichir | C3.5, C4.7, `gestion-comptes` | Comptes gérés depuis Radar, équipes sur les comptes et les catégories, sidebar « Mon équipe » — sync post-livraison de la story 015-f-gestion-comptes |
 
 ## Domaines fonctionnels
 
@@ -38,7 +40,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **C1.5** — Le posteur peut corriger le contexte de son lien ou retirer ce lien.
 - **C1.6** — Un admin peut enregistrer ou retirer une source (flux RSS ou Atom) avec une à trois catégories, consulter son état de relève et la relever à la demande (en reprenant au besoin les articles des dernières heures).
 - **C1.7** — Le système peut publier automatiquement, avec les catégories de la source et un marqueur « auto », chaque nouvel article d'une source suivie.
-- **C1.8** — Un admin peut gérer la liste des emails admin (pour partager la gestion des sources).
+- **C1.8** — Un admin peut créer un compte (email, équipe, mot de passe provisoire), le modifier, le désactiver puis le réactiver, et lui donner ou retirer le statut admin (pour ouvrir Radar à un collègue et partager l'administration sans passer par le serveur).
 - **C1.9** — Un membre peut ajouter la page qu'il lit depuis son navigateur (icône ou clic droit), avec les mêmes règles qu'un ajout dans Radar, grâce à une clé personnelle limitée à l'ajout, révocable et expirant après 90 jours sans usage.
 
 ### D2 — Cartes
@@ -55,6 +57,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **C3.2** — Un membre peut reclasser n'importe quel lien ou lui ajouter une catégorie.
 - **C3.3** — Un membre peut décrire en une phrase le besoin que couvre une catégorie (pour que chacun classe de la même façon).
 - **C3.4** — Un membre peut renommer une catégorie ou en fusionner deux quasi-doublons.
+- **C3.5** — Le système peut attribuer à une nouvelle catégorie l'équipe de son créateur (Développement, Produit, QA ou Management) ; un admin peut la changer ou la retirer.
 
 ### D4 — Exploration
 
@@ -64,6 +67,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **C4.4** — Un membre peut consulter le fil des derniers liens ajoutés.
 - **C4.5** — Un membre peut filtrer les liens par type de source (vidéos, dépôts, articles…).
 - **C4.6** — Un membre peut voir ce qui a été ajouté depuis sa dernière visite.
+- **C4.7** — Un membre peut trouver en tête de sidebar les catégories de son équipe, puis les autres avec le nom de leur équipe.
 
 ### D5 — Diffusion Chat
 
@@ -146,10 +150,10 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 ### Permissions et rôles
 
 - **R1 — Interne** : rien n'est visible sans être connecté comme membre de l'organisation.
-- **R2 — Pas de curateur** : tous les membres ont les mêmes droits pour ajouter, classer, reclasser, créer, renommer ou fusionner une catégorie.
+- **R2 — Pas de curateur** : tous les membres ont les mêmes droits pour ajouter, classer, reclasser, créer, renommer ou fusionner une catégorie. Seul l'admin change l'équipe d'une catégorie (R13).
 - **R3 — Attribution** : chaque lien porte son posteur, affiché sur la carte.
 - **R12 — Retrait réservé au posteur** : seul le posteur corrige ou retire son lien ; un lien problématique se signale au posteur dans Chat.
-- **R13 — Admins des sources** : seuls les admins (liste d'emails, plus un admin permanent par configuration) gèrent les sources et la liste des admins ; c'est la seule exception à R2. Les liens des sources ont pour posteur le compte système « Radar » (R3).
+- **R13 — Admins** : seuls les admins (comptes au statut admin, plus un admin permanent par configuration que l'interface ne peut ni désactiver ni priver du statut) gèrent les sources, les comptes et l'équipe des catégories ; ce sont les seules exceptions à R2. Un admin ne peut ni se désactiver ni se retirer le statut admin. Les liens des sources ont pour posteur le compte système « Radar » (R3).
 
 ### Workflows et états
 
@@ -206,7 +210,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `010-f-fil-derniers-ajouts` · **livrée** v0.2.0
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
-### V2 — Court terme post-lancement · `2/11 livrées`
+### V2 — Court terme post-lancement · `4/12 livrées`
 
 - [ ] `indicateurs-mensuels` — Permettre au porteur du projet de consulter les indicateurs agrégés du mois pour évaluer les seuils et le signal d'arrêt à 3 mois.
   - Pas encore cadrée
@@ -238,9 +242,12 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [x] `sources-automatiques` — Permettre à un admin de faire suivre une source (flux RSS ou Atom) dont chaque nouvel article est publié automatiquement, classé et annoncé, pour que la veille des sources suivies entre dans Radar sans effort.
   - Story `012-f-sources-automatiques` · **livrée** v0.7.0
   - C1.6, C1.7, C1.8 · P8 · dép. `cartes-par-source`, `annonce-google-chat` · Vision : principe 4 (édition ciblée du 2026-10-30)
-- [ ] `extension-navigateur` — Permettre à un membre d'ajouter la page qu'il lit depuis son navigateur (icône ou clic droit), avec une clé personnelle limitée à l'ajout, pour que partager dans Radar coûte moins qu'un post Chat.
-  - Story `014-f-extension-navigateur` · **clôture en cours**
+- [x] `extension-navigateur` — Permettre à un membre d'ajouter la page qu'il lit depuis son navigateur (icône ou clic droit), avec une clé personnelle limitée à l'ajout, pour que partager dans Radar coûte moins qu'un post Chat.
+  - Story `014-f-extension-navigateur` · **livrée** v0.9.0
   - C1.9 · P1 · dép. `ajout-lien`, `doublon-lien` · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
+- [x] `gestion-comptes` — Permettre à un admin de gérer les comptes et les équipes depuis Radar, et à chaque membre de trouver d'abord les catégories de son équipe, pour ouvrir Radar aux métiers non-développeurs.
+  - Story `015-f-gestion-comptes` · **livrée**
+  - C1.8, C3.5, C4.7 · P2 · dép. `exploration-categories` · Vision : utilisateurs secondaires / seuil à 1 an « 3 contributeurs non-développeurs »
 
 ### V3 — Long terme
 
@@ -253,7 +260,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 ### Capacités par horizon
 
 - **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1 · planifiées : —
-- **V2** — livrées : C1.6, C1.7, C1.8, C2.2 · planifiées : C1.5, C1.9, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
+- **V2** — livrées : C1.6, C1.7, C1.8, C1.9, C2.2, C3.5, C4.7 · planifiées : C1.5, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
 ### Capacités non couvertes (à challenger)
@@ -262,8 +269,8 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 
 ### Parcours supportés
 
-- **P1** : entièrement supporté en MVP ; cartes par source (C2.2) livrées en V2 ; ajout depuis le navigateur (C1.9) en V2.
-- **P2** : entièrement supporté en MVP (filtre par type de source C4.5 reporté en V2).
+- **P1** : entièrement supporté en MVP ; cartes par source (C2.2) et ajout depuis le navigateur (C1.9) livrés en V2.
+- **P2** : entièrement supporté en MVP ; catégories de son équipe en tête de sidebar (C4.7) livrées en V2 (filtre par type de source C4.5 reporté en V2).
 - **P3** : partiellement supporté en MVP (reclassement C3.2 reporté en V2).
 - **P4** : entièrement supporté en MVP via le fil C4.4 (C4.6 en V2).
 - **P5** : non supporté en MVP (C3.2, C3.3, C3.4 en V2).
