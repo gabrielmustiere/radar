@@ -10,6 +10,17 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-11-04 — Suppression et relance admin
+
+### ✨ Fonctionnel
+- **Supprimer un lien** — un admin retire définitivement un lien depuis le bouton « … » de sa carte ; ses ouvertures sont effacées avec lui et son annonce reste dans Google Chat.
+- **Relancer une annonce** — un admin renvoie l'annonce de n'importe quel lien dans Google Chat, y compris un lien repris de l'historique, en voyant la date de la dernière annonce.
+- **Noms de dépôts longs** — le nom d'un dépôt sur deux lignes ne passe plus sous le badge de type.
+
+### 🔧 Technique
+- **Bandeaux d'annonce** — une adresse publique et non devinable est prête à servir les futures images des annonces Chat ; aucune image n'y est encore produite.
+- **Logo public** — le logo de Radar est accessible par URL.
+
 ## [1.1.0] - 2026-11-03 — Nouveau design et filtres
 
 ### ✨ Fonctionnel
@@ -194,7 +205,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/gabrielmustiere/radar/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/gabrielmustiere/radar/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/gabrielmustiere/radar/compare/v0.10.0...v1.0.0
 [0.10.0]: https://github.com/gabrielmustiere/radar/compare/v0.9.3...v0.10.0
