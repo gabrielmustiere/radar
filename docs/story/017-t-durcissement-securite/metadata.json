@@ -25,10 +25,15 @@
       "date": "2026-11-04",
       "type": "Livraison",
       "description": "Commit 735ba76 sur main : en-têtes de sécurité, patchs symfony/*, contrôle du compte après le mot de passe, annonces Chat neutralisées. Reste l'étape 5, bascule prod et contrôle par curl."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Release",
+      "description": "Publiée dans v1.3.0 — Extension téléchargeable et cartes Chat."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v1.3.0",
     "commit": "735ba76"
   }
 }

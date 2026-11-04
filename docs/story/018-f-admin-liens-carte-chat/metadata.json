@@ -45,10 +45,15 @@
       "date": "2026-11-04",
       "type": "Livraison",
       "description": "Commit e039b90 sur main : annonce en carte Google Chat avec bandeau, après d5babfe pour la suppression et la relance. Reste l'étape 6, vérification du rendu réel après déploiement."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Release",
+      "description": "Publiée dans v1.3.0 — Extension téléchargeable et cartes Chat."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v1.3.0",
     "commit": "e039b90"
   }
 }
