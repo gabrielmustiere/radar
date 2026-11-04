@@ -20,6 +20,15 @@
       "date": "2026-11-04",
       "type": "Implémentation",
       "description": "Étapes 1 à 4 et 6 livrées, 5 (bascule prod) en attente de déploiement ; composer audit 0 avis, make lint sans finding, PHPUnit 437 verts, E2E 43 verts, 5 ignorés, 1 erreur préexistante (FilterTest::testPhoneUsesTheFloatingAddButton échoue aussi sur c0544eb, 5 fois sur 6). En-têtes 4/4 en local. Écarts : (1) symfony/* en v8.1.11, publiée depuis le plan ; (2) --with symfony/ux-twig-component:3.5.1 ajouté, le paquet partait en 3.7.0 ; (3) composer.json (bump-after-update : phpdoc-parser, flex) et config/reference.php (généré) modifiés en plus du lock, patchs transitifs de -W (doctrine, monolog, composer/semver) ; (4) tests fonctionnels des en-têtes en debug false, ErrorListener::removeCspHeader() retirant la CSP des erreurs en debug ; (5) neutralisation M2 déplacée de LinkAnnouncer vers LinkAnnouncementCard par la story 018."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Livraison",
+      "description": "Commit 735ba76 sur main : en-têtes de sécurité, patchs symfony/*, contrôle du compte après le mot de passe, annonces Chat neutralisées. Reste l'étape 5, bascule prod et contrôle par curl."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "735ba76"
+  }
 }
