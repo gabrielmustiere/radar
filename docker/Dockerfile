@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1.7
 FROM dunglas/frankenphp:1-php8.5.12-bookworm AS app
 
-# gd : visuels d'aperçu (webp) et favicons (png) ; pcntl : arrêt propre du worker Messenger sur SIGTERM.
-RUN install-php-extensions gd intl pcntl pdo_sqlite \
+# gd : visuels d'aperçu (webp) et favicons (png) ; pcntl : arrêt propre du worker Messenger sur SIGTERM ; zip : paquet de l'extension.
+RUN install-php-extensions gd intl pcntl pdo_sqlite zip \
     && apt-get update \
     && apt-get install -y --no-install-recommends curl unzip \
     && rm -rf /var/lib/apt/lists/*

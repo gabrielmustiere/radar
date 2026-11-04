@@ -6,7 +6,9 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\ExtensionKeyManager;
+use App\Service\ExtensionPackage;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\EventListener\AbstractSessionListener;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,17 +18,43 @@ use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 final class ExtensionKeyController extends AbstractController
 {
     #[Route(path: '/extension', name: 'app_extension_key', methods: ['GET'])]
-    public function index(#[CurrentUser] User $user, ExtensionKeyManager $extensionKeyManager): Response
+    public function index(
+        #[CurrentUser]
+        User $user,
+        ExtensionKeyManager $extensionKeyManager,
+        ExtensionPackage $extensionPackage,
+    ): Response {
+        return $this->renderPage($user, $extensionKeyManager, $extensionPackage, key: null);
+    }
+
+    #[Route(path: '/extension/telecharger', name: 'app_extension_download', methods: ['GET'])]
+    public function download(ExtensionPackage $extensionPackage): Response
     {
-        return $this->renderPage($user, $extensionKeyManager, key: null);
+        return new Response($extensionPackage->zip(), headers: [
+            'Content-Type' => 'application/zip',
+            'Content-Disposition' => HeaderUtils::makeDisposition(
+                HeaderUtils::DISPOSITION_ATTACHMENT,
+                'radar-extension.zip',
+            ),
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 
     /** La clé en clair n'existe que dans cette réponse : ni redirection, ni flash, rien en session. */
     #[Route(path: '/extension/generer', name: 'app_extension_key_generate', methods: ['POST'])]
     #[IsCsrfTokenValid('extension-key')]
-    public function generate(#[CurrentUser] User $user, ExtensionKeyManager $extensionKeyManager): Response
-    {
-        $response = $this->renderPage($user, $extensionKeyManager, $extensionKeyManager->generate($user));
+    public function generate(
+        #[CurrentUser]
+        User $user,
+        ExtensionKeyManager $extensionKeyManager,
+        ExtensionPackage $extensionPackage,
+    ): Response {
+        $response = $this->renderPage(
+            $user,
+            $extensionKeyManager,
+            $extensionPackage,
+            $extensionKeyManager->generate($user),
+        );
         // Sans ce marqueur, le listener de session remplace `no-store` par `private, must-revalidate`.
         $response->headers->set(AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER, 'true');
         $response->headers->set('Cache-Control', 'no-store');
@@ -44,12 +72,17 @@ final class ExtensionKeyController extends AbstractController
         return $this->redirectToRoute('app_extension_key');
     }
 
-    private function renderPage(User $user, ExtensionKeyManager $extensionKeyManager, ?string $key): Response
-    {
+    private function renderPage(
+        User $user,
+        ExtensionKeyManager $extensionKeyManager,
+        ExtensionPackage $extensionPackage,
+        ?string $key,
+    ): Response {
         return $this->render('extension_key/index.html.twig', [
             'user' => $user,
             'key' => $key,
             'expired' => null !== $user->getExtensionKeyHash() && $extensionKeyManager->isExpired($user),
+            'version' => $extensionPackage->version(),
         ]);
     }
 }

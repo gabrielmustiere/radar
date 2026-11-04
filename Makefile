@@ -200,7 +200,7 @@ build: ## Build des assets (Tailwind + AssetMapper)
 	symfony console tailwind:build --minify
 	symfony console asset-map:compile
 
-extension: ## Construit l'extension de production (dossier à charger dans Chrome + zip pour le Web Store, var/extension/)
+extension: ## Construit le paquet du Web Store (dossier + zip, var/extension/) ; les membres téléchargent le leur sur /extension
 	@version=$$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' extension/manifest.json); \
 		build=var/extension/radar-extension-$$version; \
 		rm -rf $$build $$build.zip && mkdir -p $$build; \

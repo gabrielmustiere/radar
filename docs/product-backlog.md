@@ -2,7 +2,7 @@
 
 > Carte des capacités fonctionnelles et backlog priorisé dérivé de `docs/vision.md`.
 
-_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-11-03._
+_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-11-04._
 
 ## Changelog
 
@@ -18,6 +18,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | 2026-11-03 | Éditer | C1.8, R2, R13 | Statut admin porté par le compte (fin de la liste d'emails), gestion des comptes et de l'équipe des catégories réservée aux admins — sync post-livraison de la story 015-f-gestion-comptes |
 | 2026-11-03 | Enrichir | C3.5, C4.7, `gestion-comptes` | Comptes gérés depuis Radar, équipes sur les comptes et les catégories, sidebar « Mon équipe » — sync post-livraison de la story 015-f-gestion-comptes |
 | 2026-11-03 | Éditer | C4.7, `gestion-comptes` | Sidebar « Mon équipe » remplacée par le filtre Équipe de la barre de filtres — sync post-livraison de la story 016-r-cartes-typees |
+| 2026-11-04 | Enrichir | C1.10, `telechargement-extension` | Téléchargement de l'extension depuis Radar, procédure d'installation, FAQ et alerte de nouvelle version — sync post-livraison de la story 019-f-telechargement-extension |
 
 ## Domaines fonctionnels
 
@@ -43,6 +44,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **C1.7** — Le système peut publier automatiquement, avec les catégories de la source et un marqueur « auto », chaque nouvel article d'une source suivie.
 - **C1.8** — Un admin peut créer un compte (email, équipe, mot de passe provisoire), le modifier, le désactiver puis le réactiver, et lui donner ou retirer le statut admin (pour ouvrir Radar à un collègue et partager l'administration sans passer par le serveur).
 - **C1.9** — Un membre peut ajouter la page qu'il lit depuis son navigateur (icône ou clic droit), avec les mêmes règles qu'un ajout dans Radar, grâce à une clé personnelle limitée à l'ajout, révocable et expirant après 90 jours sans usage.
+- **C1.10** — Un membre peut télécharger l'extension depuis Radar, suivre sa procédure d'installation, consulter une FAQ et être prévenu dans la bulle qu'une nouvelle version est disponible.
 
 ### D2 — Cartes
 
@@ -211,7 +213,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `010-f-fil-derniers-ajouts` · **livrée** v0.2.0
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
-### V2 — Court terme post-lancement · `4/12 livrées`
+### V2 — Court terme post-lancement · `4/13 livrées`
 
 - [ ] `indicateurs-mensuels` — Permettre au porteur du projet de consulter les indicateurs agrégés du mois pour évaluer les seuils et le signal d'arrêt à 3 mois.
   - Pas encore cadrée
@@ -249,6 +251,9 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [x] `gestion-comptes` — Permettre à un admin de gérer les comptes et les équipes depuis Radar, et à chaque membre de filtrer le fil par équipe, pour ouvrir Radar aux métiers non-développeurs.
   - Story `015-f-gestion-comptes` · **livrée** v0.10.0
   - C1.8, C3.5, C4.7 · P2 · dép. `exploration-categories` · Vision : utilisateurs secondaires / seuil à 1 an « 3 contributeurs non-développeurs »
+- [ ] `telechargement-extension` — Permettre à un membre de télécharger et d'installer l'extension depuis Radar, avec une FAQ sur la même page et une alerte de nouvelle version, pour s'équiper sans dépendre du Chrome Web Store.
+  - Story `019-f-telechargement-extension` · **clôture en cours**
+  - C1.10 · P1 · dép. `extension-navigateur` · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
 
 ### V3 — Long terme
 
@@ -261,7 +266,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 ### Capacités par horizon
 
 - **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1 · planifiées : —
-- **V2** — livrées : C1.6, C1.7, C1.8, C1.9, C2.2, C3.5, C4.7 · planifiées : C1.5, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
+- **V2** — livrées : C1.6, C1.7, C1.8, C1.9, C2.2, C3.5, C4.7 · planifiées : C1.5, C1.10, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
 ### Capacités non couvertes (à challenger)

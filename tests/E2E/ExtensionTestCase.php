@@ -21,6 +21,7 @@ abstract class ExtensionTestCase extends E2ETestCase
             if (location.protocol === 'file:') {
                 const read = (key) => JSON.parse(localStorage.getItem('chrome.storage.' + key) ?? 'null');
                 window.chrome = {
+                    runtime: { getManifest: () => ({ version: window.installedVersion ?? '999.0.0' }) },
                     storage: { local: {
                         get: async (key) => (null === read(key) ? {} : { [key]: read(key) }),
                         set: async (items) => Object.entries(items).forEach(([key, value]) => localStorage.setItem('chrome.storage.' + key, JSON.stringify(value))),
@@ -29,6 +30,11 @@ abstract class ExtensionTestCase extends E2ETestCase
                 };
             }
             JS);
+    }
+
+    protected function installVersion(string $version): void
+    {
+        $this->context->addInitScript(sprintf('window.installedVersion = %s;', json_encode($version)));
     }
 
     protected function openPopup(string $url): void
@@ -42,5 +48,21 @@ abstract class ExtensionTestCase extends E2ETestCase
             dirname(__DIR__, levels: 2),
             http_build_query(['url' => $url]),
         ));
+    }
+
+    protected function generateKey(): string
+    {
+        $this->page->goto('/extension');
+        $this->page->locator('[data-test="extension-key-generate"]')->click();
+        $value = $this->page->locator('[data-test="extension-key-value"]');
+        $this->expect($value)->toBeVisible();
+
+        return trim((string) $value->textContent());
+    }
+
+    protected function pasteKey(string $key): void
+    {
+        $this->page->locator('[data-test="extension-key-input"]')->fill($key);
+        $this->page->locator('[data-test="extension-key-save"]')->click();
     }
 }

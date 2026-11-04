@@ -1,6 +1,6 @@
 # Stack technique — Radar
 
-> Dernière mise à jour : 2026-11-02 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier du dépôt (source entre parenthèses) ou marquée _non renseigné_. Les briques prévues mais pas encore en place figurent dans « Cible non encore en place ».
+> Dernière mise à jour : 2026-11-04 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier du dépôt (source entre parenthèses) ou marquée _non renseigné_. Les briques prévues mais pas encore en place figurent dans « Cible non encore en place ».
 
 ## Vue d'ensemble
 
@@ -51,7 +51,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 
 ## Ops / Infrastructure
 
-- **Conteneurisation** : image FrankenPHP (`dunglas/frankenphp:1-php8.5.12-bookworm`, mode classique, extensions `gd`, `intl`, `pcntl`, `pdo_sqlite`) construite sur le VPS ; Compose de prod : `app` (web, `127.0.0.1:9018`), `worker` (un seul `messenger:consume scheduler_default async`, même image) et `migrate` (profil `tools`, lancé au déploiement) ; volumes `data` (base + sessions) et `storage` (médias) partagés par web et worker (`docker/Dockerfile`, `environments/prod/compose.yaml`)
+- **Conteneurisation** : image FrankenPHP (`dunglas/frankenphp:1-php8.5.12-bookworm`, mode classique, extensions `gd`, `intl`, `pcntl`, `pdo_sqlite`, `zip`) construite sur le VPS ; Compose de prod : `app` (web, `127.0.0.1:9018`), `worker` (un seul `messenger:consume scheduler_default async`, même image) et `migrate` (profil `tools`, lancé au déploiement) ; volumes `data` (base + sessions) et `storage` (médias) partagés par web et worker (`docker/Dockerfile`, `environments/prod/compose.yaml`)
 - **Hébergement de production** : VPS `srv-lwskvm` (partagé avec kadence), `https://radar.mustiere.fr` (`environments/prod/.env.script.example`)
 - **CDN / reverse proxy** : Caddy de l'hôte (TLS) → `127.0.0.1:9018`, configuré et rechargé par `deploy.sh` ; proxys de confiance `PRIVATE_SUBNETS` (`deploy.sh`, `environments/prod/.env.example`)
 - **Gestion des secrets** : `environments/prod/.env` (non versionné, modèle `.env.example`), copié par `deploy.sh` en `chmod 600` (`.gitignore`, `deploy.sh`)
@@ -74,7 +74,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 ## Outillage de développement local
 
 - **Commandes** : `make init`, `make serve`, `make phpunit`, `make playwright`, `make lint`, `make quality`, `make db-reset`, `make extension`… (`Makefile`)
-- **Extension navigateur** : Manifest V3 en JS vanilla, sans build (`extension/`) ; `make extension` construit la version de production (adresse `https://radar.mustiere.fr` dans `config.js`) : un dossier à charger dans Chrome et un zip pour le Chrome Web Store (`var/extension/`) ; le dossier `extension/` du dépôt vise `https://radar.wip` (`extension/config.js`, `Makefile`)
+- **Extension navigateur** : Manifest V3 en JS vanilla, sans build (`extension/`) ; le dossier du dépôt vise `https://radar.wip` (`extension/config.js`). Les membres téléchargent sur `/extension` un zip assemblé à la demande par `App\Service\ExtensionPackage` : adresse `DEFAULT_URI` et `key` publique fixe (`app.extension_public_key`, `config/services.yaml`), absente du dépôt. Clé privée conservée hors dépôt par le porteur. **Tout changement de `extension/` incrémente la version du manifest**, sinon l'alerte de la bulle ne se déclenche pas. `make extension` construit le paquet destiné au Chrome Web Store (`var/extension/`), non publié à ce jour (`extension/config.js`, `Makefile`)
 - **Serveur local** : Symfony CLI, proxy HTTPS `https://radar.wip`, workers Messenger (`async`, `scheduler_default`) + Tailwind watch (`.symfony.local.yaml`)
 - **Services de dev** : `docker compose up -d` → Mailpit (`compose.yaml`)
 - **Assistance IA** : Symfony AI Mate `^0.14` (`composer.json`, `mate/`), serveurs MCP (`.mcp.json`)
@@ -102,3 +102,4 @@ Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un 
 - 2026-10-30 — Enrichir — Backend (planification), Outillage local (worker scheduler), Cible (workers de production) — sync post-livraison de la story 012-f-sources-automatiques
 - 2026-11-02 — Enrichir — Données (base de prod, WAL), Ops (conteneurisation FrankenPHP, reverse proxy, secrets, sauvegarde), DevOps (déploiement), Cible (container de prod livré) — déploiement en production
 - 2026-11-02 — Enrichir — Backend (API Platform, pare-feu `api`, limiteur `extension_api_failure`), Outillage (extension navigateur, `make extension`) — implémentation de la story 014-f-extension-navigateur
+- 2026-11-04 — Enrichir — Ops (extension PHP `zip`), Outillage (paquet de l'extension téléchargé depuis Radar, règle de version) — implémentation de la story 019-f-telechargement-extension

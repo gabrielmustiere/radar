@@ -1,0 +1,28 @@
+<section class="{{ step_card }}" data-test="extension-download">
+    <div class="flex flex-wrap items-center gap-3">
+        <span class="{{ step_number }}">1</span>
+        <div class="flex min-w-0 flex-1 basis-[220px] flex-col gap-0.5">
+            <h2 class="text-[15px] font-semibold text-gray-900 dark:text-white">Téléchargez l'extension</h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Version <span data-test="extension-version">{{ version }}</span> · Chrome, Edge, Brave et Arc
+            </p>
+        </div>
+        <a href="{{ path('app_extension_download') }}" download data-turbo="false" data-test="extension-download-link" class="{{ button_primary }}">
+            <twig:ux:icon name="tabler:download" class="size-4"/> Télécharger
+        </a>
+    </div>
+</section>
+
+<section class="{{ step_card }}" data-test="extension-install">
+    <div class="flex items-center gap-3">
+        <span class="{{ step_number }}">2</span>
+        <h2 class="text-[15px] font-semibold text-gray-900 dark:text-white">Installez-la dans votre navigateur</h2>
+    </div>
+    <ol class="flex list-decimal flex-col gap-2 pl-5 text-sm leading-relaxed text-gray-700 marker:text-gray-400 dark:text-gray-300">
+        <li>Décompressez <code class="font-mono">radar-extension.zip</code>, puis rangez le dossier obtenu à un endroit stable, par exemple dans Documents. Gardez-le : le navigateur y lit l'extension.</li>
+        <li>Ouvrez <code class="font-mono">chrome://extensions</code> dans la barre d'adresse (<code class="font-mono">edge://extensions</code> sur Edge).</li>
+        <li>Activez l'interrupteur « Mode développeur ».</li>
+        <li>Cliquez sur « Charger l'extension non empaquetée » (« Charger l'extension décompressée » sur Edge) et choisissez le dossier.</li>
+        <li>Épinglez l'icône Radar à côté de la barre d'adresse depuis le menu des extensions.</li>
+    </ol>
+</section>

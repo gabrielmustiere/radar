@@ -176,6 +176,12 @@ textarea:focus {
     font-size: 12px;
 }
 
+.update {
+    margin: 0 0 12px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
 .message,
 .error,
 .errors {

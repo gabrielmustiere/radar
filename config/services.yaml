@@ -7,6 +7,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    # Identité de l'extension téléchargée (clé publique, sa clé privée reste hors dépôt) : la changer ferait perdre leur clé aux membres.
+    app.extension_public_key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqHNz+MuFsGG7yiiXwtoYDL015XMtxgDgWuOYF+nx9vvVuIJOQvSAJ2B/pH0PADOLc3IcFsGmKHiPfPVh/ra0AsifjMQ/QoeFCGGCyhSay2h+Zh8UnX47czqTjG3OrSivJ6hdtog5SsZcGFn3wW8Sp/z2LJ3CblQL2zPjw/ZEeW1fJhlQbHytWQn6IMyRbc6naolNatWWCcQ56pdY7JEHtPpxwWwFFgJteK8IjR0Id+ehjl5e246CIuNdcXvppUeBJ9/IG0TwUn5PiIKpn1eyHR1qgw1DOTXPJGOLim9JogS16W1WGY5yG37o0h2vhAYEhp79jjX+7717N4g24FuLFwIDAQAB'
 
 services:
     # default configuration for services in *this* file

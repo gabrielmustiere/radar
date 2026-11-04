@@ -200,11 +200,33 @@ function formErrors(messages) {
     list.hidden = 0 === messages.length;
 }
 
+function isNewer(available, current) {
+    const [left, right] = [available, current].map((version) => version.split('.').map(Number));
+    for (let index = 0; index < Math.max(left.length, right.length); index++) {
+        const difference = (left[index] ?? 0) - (right[index] ?? 0);
+        if (0 !== difference) {
+            return difference > 0;
+        }
+    }
+
+    return false;
+}
+
+async function checkVersion() {
+    try {
+        const { status, data } = await api('GET', '/version');
+        byTest('extension-update').hidden = 200 !== status || !isNewer(data.version, chrome.runtime.getManifest().version);
+    } catch {
+        // L'alerte reste un confort : son échec ne doit jamais gêner l'ajout.
+    }
+}
+
 async function openForm() {
     const { status, data } = await api('GET', '/categories');
     if (200 !== status) {
         throw new Error('Radar ne répond pas : réessayez dans un instant.');
     }
+    checkVersion();
     state.categories = data.member.map((category) => ({ id: category.id, name: category.name }));
     renderCategories();
     byTest('extension-url').value = await currentPage();

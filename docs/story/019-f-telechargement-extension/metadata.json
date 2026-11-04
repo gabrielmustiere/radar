@@ -1,0 +1,53 @@
+{
+  "version": 2,
+  "title": "Télécharger et installer l'extension depuis Radar, avec une FAQ sur la même page",
+  "created": "2026-11-04",
+  "updated": "2026-11-04",
+  "tags": [
+    "extension-navigateur",
+    "contribution"
+  ],
+  "backlog": "telechargement-extension",
+  "changelog": [
+    {
+      "date": "2026-11-04",
+      "type": "Création",
+      "description": "Pitch rédigé : zip téléchargeable sur la page Extension, procédure, FAQ fixe en trois thèmes, alerte de version non bloquante dans la bulle ; Web Store reporté, recette manuelle en condition de livraison."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Planification",
+      "description": "Plan technique rédigé : zip assemblé à la demande en PHP, key publique injectée pour une identité stable (prototypée), ressource /version, page en trois étapes, 8 étapes dont recette locale et contrôle en production."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Implémentation",
+      "description": "6/8 étapes livrées (recette Chrome/Edge et contrôle en production restants) ; make lint et phpunit (451) verts, playwright 46 OK, 6 ignorés, 1 instable hors story (FilterTest, barre de profiler sur le bouton flottant) ; zip réel validé dans Chromium par --load-extension et image Docker vérifiée. Écarts : tests écrits à chaque étape (plan) et non en phase finale ; ExtensionDownloadTest et ExtensionUpdateTest créés à part (seuil Mago), generateKey et pasteKey remontés dans ExtensionTestCase ; .env.local inutile en recette (Symfony CLI fournit DEFAULT_URI en https au serveur web)."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Implémentation",
+      "description": "Cause de l'instabilité de FilterTest établie : la barre de profiler recouvre le bouton flottant (2/10 sur le code sans la story). Hors périmètre 019 : E2ETestCase ferme la barre sur l'origine de Radar ; 10/10, CardOpenTest vert. RichCardTest reste en échec, données de dev à réinitialiser."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Implémentation",
+      "description": "Base de dev réinitialisée (sauvegarde dans var/) : make playwright 53/53 sans test ignoré, avec consommateur async lancé à la main, le worker async du serveur local étant absent ; make phpunit 451 et make lint verts."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Review",
+      "description": "Corrections requises : 0 bloquant, 2 importants ([UX] mise à jour dépendante du nom du dossier, [DOC] commentaire de config.js faux), 1 mineur ([TEST] assertion vide sur l'écran de clé invalide)."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Review",
+      "description": "Prêt à commiter sous réserve de la recette Chrome et Edge ; 2 importants et 1 mineur corrigés : [UX] FAQ de mise à jour indépendante du nom du dossier, [DOC] commentaire de config.js, [TEST] assertion vide remplacée par un contrôle des appels /version. review.md conservé pour « Hors review »."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Sync",
+      "description": "4 écarts réalignés dans le plan, 9/13 critères d'acceptation et 5/7 critères de sortie cochés, recette et contrôle en production reportés, 8 dettes dont 2 critiques ; backlog enrichi (C1.10) et rattaché."
+    }
+  ]
+}

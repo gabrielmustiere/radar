@@ -116,6 +116,15 @@ final class ExtensionTest extends ExtensionTestCase
 
     public function testRevokedKeyIsExplained(): void
     {
+        $this->context->addInitScript(<<<'JS'
+            window.versionChecks = 0;
+            const realFetch = window.fetch;
+            window.fetch = (url, options) => {
+                window.versionChecks += String(url).endsWith('/version') ? 1 : 0;
+
+                return realFetch(url, options);
+            };
+            JS);
         $this->logIn();
         $key = $this->generateKey();
         $this->page->locator('[data-test="extension-key-revoke"]')->click();
@@ -126,25 +135,10 @@ final class ExtensionTest extends ExtensionTestCase
 
         $this->expect($this->page->locator('[data-test="extension-invalid-key"]'))->toBeVisible();
         $this->expect($this->page->locator('[data-test="extension-invalid-key"]'))->toContainText('n\'est plus valide');
+        self::assertSame(0, $this->page->evaluate('window.versionChecks'));
         $this->expect($this->page->locator('[data-test="extension-key-page"]'))->toHaveAttribute(
             'href',
             'https://radar.wip/extension',
         );
-    }
-
-    private function generateKey(): string
-    {
-        $this->page->goto('/extension');
-        $this->page->locator('[data-test="extension-key-generate"]')->click();
-        $value = $this->page->locator('[data-test="extension-key-value"]');
-        $this->expect($value)->toBeVisible();
-
-        return trim((string) $value->textContent());
-    }
-
-    private function pasteKey(string $key): void
-    {
-        $this->page->locator('[data-test="extension-key-input"]')->fill($key);
-        $this->page->locator('[data-test="extension-key-save"]')->click();
     }
 }

@@ -1,0 +1,82 @@
+{% set faq = [
+    {
+        title: 'Installation',
+        questions: [
+            {
+                question: 'Quels navigateurs sont compatibles ?',
+                answer: 'Chrome et les navigateurs qui acceptent ses extensions : Edge, Brave et Arc, sur ordinateur. Firefox, Safari et les mobiles ne sont pas pris en charge.',
+            },
+            {
+                question: 'Pourquoi passer par le mode développeur ?',
+                answer: 'L\'extension n\'est pas publiée sur le Chrome Web Store. Le mode développeur est le moyen prévu par le navigateur pour installer une extension depuis un dossier de votre poste.',
+            },
+            {
+                question: 'Le mode développeur est-il sûr ?',
+                answer: 'Il autorise le chargement d\'extensions depuis votre poste, mais n\'en installe aucune tout seul. Ne chargez que des extensions de confiance. Celle de Radar ne lit que l\'adresse de la page en cours, et uniquement quand vous l\'utilisez. Votre navigateur peut vous rappeler que ce mode est actif.',
+            },
+            {
+                question: 'Que faire si le mode développeur est bloqué sur mon poste ?',
+                answer: 'Si l\'interrupteur est grisé ou si le chargement est refusé, demandez de l\'aide dans l\'espace Google Chat de la veille.',
+            },
+        ],
+    },
+    {
+        title: 'Mises à jour',
+        questions: [
+            {
+                question: 'Comment savoir qu\'une nouvelle version est disponible ?',
+                answer: 'La bulle de l\'extension affiche « Nouvelle version disponible » avec un lien vers cette page. Vous pouvez continuer à ajouter des liens en attendant.',
+            },
+            {
+                question: 'Comment mettre à jour sans perdre ma clé ?',
+                answer: 'Téléchargez la nouvelle version et décompressez-la, puis remplacez le contenu de votre dossier habituel par celui du nouveau dossier. Ouvrez ensuite la page des extensions et cliquez sur « Recharger » sur l\'extension Radar. Ne la supprimez pas du navigateur : cela effacerait la clé enregistrée.',
+            },
+            {
+                question: 'Pourquoi la mise à jour n\'est-elle pas automatique ?',
+                answer: 'Les mises à jour automatiques passent par le Chrome Web Store, où l\'extension n\'est pas encore publiée.',
+            },
+        ],
+    },
+    {
+        title: 'Clé personnelle',
+        questions: [
+            {
+                question: 'J\'ai perdu ma clé ou je ne l\'ai pas copiée',
+                answer: 'Radar ne peut pas réafficher une clé. Cliquez sur « Régénérer », puis collez la nouvelle clé dans l\'extension avec « Changer de clé ». L\'ancienne cesse aussitôt de fonctionner.',
+            },
+            {
+                question: 'Ma clé a expiré',
+                answer: 'Une clé inutilisée pendant 90 jours expire d\'elle-même, et la bulle vous le signale. Régénérez-la sur cette page et collez-la dans l\'extension.',
+            },
+            {
+                question: 'Comment équiper un second poste ?',
+                answer: 'Chaque membre a une seule clé. Collez la même clé si vous l\'avez conservée. Sinon, régénérez-la et collez la nouvelle sur vos deux postes.',
+            },
+            {
+                question: 'J\'ai perdu un poste équipé',
+                answer: 'Cliquez sur « Révoquer » ou « Régénérer » sur cette page : la clé de ce poste cesse aussitôt de fonctionner.',
+            },
+        ],
+    },
+] %}
+
+<section class="flex flex-col gap-5" data-test="extension-faq">
+    <h2 class="font-display text-2xl font-bold tracking-[-0.02em] text-gray-900 dark:text-white">Questions fréquentes</h2>
+
+    {% for theme in faq %}
+        <div class="flex flex-col gap-2">
+            <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400">{{ theme.title }}</h3>
+            {% for item in theme.questions %}
+                <details class="group rounded-xl bg-white ring-1 ring-gray-200/70 dark:bg-gray-900 dark:ring-gray-800" data-test="extension-faq-item">
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-[15px] font-medium text-gray-900 [&::-webkit-details-marker]:hidden dark:text-white">
+                        {{ item.question }}
+                        <twig:ux:icon name="tabler:chevron-down" class="size-4 shrink-0 text-gray-500 transition-transform group-open:rotate-180 motion-reduce:transition-none dark:text-gray-400"/>
+                    </summary>
+                    <p class="px-4 pb-4 text-sm leading-relaxed text-gray-600 dark:text-gray-300">{{ item.answer }}</p>
+                </details>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <p class="text-sm text-gray-500 dark:text-gray-400" data-test="extension-faq-help">Une autre question ? Demandez dans l'espace Google Chat de la veille.</p>
+</section>

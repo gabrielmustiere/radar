@@ -1,2 +1,2 @@
-// Serveur local dans le dépôt ; `make extension` y met l'adresse de production pour la version distribuée.
+// Serveur local dans le dépôt ; le paquet téléchargé depuis Radar et celui de `make extension` y mettent leur adresse.
 export const RADAR_URL = 'https://radar.wip';
