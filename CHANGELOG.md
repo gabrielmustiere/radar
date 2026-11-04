@@ -10,6 +10,22 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-04 — Extension téléchargeable et cartes Chat
+
+### ✨ Fonctionnel
+- **Télécharger l'extension depuis Radar** — la page Extension navigateur propose le fichier, la procédure d'installation pas à pas et la génération de la clé.
+- **Questions fréquentes** — installation, mises à jour et clé personnelle sont expliquées sur la même page.
+- **Alerte de nouvelle version** — la bulle signale une version plus récente, sans empêcher d'ajouter un lien.
+- **Annonces en carte dans Google Chat** — bandeau, contexte ou description, posteur et deux boutons ; une carte compacte prend le relais sans aperçu.
+- **Annonces plus sûres** — un titre ne peut plus notifier tout l'espace ni déguiser un lien.
+- **Connexion plus discrète** — la désactivation d'un compte n'est révélée qu'à son titulaire.
+
+### 🔧 Technique
+- **Protections du navigateur** — X-Frame-Options, frame-ancestors, Referrer-Policy et HSTS sur toute réponse, version de PHP masquée.
+- **Dépendances Symfony** — montée en 8.1.x, qui corrige 2 avis de sécurité.
+- **Paquet de l'extension** — assemblé à la demande, extension PHP zip ajoutée à l'image.
+- **Tests de bout en bout** — clics fiabilisés sur mobile.
+
 ## [1.2.0] - 2026-11-04 — Suppression et relance admin
 
 ### ✨ Fonctionnel
@@ -205,7 +221,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/gabrielmustiere/radar/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/gabrielmustiere/radar/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/gabrielmustiere/radar/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/gabrielmustiere/radar/compare/v0.10.0...v1.0.0
