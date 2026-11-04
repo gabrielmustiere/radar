@@ -134,9 +134,9 @@
     </a>
 {% endif %}
 
-{# Modale d'ajout : « Ajouter un lien » y charge le formulaire (Turbo Frame), la page dédiée reste le repli. #}
-{% if app.user and app.current_route not in ['app_link_new', 'app_link_seed'] %}
-    <dialog data-controller="link-modal" data-test="link-modal" aria-label="Ajouter un lien"
+{# Modale commune : l'ajout d'un lien et les actions admin y chargent leur écran (Turbo Frame), la page dédiée reste le repli. #}
+{% if app.user and app.current_route not in ['app_link_new', 'app_link_seed', 'app_admin_link_show'] %}
+    <dialog data-controller="link-modal" data-test="link-modal" aria-labelledby="link-modal-title"
             data-action="turbo:before-fetch-request->link-modal#open close->link-modal#reset click->link-modal#closeOnBackdrop turbo:before-cache@document->link-modal#close"
             class="m-auto w-[calc(100%-2rem)] max-w-2xl rounded-3xl bg-white p-6 text-gray-800 opacity-0 shadow-2xl ring-1 ring-gray-200/70 transition duration-[280ms] ease-radar-spring transition-discrete backdrop:bg-gray-950/40 backdrop:backdrop-blur-xs open:opacity-100 starting:open:translate-y-2.5 starting:open:scale-97 starting:open:opacity-0 motion-reduce:transition-none sm:p-8 dark:bg-gray-900 dark:text-gray-200 dark:ring-gray-800">
         <button type="button" data-action="link-modal#close" data-test="link-modal-close"

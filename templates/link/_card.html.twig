@@ -68,6 +68,8 @@
 {# « Nouveau » : posté depuis moins de 72 h ; un lien repris de Chat garde sa date d'origine #}
 {% set new = link.postedAt > date('-72 hours') %}
 {% set type_label = kind == 'rss' ? 'Source suivie' : source.label %}
+{# La carte doublon s'affiche dans la modale d'ajout : pas de seconde modale depuis celle-ci #}
+{% set can_administer = (admin_actions ?? true) and is_granted('RADAR_ADMIN') %}
 <article id="link-card-{{ link.id }}" class="link-card relative flex gap-3 overflow-hidden p-3 sm:flex-col sm:gap-0 sm:p-0 rounded-2xl bg-white ring-1 {{ theme.ring }} dark:bg-gray-900"
          data-test="link-card" data-preview-status="{{ link.previewStatus.value }}">
     {# Sur téléphone, la carte se compacte : vignette du type à la place du visuel (donc sans façade), texte resserré #}
@@ -118,12 +120,14 @@
     <div class="flex min-w-0 flex-1 flex-col sm:p-4">
         <p class="flex items-center gap-1.5 text-xs font-bold sm:hidden {{ theme.open }}">
             {{ type_label }}{% if new %} <span class="text-gray-900 dark:text-white">· nouveau</span>{% endif %}
+            {% if can_administer %}{% include 'link/_card_admin_trigger.html.twig' %}{% endif %}
         </p>
         <p class="flex items-center gap-1.5 text-xs font-medium text-gray-500 max-sm:hidden dark:text-gray-400" data-test="link-source">
             <twig:ux:icon name="{{ source.icon }}" class="size-4"/>
             <span>{{ source.label }}</span>
             <span class="size-1 rounded-full bg-gray-300 dark:bg-gray-700"></span>
             <span class="truncate">{{ link.siteName ?? host }}</span>
+            {% if can_administer %}{% include 'link/_card_admin_trigger.html.twig' %}{% endif %}
         </p>
 
         {# Le lien du titre s'étend sur toute la carte : seuls la façade vidéo et « Ouvrir » passent au-dessus (z-10).

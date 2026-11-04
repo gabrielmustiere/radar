@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\Enum\Type\SourceType;
 use App\Repository\LinkRepository;
 use App\Repository\UserRepository;
+use App\Service\LinkManager;
 use App\Service\Preview\LinkPreview;
 use App\Twig\Components\PendingLinkCard;
 use Doctrine\ORM\EntityManagerInterface;
@@ -48,6 +49,22 @@ final class PendingLinkCardTest extends WebTestCase
         )->actingAs($this->user());
 
         self::assertStringNotContainsString('data-poll', (string) $component->call('refresh')->render());
+    }
+
+    public function testCardOfARemovedLinkRendersNothingAtItsNextRefresh(): void
+    {
+        $client = self::createClient();
+        $link = $this->pendingLink();
+        $component = $this->createLiveComponent('PendingLinkCard', ['link' => $link], $client)->actingAs($this->user());
+        self::assertStringContainsString('data-test="link-card"', (string) $component->render());
+
+        $manager = self::getContainer()->get(LinkManager::class);
+        self::assertInstanceOf(LinkManager::class, $manager);
+        $manager->remove($link);
+        $html = (string) $component->call('refresh')->render();
+
+        self::assertStringNotContainsString('data-test="link-card"', $html);
+        self::assertStringNotContainsString('data-poll', $html);
     }
 
     private function pendingLink(): Link

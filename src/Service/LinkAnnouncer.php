@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Category;
 use App\Entity\Link;
+use App\Service\Preview\LinkBannerStore;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\Message\ChatMessage;
@@ -20,6 +21,7 @@ final readonly class LinkAnnouncer
         private ChatterInterface $chatter,
         private UrlGeneratorInterface $urlGenerator,
         private ClockInterface $clock,
+        private LinkBannerStore $bannerStore,
     ) {}
 
     /** Le marquage est enregistré au flush de l'appelant, avec l'aperçu. */
@@ -29,8 +31,20 @@ final readonly class LinkAnnouncer
             return;
         }
 
+        $this->reannounce($link);
+    }
+
+    /** Annonce décidée par un admin, sans les gardes de l'annonce automatique. Enregistrée au flush de l'appelant. */
+    public function reannounce(Link $link): void
+    {
         $this->chatter->send(new ChatMessage($this->text($link)));
         $link->markAnnounced($this->clock->now());
+    }
+
+    /** Retire ce qu'une annonce a rendu public. */
+    public function forget(Link $link): void
+    {
+        $this->bannerStore->remove($link);
     }
 
     private function text(Link $link): string

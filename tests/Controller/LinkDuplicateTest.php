@@ -28,6 +28,7 @@ final class LinkDuplicateTest extends LinkWebTestCase
             $slug,
         ));
         self::assertSelectorTextContains('[data-test="link-form"]', 'Ce lien est déjà dans Radar.');
+        self::assertSelectorNotExists('[data-test="link-duplicate"] [data-test="link-admin-actions"]');
 
         $client->clickLink('Voir la carte');
         self::assertResponseIsSuccessful();

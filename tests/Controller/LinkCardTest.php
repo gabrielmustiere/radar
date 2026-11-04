@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Repository\UserRepository;
 use App\Service\Preview\PreviewImageStore;
 
 final class LinkCardTest extends LinkWebTestCase
@@ -32,6 +33,40 @@ final class LinkCardTest extends LinkWebTestCase
         self::assertSelectorNotExists($card . ' img[src^="https://"]');
         self::assertSelectorTextContains($card . ' [data-test="link-source"]', 'Article');
         self::assertSelectorTextContains($card . ' [data-test="link-category"]', 'Agents');
+    }
+
+    public function testAdminFindsTheActionsOnTheCardsOfTheFeedAndOfTheDetailPage(): void
+    {
+        $client = $this->loggedClient();
+        $url = 'https://example.com/article-' . uniqid();
+        $this->submit($client, ['url' => $url, 'categories' => [$this->categoryId('Agents')]]);
+
+        $crawler = $client->followRedirect();
+
+        $action = (string) $crawler->filter(self::FIRST_CARD . ' [data-test="link-admin-actions"]')->attr('href');
+        self::assertSame(
+            'link-modal-frame',
+            $crawler->filter('[data-test="link-admin-actions"]')->attr('data-turbo-frame'),
+        );
+        $client->request('GET', str_replace(search: '/admin', replace: '', subject: $action));
+        self::assertSelectorExists('[data-test="link-card"] [data-test="link-admin-actions"]');
+    }
+
+    public function testMemberSeesNoAdminActions(): void
+    {
+        $client = $this->loggedClient();
+        $url = 'https://example.com/article-' . uniqid();
+        $this->submit($client, ['url' => $url, 'categories' => [$this->categoryId('Agents')]]);
+        $users = self::getContainer()->get(UserRepository::class);
+        self::assertInstanceOf(UserRepository::class, $users);
+        $member = $users->findOneBy(['email' => 'marie@example.com']);
+        self::assertNotNull($member);
+        $client->loginUser($member);
+
+        $client->request('GET', '/');
+
+        self::assertSelectorExists(self::FIRST_CARD);
+        self::assertSelectorNotExists('[data-test="link-admin-actions"]');
     }
 
     public function testCardFallsBackWhenSourceHasNoPreview(): void

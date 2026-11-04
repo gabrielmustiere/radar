@@ -1,3 +1,6 @@
 <div {{ attributes.defaults({class: 'grid'}) }} {% if this.polling %}data-poll="delay(3000)|refresh"{% endif %}>
-    {% include 'link/_card.html.twig' %}
+    {# Lien supprimé pendant que sa carte se rafraîchissait #}
+    {% if link %}
+        {% include 'link/_card.html.twig' %}
+    {% endif %}
 </div>

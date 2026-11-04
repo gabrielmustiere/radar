@@ -13,12 +13,19 @@ use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
 use App\Message\FetchLinkPreview;
 use App\Repository\LinkRepository;
+use App\Service\LinkAnnouncer;
 use App\Service\LinkManager;
 use App\Service\LinkUrlAnalyzer;
+use App\Service\Preview\LinkBannerStore;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class LinkManagerTest extends TestCase
 {
@@ -116,6 +123,12 @@ final class LinkManagerTest extends TestCase
             new LinkUrlAnalyzer(),
             $clock,
             $bus,
+            new LinkAnnouncer(
+                $this->createStub(ChatterInterface::class),
+                $this->createStub(UrlGeneratorInterface::class),
+                $clock,
+                new LinkBannerStore(new Filesystem(new InMemoryFilesystemAdapter()), new NullLogger(), 'secret'),
+            ),
         );
     }
 

@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Link;
+use App\Entity\LinkOpening;
 use App\Enum\Type\FeedType;
 use App\Enum\Type\PreviewStatus;
 use App\Enum\Type\Team;
 use App\Search\LinkFilter;
 use App\Search\SearchQuery;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\OffsetPaginator;
 use Doctrine\ORM\Tools\Pagination\Window;
@@ -78,6 +80,24 @@ class LinkRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($link);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * Les clés étrangères SQLite sont inactives : les CASCADE du schéma ne s'appliquent pas, et Doctrine compte sur
+     * celui de `link_category` pour vider la table de liaison.
+     */
+    public function remove(Link $link): void
+    {
+        $this->getEntityManager()->wrapInTransaction(static function (EntityManagerInterface $entityManager) use (
+            $link,
+        ): void {
+            $entityManager
+                ->createQuery('DELETE FROM ' . LinkOpening::class . ' o WHERE o.link = :link')
+                ->setParameter('link', $link)
+                ->execute();
+            $entityManager->getConnection()->delete('link_category', ['link_id' => $link->getId()]);
+            $entityManager->remove($link);
+        });
     }
 
     /** @return list<array{id: int, name: string, team: ?Team, linkCount: int}> catégories portant au moins un lien */

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administrer un lien · Radar{% endblock %}
+
+{% block body %}
+    {# Ouvert directement ou chargé dans la modale commune (même frame) : les formulaires visent la page entière #}
+    <twig:Turbo:Frame id="link-modal-frame" class="mx-auto block max-w-2xl rounded-[20px] bg-white p-6 ring-1 ring-gray-200/70 sm:p-8 dark:bg-gray-900 dark:ring-gray-800">
+        <h1 id="link-modal-title" class="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Administrer ce lien</h1>
+        <p class="mt-1 break-words text-sm text-gray-700 dark:text-gray-300" data-test="admin-link-title">{{ link|link_title }}</p>
+        <p class="mt-0.5 break-all text-xs text-gray-500 dark:text-gray-400" data-test="admin-link-url">{{ link.url }}</p>
+
+        <section class="mt-6 border-t border-gray-100 pt-5 dark:border-gray-800">
+            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Annonce Google Chat</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400" data-test="admin-link-announced">
+                {%- if link.announcedAt -%}
+                    Dernière annonce le <time datetime="{{ link.announcedAt|date('c') }}">{{ link.announcedAt|date('d/m/Y à H:i', 'Europe/Paris') }}</time>
+                {%- else -%}
+                    Jamais annoncé
+                {%- endif -%}
+            </p>
+            {% if link.previewStatus is same as constant('App\\Enum\\Type\\PreviewStatus::Pending') %}
+                <p class="mt-3 text-sm text-gray-500 dark:text-gray-400" data-test="admin-link-pending">Aperçu en cours de construction : la relance sera possible ensuite.</p>
+            {% else %}
+                <form method="post" action="{{ path('app_admin_link_reannounce', {id: link.id}) }}" data-turbo-frame="_top" data-test="admin-link-reannounce-form" class="mt-3">
+                    <input type="hidden" name="_token" value="{{ csrf_token('link-reannounce') }}">
+                    <twig:Button type="submit" variant="outline" class="gap-2" data-test="admin-link-reannounce">
+                        <twig:ux:icon name="tabler:send" class="size-4"/> Relancer l'annonce
+                    </twig:Button>
+                </form>
+            {% endif %}
+        </section>
+
+        <section class="mt-6 border-t border-gray-100 pt-5 dark:border-gray-800">
+            <h2 class="text-sm font-semibold text-gray-900 dark:text-white">Suppression définitive</h2>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Le lien et ses ouvertures sont effacés de Radar. Son annonce reste dans Google Chat.</p>
+            <form method="post" action="{{ path('app_admin_link_remove', {id: link.id}) }}" data-turbo-frame="_top" data-test="admin-link-remove-form" class="mt-3">
+                <input type="hidden" name="_token" value="{{ csrf_token('link-remove') }}">
+                <twig:Button type="submit" variant="danger" class="gap-2" data-test="admin-link-remove">
+                    <twig:ux:icon name="tabler:trash" class="size-4"/> Supprimer définitivement
+                </twig:Button>
+            </form>
+        </section>
+    </twig:Turbo:Frame>
+{% endblock %}

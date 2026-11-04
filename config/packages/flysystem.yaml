@@ -1,7 +1,8 @@
 # Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
 flysystem:
     storages:
-        # Visuels d'aperçu et favicons conservés par Radar, servis par la route authentifiée `app_media`.
+        # Visuels d'aperçu et favicons conservés par Radar, servis par la route authentifiée `app_media`,
+        # et bandeaux des annonces Chat, servis sans connexion par `app_announcement_banner`.
         # En production, le dossier vit sur le volume persistant (comme la base SQLite) ; S3 viendra par un autre adapter.
         media.storage:
             adapter: 'local'

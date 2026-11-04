@@ -39,4 +39,23 @@ final class ImageCropper
 
         return $target;
     }
+
+    /** Pour un format sans transparence : une zone transparente sortirait noire. */
+    public static function onWhite(\GdImage $source): \GdImage
+    {
+        $target = imagecreatetruecolor(imagesx($source), imagesy($source));
+        imagefill($target, x: 0, y: 0, color: (int) imagecolorallocate($target, red: 255, green: 255, blue: 255));
+        imagecopy(
+            $target,
+            $source,
+            dst_x: 0,
+            dst_y: 0,
+            src_x: 0,
+            src_y: 0,
+            src_width: imagesx($source),
+            src_height: imagesy($source),
+        );
+
+        return $target;
+    }
 }

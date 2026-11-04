@@ -8,8 +8,10 @@ use App\Entity\Category;
 use App\Entity\Link;
 use App\Entity\Source;
 use App\Entity\User;
+use App\Enum\Type\PreviewStatus;
 use App\Exception\CategoryLimitException;
 use App\Exception\DuplicateLinkException;
+use App\Exception\LinkNotReadyException;
 use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
 use App\Message\FetchLinkPreview;
@@ -24,6 +26,7 @@ final readonly class LinkManager
         private LinkUrlAnalyzer $urlAnalyzer,
         private ClockInterface $clock,
         private MessageBusInterface $messageBus,
+        private LinkAnnouncer $announcer,
     ) {}
 
     /** @throws DuplicateLinkException quand le lien existe déjà : rien n'est créé */
@@ -86,6 +89,27 @@ final readonly class LinkManager
             $link->addCategory($category);
         }
 
+        $this->linkRepository->save($link);
+    }
+
+    public function remove(Link $link): void
+    {
+        $this->announcer->forget($link);
+        $this->linkRepository->remove($link);
+    }
+
+    /**
+     * Annonce à nouveau un lien, déjà annoncé ou non, repris compris.
+     *
+     * @throws LinkNotReadyException tant que l'aperçu est attendu : l'annonce automatique partirait aussi
+     */
+    public function reannounce(Link $link): void
+    {
+        if (PreviewStatus::Pending === $link->getPreviewStatus()) {
+            throw new LinkNotReadyException();
+        }
+
+        $this->announcer->reannounce($link);
         $this->linkRepository->save($link);
     }
 

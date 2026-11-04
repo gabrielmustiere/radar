@@ -7,7 +7,7 @@
     {% endif %}
     <p class="mt-1 text-sm text-amber-800 dark:text-amber-300">Pas besoin de l'ajouter une seconde fois : le voici, avec ses catégories.</p>
     <div class="mt-4 max-w-sm">
-        {% include 'link/_card.html.twig' with {link: duplicate} %}
+        {% include 'link/_card.html.twig' with {link: duplicate, admin_actions: false} %}
     </div>
     <a href="{{ path('app_link_show', {id: duplicate.id}) }}" data-test="link-duplicate-show"
        class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-gray-900 hover:underline dark:text-white">

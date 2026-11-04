@@ -50,6 +50,8 @@ security:
     # Note: Only the *first* matching rule is applied
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        # Bandeaux des annonces Chat : Google les lit sans compte. Seule exception à « rien sans connexion ».
+        - { path: ^/annonces/bandeaux/, roles: PUBLIC_ACCESS }
         - { path: ^/api/, roles: ROLE_USER }
         - { path: ^/, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }

@@ -10,8 +10,12 @@ use App\Entity\Source;
 use App\Entity\User;
 use App\Enum\Type\SourceType;
 use App\Service\LinkAnnouncer;
+use App\Service\Preview\LinkBannerStore;
 use App\Service\Preview\LinkPreview;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\Message\ChatMessage;
@@ -82,6 +86,32 @@ final class LinkAnnouncerTest extends TestCase
         self::assertNull($link->getAnnouncedAt());
     }
 
+    public function testReannouncesALinkAlreadyAnnouncedAndUpdatesItsDate(): void
+    {
+        $link = $this->link();
+        $link->markAnnounced(new \DateTimeImmutable('2026-01-01'));
+        $sent = [];
+
+        $this->announcer($sent)->reannounce($link);
+
+        self::assertCount(1, $sent);
+        self::assertEquals(
+            new \DateTimeImmutable('2026-10-29 12:00', new \DateTimeZone('Europe/Paris')),
+            $link->getAnnouncedAt(),
+        );
+    }
+
+    public function testReannouncesASeededLink(): void
+    {
+        $link = $this->link(seeded: true);
+        $sent = [];
+
+        $this->announcer($sent)->reannounce($link);
+
+        self::assertCount(1, $sent);
+        self::assertNotNull($link->getAnnouncedAt());
+    }
+
     /** @param list<string> $sent */
     private function announcer(array &$sent): LinkAnnouncer
     {
@@ -96,7 +126,12 @@ final class LinkAnnouncerTest extends TestCase
         $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
         $urlGenerator->method('generate')->willReturn('https://radar.example/liens/42');
 
-        return new LinkAnnouncer($chatter, $urlGenerator, new MockClock('2026-10-29 12:00', 'Europe/Paris'));
+        return new LinkAnnouncer(
+            $chatter,
+            $urlGenerator,
+            new MockClock('2026-10-29 12:00', 'Europe/Paris'),
+            new LinkBannerStore(new Filesystem(new InMemoryFilesystemAdapter()), new NullLogger(), 'secret'),
+        );
     }
 
     private function link(?string $context = null, bool $seeded = false): Link

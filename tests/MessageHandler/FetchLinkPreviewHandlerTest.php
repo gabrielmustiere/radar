@@ -11,10 +11,14 @@ use App\Message\FetchLinkPreview;
 use App\MessageHandler\FetchLinkPreviewHandler;
 use App\Repository\LinkRepository;
 use App\Service\LinkAnnouncer;
+use App\Service\Preview\LinkBannerStore;
 use App\Tests\Service\Preview\PreviewFixture;
 use App\Tests\Service\Preview\PreviewTestKit;
 use Doctrine\ORM\EntityManagerInterface;
+use League\Flysystem\Filesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -105,7 +109,12 @@ final class FetchLinkPreviewHandlerTest extends TestCase
                 return null;
             });
 
-        return new LinkAnnouncer($chatter, $this->createStub(UrlGeneratorInterface::class), new MockClock());
+        return new LinkAnnouncer(
+            $chatter,
+            $this->createStub(UrlGeneratorInterface::class),
+            new MockClock(),
+            new LinkBannerStore(new Filesystem(new InMemoryFilesystemAdapter()), new NullLogger(), 'secret'),
+        );
     }
 
     private function html(): MockResponse

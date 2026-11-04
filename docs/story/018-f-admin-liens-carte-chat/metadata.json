@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "title": "Permettre à un admin de supprimer un lien et de relancer son annonce, dans une carte Google Chat soignée",
+  "created": "2026-11-04",
+  "updated": "2026-11-04",
+  "tags": [
+    "admin",
+    "liens",
+    "google-chat",
+    "moderation",
+    "annonce"
+  ],
+  "changelog": [
+    {
+      "date": "2026-11-04",
+      "type": "Création",
+      "description": "Pitch rédigé : suppression définitive et relance par un admin depuis un menu sur la carte, annonce en carte Chat avec aperçu, repli texte si Google la refuse."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Planification",
+      "description": "Plan rédigé en 6 étapes, après 017 : modale admin, suppression explicite des ouvertures, bandeau 3:1 public produit par Radar, carte Chat. Pitch amendé (règles 5, 10, 18, 20, 22)."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Implémentation",
+      "description": "Étapes 1 à 4 livrées, 5 et 6 en attente de la 017 ; make lint sans finding, schema:validate vert, PHPUnit 422 verts, E2E 43 verts et 6 ignorés. Écarts : (1) démarrage sans la 017, choix user, seule l'étape 5 en dépend ; (2) link_category effacée en DBAL, car Doctrine compte sur le CASCADE SQLite inerte ; (3) bandeau dans LinkBannerStore au lieu de PreviewImageStore, limites Mago ; (4) LinkAnnouncer::forget() au lieu d'injecter le stockage dans LinkManager, limite de paramètres Mago ; (5) ImageCropper::onWhite() et commentaire flysystem.yaml ajoutés au périmètre ; (6) tests découpés (AdminLinkWebTestCase, AdminLinkReannounceTest, LinkManagerReannounceTest, LinkRemovalTest, LinkBannerStoreTest), limite too-many-methods ; (7) LinkBannerStore::store() sans appelant jusqu'à l'étape 5."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Review",
+      "description": "Corrections requises sur les étapes 1 à 4 : 0 bloquant, 2 importants (adresse absente de la modale, relance non neutralisée avant la 017), 4 mineurs."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Review",
+      "description": "Prêt à commiter sous réserve de ne pas déployer avant la 017 ; 1 important et 5 mineurs corrigés : [PLAN] adresse dans la modale, [ROBUSTESSE] aperçu illisible, [STYLE] reannounce/publish, [STYLE] libellé des flash, [STYLE] nom accessible de la modale, [BUG] double frame sur la page directe. Reste : [SECU] relance non neutralisée avant la 017."
+    }
+  ]
+}
