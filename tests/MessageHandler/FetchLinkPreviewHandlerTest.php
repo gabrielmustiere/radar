@@ -10,6 +10,7 @@ use App\Enum\Type\SourceType;
 use App\Message\FetchLinkPreview;
 use App\MessageHandler\FetchLinkPreviewHandler;
 use App\Repository\LinkRepository;
+use App\Service\LinkAnnouncementCard;
 use App\Service\LinkAnnouncer;
 use App\Service\Preview\LinkBannerStore;
 use App\Tests\Service\Preview\PreviewFixture;
@@ -37,7 +38,7 @@ final class FetchLinkPreviewHandlerTest extends TestCase
 
         self::assertSame(PreviewStatus::Ready, $link->getPreviewStatus());
         self::assertNotNull($link->getAnnouncedAt());
-        self::assertStringStartsWith('*Titre*', $sent[0] ?? '');
+        self::assertStringStartsWith('Titre · ', $sent[0] ?? '');
     }
 
     public function testResolvesXPostThroughOEmbed(): void
@@ -111,7 +112,7 @@ final class FetchLinkPreviewHandlerTest extends TestCase
 
         return new LinkAnnouncer(
             $chatter,
-            $this->createStub(UrlGeneratorInterface::class),
+            new LinkAnnouncementCard($this->createStub(UrlGeneratorInterface::class)),
             new MockClock(),
             new LinkBannerStore(new Filesystem(new InMemoryFilesystemAdapter()), new NullLogger(), 'secret'),
         );

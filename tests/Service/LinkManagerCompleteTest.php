@@ -10,6 +10,7 @@ use App\Entity\User;
 use App\Enum\Type\SourceType;
 use App\Exception\CategoryLimitException;
 use App\Repository\LinkRepository;
+use App\Service\LinkAnnouncementCard;
 use App\Service\LinkAnnouncer;
 use App\Service\LinkManager;
 use App\Service\LinkUrlAnalyzer;
@@ -63,7 +64,7 @@ final class LinkManagerCompleteTest extends TestCase
             $bus ?? $this->createStub(MessageBusInterface::class),
             new LinkAnnouncer(
                 $this->createStub(ChatterInterface::class),
-                $this->createStub(UrlGeneratorInterface::class),
+                new LinkAnnouncementCard($this->createStub(UrlGeneratorInterface::class)),
                 new MockClock(),
                 new LinkBannerStore(new Filesystem(new InMemoryFilesystemAdapter()), new NullLogger(), 'secret'),
             ),

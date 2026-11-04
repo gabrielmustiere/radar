@@ -122,7 +122,7 @@ Aucun impact modèle. `Link::$announcedAt` porte déjà la date de la dernière 
 
 ## Ordre d'exécution
 
-0. [ ] **Vérifier le prérequis**
+0. [x] **Vérifier le prérequis**
    - Objectif : confirmer que la story 017 est livrée, sinon s'arrêter.
    - Fichiers : aucun.
    - Vérification : `src/Service/LinkAnnouncer.php` neutralise les fragments et `docs/story/017-t-durcissement-securite/metadata.json` porte `delivery`.
@@ -152,7 +152,7 @@ Aucun impact modèle. `Link::$announcedAt` porte déjà la date de la dernière 
    - Vérification : `make phpunit` ; `curl` anonyme sur un bandeau de dev.
    - Commitable seule : oui.
 
-5. [ ] **Carte d'annonce**
+5. [x] **Carte d'annonce**
    - Objectif : remplacer le texte par la carte, dans tous les chemins d'annonce.
    - Fichiers : `src/Service/LinkAnnouncementCard.php`, `src/Service/LinkAnnouncer.php`, tests.
    - Vérification : `make phpunit`, `make lint`, `make playwright`.

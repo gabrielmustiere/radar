@@ -35,6 +35,11 @@
       "date": "2026-11-04",
       "type": "Review",
       "description": "Prêt à commiter sous réserve de ne pas déployer avant la 017 ; 1 important et 5 mineurs corrigés : [PLAN] adresse dans la modale, [ROBUSTESSE] aperçu illisible, [STYLE] reannounce/publish, [STYLE] libellé des flash, [STYLE] nom accessible de la modale, [BUG] double frame sur la page directe. Reste : [SECU] relance non neutralisée avant la 017."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Implémentation",
+      "description": "Étapes 0 et 5 livrées, 6 (vérification en production) en attente de déploiement ; make lint sans finding, PHPUnit 437 verts, E2E 43 verts, 5 ignorés, 1 erreur préexistante (FilterTest::testPhoneUsesTheFloatingAddButton, aussi sur c0544eb). Bandeau local vérifié sans connexion, 600 × 200 en JPEG. Écarts : (1) prérequis 017 livré en code mais pas encore déployé, metadata sans delivery ; (2) LinkAnnouncementCard::message() renvoie le ChatMessage et non les GoogleChatOptions, pour ne calculer le texte de repli qu'une fois ; (3) texte de repli en clair sur une ligne, sans balises Chat, car Google l'affiche tel quel dans les notifications ; (4) logo public en en-tête de carte, prévu par le pitch mais absent du plan ; (5) tests de carte regroupés, limite too-many-methods."
     }
   ]
 }

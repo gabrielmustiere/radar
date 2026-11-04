@@ -6,12 +6,13 @@ namespace App\Tests\Service;
 
 use App\Entity\Category;
 use App\Entity\Link;
-use App\Entity\Source;
 use App\Entity\User;
 use App\Enum\Type\SourceType;
+use App\Service\LinkAnnouncementCard;
 use App\Service\LinkAnnouncer;
 use App\Service\Preview\LinkBannerStore;
 use App\Service\Preview\LinkPreview;
+use App\Tests\Service\Preview\TestImage;
 use League\Flysystem\Filesystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
@@ -23,56 +24,48 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class LinkAnnouncerTest extends TestCase
 {
-    public function testAnnouncesTitleCategoriesPosterContextAndLinksOnce(): void
+    public function testAnnouncesOnceAndMarksTheLink(): void
     {
-        $link = $this->link(context: 'Pour la recette mobile.');
-        $link->applyPreview(new LinkPreview(title: 'Maestro, tests mobiles'), null, null, new \DateTimeImmutable());
+        $link = $this->link();
         $sent = [];
 
         $this->announcer($sent)->announce($link);
         $this->announcer($sent)->announce($link);
 
         self::assertCount(1, $sent);
-        self::assertSame(
-            "*Maestro, tests mobiles*\nTester une app mobile, Outils QA · posté par marie\n_« Pour la recette mobile. »_\n"
-            . '<https://maestro.dev|Ouvrir le lien> · <https://radar.example/liens/42|Voir dans Radar>',
-            $sent[0] ?? null,
-        );
         self::assertEquals(
             new \DateTimeImmutable('2026-10-29 12:00', new \DateTimeZone('Europe/Paris')),
             $link->getAnnouncedAt(),
         );
     }
 
-    public function testFallsBackOnUrlWithoutTitleOrContext(): void
+    public function testBannerOfTheStoredPreviewReachesTheCard(): void
+    {
+        $link = $this->link();
+        $link->applyPreview(new LinkPreview(), 'previews/apercu.webp', null, new \DateTimeImmutable());
+        $storage = new Filesystem(new InMemoryFilesystemAdapter());
+        $storage->write('previews/apercu.webp', TestImage::png(600, 314));
+        $sent = [];
+
+        $this->announcer($sent, $storage)->announce($link);
+
+        self::assertStringContainsString(
+            '"image"',
+            (string) json_encode(($sent[0] ?? null)?->getOptions()?->toArray()),
+        );
+    }
+
+    public function testCardStaysCompactWithoutStoredPreview(): void
     {
         $sent = [];
 
         $this->announcer($sent)->announce($this->link());
 
-        self::assertStringStartsWith(
-            "*https://maestro.dev*\nTester une app mobile, Outils QA · posté par marie\n<",
-            $sent[0] ?? '',
+        self::assertCount(1, $sent);
+        self::assertStringNotContainsString(
+            '"image"',
+            (string) json_encode(($sent[0] ?? null)?->getOptions()?->toArray()),
         );
-    }
-
-    public function testNamesTheSourceOfAnAutomaticLink(): void
-    {
-        $source = new Source('https://symfony.com/feed', 'Symfony Blog', [], new \DateTimeImmutable());
-        $link = new Link(
-            'https://symfony.com/blog/article',
-            'https://symfony.com/blog/article',
-            [new Category('Symfony', new \DateTimeImmutable())],
-            new User()->setEmail('radar@radar.invalid'),
-            new \DateTimeImmutable(),
-            SourceType::Article,
-            source: $source,
-        );
-        $sent = [];
-
-        $this->announcer($sent)->announce($link);
-
-        self::assertStringContainsString("\nSymfony · posté par radar via Symfony Blog\n", $sent[0] ?? '');
     }
 
     public function testNeverAnnouncesSeededLink(): void
@@ -84,59 +77,6 @@ final class LinkAnnouncerTest extends TestCase
 
         self::assertSame([], $sent);
         self::assertNull($link->getAnnouncedAt());
-    }
-
-    public function testNeutralisesTheChatMarkupOfEveryUntrustedFragment(): void
-    {
-        $hostile = '<users/all>';
-        $source = new Source('https://example.com/feed', $hostile, [], new \DateTimeImmutable());
-        $link = new Link(
-            'https://example.com/article',
-            'https://example.com/article',
-            [new Category($hostile, new \DateTimeImmutable())],
-            new User()->setEmail($hostile . '@example.com'),
-            new \DateTimeImmutable(),
-            SourceType::Article,
-            $hostile,
-            source: $source,
-        );
-        $link->applyPreview(
-            new LinkPreview(title: '<https://piege.example|Se connecter>'),
-            null,
-            null,
-            new \DateTimeImmutable(),
-        );
-        $sent = [];
-
-        $this->announcer($sent)->announce($link);
-
-        $text = $sent[0] ?? '';
-        self::assertStringContainsString('‹https://piege.example|Se connecter›', $text);
-        self::assertSame(4, substr_count($text, needle: '‹users/all›'));
-        self::assertSame(
-            2,
-            substr_count($text, needle: '<'),
-            'Seules les deux balises de lien construites par Radar subsistent.',
-        );
-    }
-
-    public function testEncodesTheCharactersOfAnUrlThatWouldBreakOutOfItsChatTag(): void
-    {
-        $link = new Link(
-            'https://example.com/a|b>c<d',
-            'https://example.com/a|b>c<d',
-            [new Category('Symfony', new \DateTimeImmutable())],
-            new User()->setEmail('marie@example.com'),
-            new \DateTimeImmutable(),
-            SourceType::Article,
-        );
-        $sent = [];
-
-        $this->announcer($sent)->announce($link);
-
-        $text = $sent[0] ?? '';
-        self::assertStringStartsWith('*https://example.com/a%7Cb%3Ec%3Cd*', $text);
-        self::assertStringContainsString('<https://example.com/a%7Cb%3Ec%3Cd|Ouvrir le lien>', $text);
     }
 
     public function testReannouncesALinkAlreadyAnnouncedAndUpdatesItsDate(): void
@@ -165,25 +105,29 @@ final class LinkAnnouncerTest extends TestCase
         self::assertNotNull($link->getAnnouncedAt());
     }
 
-    /** @param list<string> $sent */
-    private function announcer(array &$sent): LinkAnnouncer
+    /** @param list<ChatMessage> $sent */
+    private function announcer(array &$sent, ?Filesystem $storage = null): LinkAnnouncer
     {
         $chatter = $this->createStub(ChatterInterface::class);
         $chatter
             ->method('send')
             ->willReturnCallback(static function (ChatMessage $message) use (&$sent): null {
-                $sent[] = $message->getSubject();
+                $sent[] = $message;
 
                 return null;
             });
         $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
-        $urlGenerator->method('generate')->willReturn('https://radar.example/liens/42');
+        $urlGenerator->method('generate')->willReturn('https://radar.example/');
 
         return new LinkAnnouncer(
             $chatter,
-            $urlGenerator,
+            new LinkAnnouncementCard($urlGenerator),
             new MockClock('2026-10-29 12:00', 'Europe/Paris'),
-            new LinkBannerStore(new Filesystem(new InMemoryFilesystemAdapter()), new NullLogger(), 'secret'),
+            new LinkBannerStore(
+                $storage ?? new Filesystem(new InMemoryFilesystemAdapter()),
+                new NullLogger(),
+                'secret',
+            ),
         );
     }
 
