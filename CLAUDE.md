@@ -53,30 +53,13 @@ Transformer les tâches en objectifs vérifiables :
 
 Pour le multi-étapes : suivre le workflow `PLAN → ANALYZE → BUILD → TEST` (voir skill `/forge:help`). **Ne jamais passer à la phase suivante sans validation du user.**
 
-## Stack
-
-- PHP 8.5+ (`declare(strict_types=1)` partout), SQLite (`var/data.db`), Symfony 8.1, Symfony Messenger (Doctrine)
-- Frontend : Tailwind CSS 4, Stimulus, Symfony UX (Live Components, Turbo, Icons)
-- Tests : PHPUnit 13 + Playwright PHP (E2E, `playwright-php/playwright`)
-- Qualité : Mago (`fmt` + `lint` + `analyze`, config unique `mago.toml`, zéro finding sans baseline)
-- AI : Symfony AI Mate en CLI (`symfony php vendor/bin/mate`, voir `AGENTS.md`) configuré dans `mate/` (extensions symfony + monolog) ; extensions maison dans `Mate\` (`mate/src/`)
-
 ## Commandes
 
-Toutes les commandes PHP passent par `symfony` CLI — jamais `php` directement.
-
-```bash
-make serve                                # Lance le serveur Symfony (Mailpit : docker compose up -d)
-make db-reset                             # Reset DB complet (drop + migrate + fixtures)
-symfony console make:migration            # Après modif d'une entité
-make phpunit                              # PHPUnit (Unit + Functional)
-make playwright                           # Playwright (E2E)
-make lint                                 # Mago en lecture seule (format, lint, analyse)
-make quality                              # Mago (format, correctifs, analyse) + build
-```
+Toutes les commandes PHP passent par `symfony` CLI — jamais `php` directement. `make help` liste les cibles.
 
 ## Règles critiques
 
+- `declare(strict_types=1)` partout ; Mago à zéro finding, sans baseline
 - Fixtures dans `fixtures/` (PSR-4 : `DataFixtures\`) — **PAS** dans `src/DataFixtures/`
 - Ne jamais modifier une migration commitée — en créer une nouvelle
 - Ne jamais modifier `vendor/`
@@ -92,10 +75,6 @@ make quality                              # Mago (format, correctifs, analyse) +
 - `admin@example.com` / `password` (ROLE_USER)
 
 ## Architecture
-
-```
-Request → Controller → Service/Manager → Repository → Entity → Response
-```
 
 **Interdit** : QueryBuilder hors repository, logique métier dans controller/entity/repository, `new Service()`, entity qui injecte un service.
 
@@ -123,18 +102,6 @@ Cycle complet vision → backlog → feature/refacto/tech → release.
 ### Plugin `symfony` — recettes framework
 
 À invoquer quand on touche au domaine concerné (controllers, doctrine, forms, events, messenger, validation, etc.).
-
-| Domaine        | Skills                                                                                          |
-|----------------|-------------------------------------------------------------------------------------------------|
-| HTTP           | `/symfony:routing-define`, `/symfony:controller-action`                                         |
-| Doctrine       | `/symfony:doctrine-entity`, `/symfony:doctrine-migration`, `/symfony:doctrine-query`            |
-| Forms          | `/symfony:form-type`, `/symfony:form-render`, `/symfony:form-handle`, `/symfony:form-advanced`  |
-| Events         | `/symfony:event-dispatch`, `/symfony:event-listen`, `/symfony:event-subscribe`                  |
-| Services / DI  | `/symfony:service-define`, `/symfony:service-wire`, `/symfony:service-tags`                     |
-| Validation     | `/symfony:validation-constraints`, `/symfony:validation-groups`, `/symfony:validation-use`      |
-| HTTP Client    | `/symfony:http-client-request`, `/symfony:http-client-async`, `/symfony:http-client-response`, `/symfony:http-client-test` |
-| Messenger      | `/symfony:messenger-async`                                                                      |
-| Serializer / Mapper | `/symfony:serializer-use`, `/symfony:object-mapper`                                        |
 
 Préfèrer ces skills aux conventions ad hoc — elles encodent les patterns retenus pour ce template.
 
