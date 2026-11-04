@@ -63,6 +63,11 @@
       "date": "2026-11-04",
       "type": "Release",
       "description": "Publiée dans v1.3.0 — Extension téléchargeable et cartes Chat."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Sync",
+      "description": "Relance après la release : version v1.3.0 reportée au backlog ; critères inchangés, 9/13 et 5/7, dettes inchangées."
     }
   ],
   "delivery": {

@@ -252,7 +252,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `015-f-gestion-comptes` · **livrée** v0.10.0
   - C1.8, C3.5, C4.7 · P2 · dép. `exploration-categories` · Vision : utilisateurs secondaires / seuil à 1 an « 3 contributeurs non-développeurs »
 - [x] `telechargement-extension` — Permettre à un membre de télécharger et d'installer l'extension depuis Radar, avec une FAQ sur la même page et une alerte de nouvelle version, pour s'équiper sans dépendre du Chrome Web Store.
-  - Story `019-f-telechargement-extension` · **livrée**
+  - Story `019-f-telechargement-extension` · **livrée** v1.3.0
   - C1.10 · P1 · dép. `extension-navigateur` · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
 
 ### V3 — Long terme
