@@ -13,13 +13,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class UserChecker implements UserCheckerInterface
 {
     #[\Override]
-    public function checkPreAuth(UserInterface $user): void
+    public function checkPreAuth(UserInterface $user): void {}
+
+    /** Après le mot de passe : la désactivation d'un compte ne se révèle qu'à son titulaire. */
+    #[\Override]
+    public function checkPostAuth(UserInterface $user, #[\SensitiveParameter] ?TokenInterface $token = null): void
     {
         if ($user instanceof User && !$user->isActive()) {
             throw new CustomUserMessageAccountStatusException('Ce compte est désactivé.');
         }
     }
-
-    #[\Override]
-    public function checkPostAuth(UserInterface $user, #[\SensitiveParameter] ?TokenInterface $token = null): void {}
 }

@@ -11,12 +11,21 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAccountStatusExce
 
 final class UserCheckerTest extends TestCase
 {
-    public function testDeactivatedAccountIsRefusedWithAMessage(): void
+    public function testDeactivatedAccountIsRefusedWithAMessageOnceAuthenticated(): void
     {
         $user = new User();
         $user->deactivate();
 
         $this->expectExceptionObject(new CustomUserMessageAccountStatusException('Ce compte est désactivé.'));
+
+        new UserChecker()->checkPostAuth($user);
+    }
+
+    public function testDeactivatedAccountIsNotRefusedBeforeThePasswordCheck(): void
+    {
+        $user = new User();
+        $user->deactivate();
+        $this->expectNotToPerformAssertions();
 
         new UserChecker()->checkPreAuth($user);
     }
@@ -25,6 +34,8 @@ final class UserCheckerTest extends TestCase
     {
         $this->expectNotToPerformAssertions();
 
-        new UserChecker()->checkPreAuth(new User());
+        $checker = new UserChecker();
+        $checker->checkPreAuth(new User());
+        $checker->checkPostAuth(new User());
     }
 }

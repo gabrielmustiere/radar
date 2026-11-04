@@ -86,6 +86,59 @@ final class LinkAnnouncerTest extends TestCase
         self::assertNull($link->getAnnouncedAt());
     }
 
+    public function testNeutralisesTheChatMarkupOfEveryUntrustedFragment(): void
+    {
+        $hostile = '<users/all>';
+        $source = new Source('https://example.com/feed', $hostile, [], new \DateTimeImmutable());
+        $link = new Link(
+            'https://example.com/article',
+            'https://example.com/article',
+            [new Category($hostile, new \DateTimeImmutable())],
+            new User()->setEmail($hostile . '@example.com'),
+            new \DateTimeImmutable(),
+            SourceType::Article,
+            $hostile,
+            source: $source,
+        );
+        $link->applyPreview(
+            new LinkPreview(title: '<https://piege.example|Se connecter>'),
+            null,
+            null,
+            new \DateTimeImmutable(),
+        );
+        $sent = [];
+
+        $this->announcer($sent)->announce($link);
+
+        $text = $sent[0] ?? '';
+        self::assertStringContainsString('‹https://piege.example|Se connecter›', $text);
+        self::assertSame(4, substr_count($text, needle: '‹users/all›'));
+        self::assertSame(
+            2,
+            substr_count($text, needle: '<'),
+            'Seules les deux balises de lien construites par Radar subsistent.',
+        );
+    }
+
+    public function testEncodesTheCharactersOfAnUrlThatWouldBreakOutOfItsChatTag(): void
+    {
+        $link = new Link(
+            'https://example.com/a|b>c<d',
+            'https://example.com/a|b>c<d',
+            [new Category('Symfony', new \DateTimeImmutable())],
+            new User()->setEmail('marie@example.com'),
+            new \DateTimeImmutable(),
+            SourceType::Article,
+        );
+        $sent = [];
+
+        $this->announcer($sent)->announce($link);
+
+        $text = $sent[0] ?? '';
+        self::assertStringStartsWith('*https://example.com/a%7Cb%3Ec%3Cd*', $text);
+        self::assertStringContainsString('<https://example.com/a%7Cb%3Ec%3Cd|Ouvrir le lien>', $text);
+    }
+
     public function testReannouncesALinkAlreadyAnnouncedAndUpdatesItsDate(): void
     {
         $link = $this->link();

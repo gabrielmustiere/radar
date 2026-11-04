@@ -70,6 +70,21 @@ final class AdminUserStatusTest extends AdminUserWebTestCase
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-poster"]', $account->getDisplayName());
     }
 
+    public function testDeactivationStaysHiddenWithoutTheRightPassword(): void
+    {
+        $client = self::createClient();
+        $account = $this->account();
+        $account->deactivate();
+        $this->entityManager()->flush();
+
+        $this->logInWithForm($client, $account->getUserIdentifier(), 'mauvais-mot-de-passe');
+        self::assertResponseRedirects('/login');
+        $client->followRedirect();
+
+        self::assertSelectorExists('[role="alert"]');
+        self::assertSelectorTextNotContains('[role="alert"]', 'désactivé');
+    }
+
     public function testReactivatedAccountLogsInAgainWithItsPassword(): void
     {
         $client = $this->loggedClient();

@@ -53,7 +53,7 @@ final readonly class LinkAnnouncer
             ', ',
             $link
                 ->getCategories()
-                ->map(static fn(Category $category): string => $category->getName())
+                ->map(fn(Category $category): string => $this->safeText($category->getName()))
                 ->toArray(),
         );
         $cardUrl = $this->urlGenerator->generate(
@@ -62,21 +62,36 @@ final readonly class LinkAnnouncer
             UrlGeneratorInterface::ABSOLUTE_URL,
         );
 
+        $url = $this->safeUrl($link->getUrl());
         $source = $link->getSource();
+        $title = $link->getTitle();
         $lines = [
-            sprintf('*%s*', $link->getTitle() ?? $link->getUrl()),
+            sprintf('*%s*', null === $title ? $url : $this->safeText($title)),
             sprintf(
                 '%s · posté par %s%s',
                 $categories,
-                $link->getPostedBy()->getDisplayName(),
-                null === $source ? '' : ' via ' . $source->getName(),
+                $this->safeText($link->getPostedBy()->getDisplayName()),
+                null === $source ? '' : ' via ' . $this->safeText($source->getName()),
             ),
         ];
-        if (null !== $link->getContext()) {
-            $lines[] = sprintf('_« %s »_', $link->getContext());
+        $context = $link->getContext();
+        if (null !== $context) {
+            $lines[] = sprintf('_« %s »_', $this->safeText($context));
         }
-        $lines[] = sprintf('<%s|Ouvrir le lien> · <%s|Voir dans Radar>', $link->getUrl(), $cardUrl);
+        $lines[] = sprintf('<%s|Ouvrir le lien> · <%s|Voir dans Radar>', $url, $cardUrl);
 
         return implode("\n", $lines);
+    }
+
+    /** Le titre vient du site cible : `<users/all>` notifierait tout l'espace, `<url|texte>` déguiserait un lien. */
+    private function safeText(string $text): string
+    {
+        return strtr($text, ['<' => '‹', '>' => '›']);
+    }
+
+    /** Une URL ne peut pas porter de sosie : `|` et `>` la feraient sortir de la balise qui l'entoure. */
+    private function safeUrl(string $url): string
+    {
+        return strtr($url, ['<' => '%3C', '>' => '%3E', '|' => '%7C']);
     }
 }

@@ -126,25 +126,25 @@ Aucun impact modèle.
 
 ## Ordre d'exécution
 
-1. [ ] **M3 — patchs `symfony/*` 8.1**
+1. [x] **M3 — patchs `symfony/*` 8.1**
    - Objectif : `composer audit` à 0 avis, UX inchangé. Commande : `symfony composer update "symfony/*" -W --with symfony/ux-live-component:3.5.1 --with symfony/ux-turbo:3.5.1 --with symfony/ux-icons:3.5.1 --with symfony/ux-toolkit:3.5.1 --with symfony/stimulus-bundle:3.5.1` (compléter les `--with` si le diff montre un autre paquet UX en mouvement, par exemple `symfony/ux-twig-component`).
    - Fichiers : `composer.lock`.
    - Vérification : `symfony composer audit` = 0 avis ; `git diff composer.lock` sans paquet UX ; `make lint`, `make phpunit`, `make playwright` verts.
    - Commitable seule : oui.
 
-2. [ ] **F1 — contrôle du compte actif après le mot de passe**
+2. [x] **F1 — contrôle du compte actif après le mot de passe**
    - Objectif : plus aucune mention de la désactivation sans le bon mot de passe.
    - Fichiers : `src/Security/UserChecker.php`, `tests/Security/UserCheckerTest.php`, `tests/Controller/AdminUserStatusTest.php`.
    - Vérification : le nouveau cas échoue avant la modification puis passe ; `make phpunit` vert, dont `tests/Api/`.
    - Commitable seule : oui.
 
-3. [ ] **M2 — neutralisation des annonces Chat**
+3. [x] **M2 — neutralisation des annonces Chat**
    - Objectif : seules les deux balises de lien construites par Radar subsistent dans une annonce.
    - Fichiers : `src/Service/LinkAnnouncer.php`, `tests/Service/LinkAnnouncerTest.php`.
    - Vérification : cas hostiles rouges avant, verts après ; cas existants inchangés ; `make lint` sans finding.
    - Commitable seule : oui.
 
-4. [ ] **M1 — listener d'en-têtes et `expose_php`**
+4. [x] **M1 — listener d'en-têtes et `expose_php`**
    - Objectif : quatre en-têtes sur toute réponse principale, HSTS en HTTPS seulement ; `X-Powered-By` supprimé.
    - Fichiers : `src/EventListener/SecurityHeadersListener.php`, `tests/Controller/SecurityHeadersTest.php`, `php.ini`.
    - Vérification : `tests/Controller/SecurityHeadersTest.php` vert ; `make phpunit`, `make playwright` verts ; en local, `curl -sk -D - -o /dev/null https://radar.wip/login` montre les en-têtes et la barre de debug du profiler s'affiche toujours.
@@ -156,7 +156,7 @@ Aucun impact modèle.
    - Vérification : `curl -sS -o /dev/null -D - https://radar.mustiere.fr/login` montre `strict-transport-security`, `x-frame-options: DENY`, `content-security-policy: frame-ancestors 'none'`, `referrer-policy`, et plus de `x-powered-by` ; connexion, ajout d'un lien et extension fonctionnent.
    - Commitable seule : non — dépend du déploiement.
 
-6. [ ] **Documentation**
+6. [x] **Documentation**
    - `docs/stack.md` : versions résolues (Symfony 8.1.10), en-têtes de sécurité posés par l'app.
 
 ## Critères de sortie

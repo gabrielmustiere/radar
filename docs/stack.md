@@ -22,13 +22,14 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 
 ## Backend
 
-- **Framework** : Symfony `8.1.*`, résolu `v8.1.7` (`composer.json`, `composer.lock`)
+- **Framework** : Symfony `8.1.*`, résolu `v8.1.11` (`composer.json`, `composer.lock`)
 - **ORM / données** : Doctrine ORM `^3.7.2` (résolu `3.7.2`) + Doctrine Migrations (`composer.json`, `composer.lock`)
 - **Async** : Symfony Messenger, transport Doctrine (`.env` → `MESSENGER_TRANSPORT_DSN=doctrine://default`) ; `sync://` en test (`.env.test`)
 - **Planification** : `symfony/scheduler` `8.1.*`, résolu `v8.1.10` — planning `App\Schedule` (`#[AsSchedule]`, relève horaire des sources), consommé par un worker `messenger:consume scheduler_default` (`composer.json`, `composer.lock`, `src/Schedule.php`, `.symfony.local.yaml`)
 - **Notifications** : Symfony Notifier, `ChatMessage` routé en `async` (`config/packages/messenger.yaml`) ; bridge Google Chat `symfony/google-chat-notifier` 8.1, transport `googlechat` sur `GOOGLE_CHAT_DSN` (`null://null` par défaut) (`composer.json`, `config/packages/notifier.yaml`, `.env`)
-- **HTTP sortant** : Symfony HttpClient `8.1.*`, résolu `v8.1.7` (`composer.lock`) ; client des aperçus `app.preview_http_client` = `NoPrivateNetworkHttpClient` + limiteur par hôte, composé par `App\HttpClient\PreviewHttpClientFactory` (`config/services.yaml`)
-- **Limitation de débit** : `symfony/rate-limiter` `8.1.*`, résolu `v8.1.10` — limiteurs `preview_host` (token bucket) et `extension_api_failure` (fenêtre glissante, clés refusées par IP) (`composer.json`, `config/packages/rate_limiter.yaml`)
+- **HTTP sortant** : Symfony HttpClient `8.1.*`, résolu `v8.1.11` (`composer.lock`) ; client des aperçus `app.preview_http_client` = `NoPrivateNetworkHttpClient` + limiteur par hôte, composé par `App\HttpClient\PreviewHttpClientFactory` (`config/services.yaml`)
+- **Limitation de débit** : `symfony/rate-limiter` `8.1.*`, résolu `v8.1.11` — limiteurs `preview_host` (token bucket) et `extension_api_failure` (fenêtre glissante, clés refusées par IP) (`composer.json`, `config/packages/rate_limiter.yaml`)
+- **En-têtes de sécurité** : posés par `App\EventListener\SecurityHeadersListener` sur toute réponse principale — `X-Frame-Options: DENY`, `Content-Security-Policy: frame-ancestors 'none'`, `Referrer-Policy: strict-origin-when-cross-origin`, HSTS d'un an en HTTPS ; `expose_php = Off` dans `php.ini`
 - **Auth** : Security bundle, `form_login` email / mot de passe, provider entité `User` ; pare-feu `api` sans état (`^/api/`) par `access_token` (clé d'extension, empreinte SHA-256 sur `User`, `App\Security\ExtensionKeyHandler`) (`config/packages/security.yaml`, `src/Entity/User.php`)
 - **API** : API Platform `^5.0`, résolu `v5.0.5` — ressources DTO de l'extension navigateur sous `/api/extension` (`src/ApiResource/`, `src/State/`), JSON-LD, sans intégration Doctrine ni documentation exposée (`composer.json`, `config/packages/api_platform.yaml`)
 - **Mail** : Symfony Mailer (`composer.json`)
