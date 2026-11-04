@@ -213,7 +213,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `010-f-fil-derniers-ajouts` · **livrée** v0.2.0
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
-### V2 — Court terme post-lancement · `4/13 livrées`
+### V2 — Court terme post-lancement · `5/13 livrées`
 
 - [ ] `indicateurs-mensuels` — Permettre au porteur du projet de consulter les indicateurs agrégés du mois pour évaluer les seuils et le signal d'arrêt à 3 mois.
   - Pas encore cadrée
@@ -251,8 +251,8 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [x] `gestion-comptes` — Permettre à un admin de gérer les comptes et les équipes depuis Radar, et à chaque membre de filtrer le fil par équipe, pour ouvrir Radar aux métiers non-développeurs.
   - Story `015-f-gestion-comptes` · **livrée** v0.10.0
   - C1.8, C3.5, C4.7 · P2 · dép. `exploration-categories` · Vision : utilisateurs secondaires / seuil à 1 an « 3 contributeurs non-développeurs »
-- [ ] `telechargement-extension` — Permettre à un membre de télécharger et d'installer l'extension depuis Radar, avec une FAQ sur la même page et une alerte de nouvelle version, pour s'équiper sans dépendre du Chrome Web Store.
-  - Story `019-f-telechargement-extension` · **clôture en cours**
+- [x] `telechargement-extension` — Permettre à un membre de télécharger et d'installer l'extension depuis Radar, avec une FAQ sur la même page et une alerte de nouvelle version, pour s'équiper sans dépendre du Chrome Web Store.
+  - Story `019-f-telechargement-extension` · **livrée**
   - C1.10 · P1 · dép. `extension-navigateur` · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
 
 ### V3 — Long terme
@@ -266,7 +266,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 ### Capacités par horizon
 
 - **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1 · planifiées : —
-- **V2** — livrées : C1.6, C1.7, C1.8, C1.9, C2.2, C3.5, C4.7 · planifiées : C1.5, C1.10, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
+- **V2** — livrées : C1.6, C1.7, C1.8, C1.9, C1.10, C2.2, C3.5, C4.7 · planifiées : C1.5, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
 - **V3** — livrées : — · planifiées : —
 
 ### Capacités non couvertes (à challenger)
@@ -275,7 +275,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 
 ### Parcours supportés
 
-- **P1** : entièrement supporté en MVP ; cartes par source (C2.2) et ajout depuis le navigateur (C1.9) livrés en V2.
+- **P1** : entièrement supporté en MVP ; cartes par source (C2.2), ajout depuis le navigateur (C1.9) et téléchargement de l'extension (C1.10) livrés en V2.
 - **P2** : entièrement supporté en MVP ; filtre par équipe (C4.7) livré en V2 (filtre par type de source C4.5 planifié en V2).
 - **P3** : partiellement supporté en MVP (reclassement C3.2 reporté en V2).
 - **P4** : entièrement supporté en MVP via le fil C4.4 (C4.6 en V2).

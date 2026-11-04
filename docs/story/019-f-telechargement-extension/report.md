@@ -12,7 +12,7 @@
 - **Non livré** : 2 étapes du plan, 4 critères d'acceptation et 2 critères de sortie, tous suspendus à la recette manuelle ou au déploiement.
 - **Dette** : 8 items, dont 2 critiques.
 
-Le code et les tests automatiques sont livrés. La recette sur Chrome et Edge, que le plan place avant le commit final, n'est pas consignée ; le parcours réel n'a été prouvé que sur Chromium, par `--load-extension`.
+Le code et les tests automatiques sont livrés. Le commit a été poussé avant la recette sur Chrome et Edge, que le plan plaçait avant : décision du porteur à `/forge:commit`, rien n'étant déployé ni annoncé. Le parcours réel n'a été prouvé que sur Chromium, par `--load-extension`.
 
 ## Écarts avec le plan
 
@@ -29,7 +29,7 @@ Le code et les tests automatiques sont livrés. La recette sur Chrome et Edge, q
 
 | Élément prévu | Raison | Action requise |
 |---|---|---|
-| Étape 7 du plan, recette manuelle locale, et ses critères : installation depuis le zip, icône et clic droit, ajout en moins de 15 secondes, mise à jour sans perte de clé, recette consignée | Reporté : à mener par le porteur sur Chrome et Edge, résultats non consignés à cette passe | Dette n°1 |
+| Étape 7 du plan, recette manuelle locale, et ses critères : installation depuis le zip, icône et clic droit, ajout en moins de 15 secondes, mise à jour sans perte de clé, recette consignée | Reporté après le commit par décision du porteur, à mener sur Chrome et Edge avant le déploiement ou l'annonce ; résultats non consignés à cette passe | Dette n°1 |
 | Étape 8 du plan, contrôle en production, et critère « le téléchargement répond 200 dans l'image » | Reporté : suppose le déploiement. L'image construite en local contient `ZipArchive` et `extension/` et produit le zip, sans appel HTTP | Dette n°2 |
 
 ### Ajouts non prévus

@@ -53,6 +53,11 @@
       "date": "2026-11-04",
       "type": "Livraison",
       "description": "Commit a2c5fe5 poussé sur main, avec 9c48580 pour la stabilité E2E ; recette Chrome et Edge et contrôle en production restent à faire avant l'annonce."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Sync",
+      "description": "Relance après livraison : ligne de backlog cochée (V2 5/13, C1.10 livrée), report du commit avant recette tracé ; critères inchangés, 9/13 et 5/7, dettes inchangées."
     }
   ],
   "delivery": {

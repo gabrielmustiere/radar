@@ -146,7 +146,7 @@ Aucun impact modèle.
    - Vérification : `make lint`, `make phpunit`, `make playwright`.
    - Commitable seule : oui.
 
-7. [ ] **Recette manuelle locale, avant commit final**
+7. [ ] **Recette manuelle locale, reportée après le commit par décision du porteur**
    - Objectif : prouver le parcours réel sur Chrome et Edge, avec le zip servi par le site local, qui vise déjà `https://radar.wip`.
    - Fichiers : ajustements éventuels de `templates/extension_key/_faq.html.twig`.
    - Vérification : installation via « Charger l'extension non empaquetée » en suivant la seule procédure de la page, clé collée, icône, clic droit, ajout en moins de 15 secondes ; passage à une version supérieure (remplacement du contenu du dossier + « Recharger », puis chargement d'un autre dossier) avec clé conservée ; résultats consignés dans le compte rendu.
