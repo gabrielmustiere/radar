@@ -48,6 +48,15 @@
       "date": "2026-11-04",
       "type": "Sync",
       "description": "4 écarts réalignés dans le plan, 9/13 critères d'acceptation et 5/7 critères de sortie cochés, recette et contrôle en production reportés, 8 dettes dont 2 critiques ; backlog enrichi (C1.10) et rattaché."
+    },
+    {
+      "date": "2026-11-04",
+      "type": "Livraison",
+      "description": "Commit a2c5fe5 poussé sur main, avec 9c48580 pour la stabilité E2E ; recette Chrome et Edge et contrôle en production restent à faire avant l'annonce."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "a2c5fe5"
+  }
 }
