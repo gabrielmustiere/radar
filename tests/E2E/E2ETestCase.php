@@ -28,6 +28,12 @@ abstract class E2ETestCase extends TestCase
             'baseURL' => self::baseUrl(),
             'ignoreHTTPSErrors' => true,
         ]);
+        // Dépliée, la barre de profiler du dev recouvre le bas de l'écran dès que son contenu arrive, et intercepte les clics.
+        // Limité à Radar : le script s'exécute aussi dans les popups, où toucher à localStorage empêche leur ouverture.
+        $this->context->addInitScript(sprintf("if (%s === location.origin) { localStorage.setItem('symfony/profiler/toolbar/displayState', 'closed'); }", json_encode(
+            self::baseUrl(),
+            JSON_THROW_ON_ERROR,
+        )));
         $this->page = $this->context->newPage();
     }
 
