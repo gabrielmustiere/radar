@@ -107,6 +107,31 @@ final class RichCardTest extends E2ETestCase
         self::assertLessThanOrEqual(600, $layout['widest']);
     }
 
+    public function testLongRepositoryNameStaysClearOfTheTypeBadge(): void
+    {
+        $this->logIn();
+        // Largeur de colonne minimale : c'est là que le nom passe sur deux lignes dans un visuel au plus bas.
+        $this->page->setViewportSize(1264, 900);
+
+        $this->page->goto('/');
+        $this->expect($this->page->locator('[data-test="link-repository"]')->first())->toBeVisible();
+
+        /** @var array{badgeBottom: float, ownerTop: float} $layout */
+        $layout = $this->page->evaluate(<<<'JS'
+            () => {
+                const repository = document.querySelector('[data-test="link-repository"]');
+                repository.querySelector('[data-test="link-repository-name"]').textContent = 'a-long-repository-name-wrapping-on-two-lines';
+
+                return {
+                    badgeBottom: repository.closest('[data-test="link-card"]').querySelector('[data-test="link-type"]').getBoundingClientRect().bottom,
+                    ownerTop: repository.querySelector('[data-test="link-repository-owner"]').getBoundingClientRect().top,
+                };
+            }
+            JS);
+
+        self::assertGreaterThanOrEqual($layout['badgeBottom'], $layout['ownerTop']);
+    }
+
     /** Ajoute le lien dans la première catégorie, puis attend que sa carte quitte l'état « en cours ». */
     private function addEnrichedLink(string $url): LocatorInterface
     {

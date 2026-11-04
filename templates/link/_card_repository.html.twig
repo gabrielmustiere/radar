@@ -1,11 +1,11 @@
 {# Visuel d'un dépôt GitHub reconstruit depuis ses métadonnées, plutôt que l'image générique de GitHub #}
 {% set owner = repository|split('/')|first %}
 {% set name = repository|split('/')|last %}
-<div class="relative flex aspect-[1.91/1] flex-col justify-between overflow-hidden bg-violet-50 p-5 text-violet-950 dark:bg-violet-500/10 dark:text-white"
+<div class="relative flex aspect-[1.91/1] flex-col justify-between bg-violet-50 p-5 text-violet-950 dark:bg-violet-500/10 dark:text-white"
      data-test="link-repository">
     <twig:ux:icon name="tabler:brand-github" class="absolute -right-8 -bottom-10 size-44 text-violet-600/5 dark:text-white/5" aria-hidden="true"/>
-    {# Place du badge de type, posé par la carte #}
-    <span class="h-4"></span>
+    {# Place du badge de type, posé par la carte. Sans overflow-hidden ici, le bloc grandit pour un nom sur deux lignes ; le filigrane reste coupé par link-card-media #}
+    <span class="h-6 shrink-0"></span>
     <p class="min-w-0">
         <span class="block truncate font-mono text-sm text-violet-700 dark:text-violet-300" data-test="link-repository-owner">{{ owner }} /</span>
         <span class="mt-0.5 line-clamp-2 font-display text-2xl leading-tight font-bold break-words" data-test="link-repository-name">{{ name }}</span>
