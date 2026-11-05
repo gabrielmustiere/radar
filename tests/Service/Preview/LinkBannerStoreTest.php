@@ -88,10 +88,10 @@ final class LinkBannerStoreTest extends TestCase
 
     public function testRemovesBannerAndIgnoresAMissingOne(): void
     {
-        $this->storage->write(self::PREVIEW, TestImage::png(600, 314));
         $store = $this->store();
-        $link = $this->link(1, self::PREVIEW);
-        $path = LinkBannerStore::path((string) $store->store($link));
+        $link = $this->link(1, null);
+        $path = LinkBannerStore::path($store->name($link));
+        $this->storage->write($path, 'JPEG');
 
         $store->remove($link);
         $store->remove($link);

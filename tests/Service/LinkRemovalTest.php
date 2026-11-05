@@ -49,10 +49,10 @@ final class LinkRemovalTest extends LinkWebTestCase
         $link = $this->link($url);
         $store = self::getContainer()->get(LinkBannerStore::class);
         self::assertInstanceOf(LinkBannerStore::class, $store);
-        $name = (string) $store->store($link);
+        $name = $store->name($link);
         $storage = self::getContainer()->get('media.storage');
         self::assertInstanceOf(FilesystemOperator::class, $storage);
-        self::assertTrue($storage->fileExists(LinkBannerStore::path($name)));
+        $storage->write(LinkBannerStore::path($name), 'JPEG');
 
         $this->manager()->remove($link);
 

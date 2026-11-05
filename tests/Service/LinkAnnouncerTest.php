@@ -68,6 +68,23 @@ final class LinkAnnouncerTest extends TestCase
         );
     }
 
+    public function testFailedSendPropagatesAndLeavesTheLinkUnannounced(): void
+    {
+        $link = $this->link();
+        $failure = new \RuntimeException('Chat indisponible');
+        $sent = [];
+        $thrown = null;
+
+        try {
+            $this->announcer($sent, failure: $failure)->announce($link);
+        } catch (\RuntimeException $exception) {
+            $thrown = $exception;
+        }
+
+        self::assertSame($failure, $thrown);
+        self::assertNull($link->getAnnouncedAt());
+    }
+
     public function testNeverAnnouncesSeededLink(): void
     {
         $link = $this->link(seeded: true);
@@ -106,12 +123,16 @@ final class LinkAnnouncerTest extends TestCase
     }
 
     /** @param list<ChatMessage> $sent */
-    private function announcer(array &$sent, ?Filesystem $storage = null): LinkAnnouncer
+    private function announcer(array &$sent, ?Filesystem $storage = null, ?\Throwable $failure = null): LinkAnnouncer
     {
         $chatter = $this->createStub(ChatterInterface::class);
         $chatter
             ->method('send')
-            ->willReturnCallback(static function (ChatMessage $message) use (&$sent): null {
+            ->willReturnCallback(static function (ChatMessage $message) use (&$sent, $failure): null {
+                if (null !== $failure) {
+                    throw $failure;
+                }
+
                 $sent[] = $message;
 
                 return null;
