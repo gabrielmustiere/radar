@@ -18,7 +18,8 @@ Ensuite, **avant d'écrire du code** :
 2. Propose un découpage en stories `forge`, par exemple :
    - **refacto** : restylage visuel sans changement de comportement (cartes typées, couleurs, animations, pages admin, connexion, modale d'ajout) ;
    - **feature** : filtres Équipe et Type en entonnoir dans `LinkList`, avec compteurs ;
-   - **feature** : détection du type à la saisie et titres de repli lisibles.
+   - **feature** : détection du type à la saisie et titres de repli lisibles ;
+   - **refacto** : nouvelle annonce Google Chat, décrite dans `google-chat/ANNONCE.md`.
 3. Pour chaque story, suis le pipeline `forge` (`/forge:refactor-plan` ou `/forge:feature-pitch` → plan → implem), et attends ma validation entre chaque phase, comme le prévoit `CLAUDE.md`.
 
 Contraintes :
