@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "title": "Plan technique — Typer la carte d'annonce Google Chat : icône, couleur et action par type",
+  "created": "2026-11-05",
+  "updated": "2026-11-06",
+  "tags": [
+    "google-chat",
+    "annonce",
+    "redesign"
+  ],
+  "changelog": [
+    {
+      "date": "2026-11-05",
+      "type": "Création",
+      "description": "Plan refacto rédigé : carte Chat typée sans bannière, en 5 étapes, caractérisation de l'échec d'envoi et de remove()."
+    },
+    {
+      "date": "2026-11-06",
+      "type": "Review",
+      "description": "Sous réserve, étape 1 sur 5 seulement ; 0 bloquant, 0 important, 2 mineurs ouverts : [TEST] portée du test d'échec, [DOC] README du redesign."
+    },
+    {
+      "date": "2026-11-06",
+      "type": "Review",
+      "description": "Sous réserve, étape 1 sur 5 seulement ; 2 mineurs corrigés : [TEST] test d'échec renommé selon sa portée, [DOC] icônes retirées du README du redesign."
+    }
+  ]
+}
