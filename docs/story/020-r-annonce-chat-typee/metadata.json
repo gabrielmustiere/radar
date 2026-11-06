@@ -43,6 +43,15 @@
       "date": "2026-11-06",
       "type": "Sync",
       "description": "6 écarts réalignés dans le plan sur 8, 7/11 critères cochés, 4 dettes ouvertes dont l'envoi réel avant déploiement."
+    },
+    {
+      "date": "2026-11-06",
+      "type": "Livraison",
+      "description": "Commit c5a7b32 poussé sur main ; envoi réel sur espace de test à faire avant le déploiement."
     }
-  ]
+  ],
+  "delivery": {
+    "release": null,
+    "commit": "c5a7b32"
+  }
 }
