@@ -23,6 +23,26 @@
       "date": "2026-11-06",
       "type": "Review",
       "description": "Sous réserve, étape 1 sur 5 seulement ; 2 mineurs corrigés : [TEST] test d'échec renommé selon sa portée, [DOC] icônes retirées du README du redesign."
+    },
+    {
+      "date": "2026-11-06",
+      "type": "Implémentation",
+      "description": "5 étapes sur 5 : carte typée sans bannière, store(), decode() et onWhite() retirés. QA : lint Mago vert, PHPUnit 466 verts ; E2E 53 tests, 1 erreur préexistante (CardOpenTest, reproduite sur 6b3e464), 15 ignorés. Écarts : (1) table STYLES remplacée par style() en match, car l'analyse Mago refuse l'accès par clé ; (2) helpers button(), url() et comparable() retirés, limite Mago de 10 méthodes ; (3) tests de la carte scindés en 3 classes et une base abstraite, même limite ; (4) LinkAnnouncementTest et SourceLinkTest adaptés, oubliés au périmètre du plan ; (5) testAnnouncementWritesNoBanner remplace les 2 tests de bannière au lieu de les retirer."
+    },
+    {
+      "date": "2026-11-06",
+      "type": "Review",
+      "description": "Corrections requises sur le diff complet ; 0 bloquant, 1 important ouvert : [TEST] échappement du domaine non couvert, mutation survivante."
+    },
+    {
+      "date": "2026-11-06",
+      "type": "Review",
+      "description": "Prêt à commiter ; 1 important corrigé : [TEST] test de l'hôte hostile ajouté, les 9 mutations d'échappement échouent."
+    },
+    {
+      "date": "2026-11-06",
+      "type": "Sync",
+      "description": "6 écarts réalignés dans le plan sur 8, 7/11 critères cochés, 4 dettes ouvertes dont l'envoi réel avant déploiement."
     }
   ]
 }

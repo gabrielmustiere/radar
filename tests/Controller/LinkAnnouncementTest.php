@@ -25,14 +25,17 @@ final class LinkAnnouncementTest extends LinkWebTestCase
         $message = self::getNotifierMessage();
         self::assertNotNull($message);
         $text = $message->getSubject();
-        self::assertStringContainsString('Un article de test · Article · Agents · Posté par admin', $text);
+        self::assertStringContainsString(
+            'Un article de test · Article · example.com · Agents · Posté par admin',
+            $text,
+        );
         $card = (string) json_encode(
             $message->getOptions()?->toArray(),
             JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
         );
-        self::assertStringContainsString('"text":"À lire."', $card);
+        self::assertStringContainsString('<i>À lire.</i>', $card);
         self::assertMatchesRegularExpression('#"url":"http://localhost/liens/\d+"#', $card);
-        self::assertStringContainsString('"imageUrl":"http://localhost/logo.png"', $card);
+        self::assertStringContainsString('"imageUrl":"http://localhost/chat/icons/article.png"', $card);
     }
 
     public function testSeededLinkIsNotAnnounced(): void

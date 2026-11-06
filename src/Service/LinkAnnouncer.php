@@ -34,7 +34,7 @@ final readonly class LinkAnnouncer
     /** Annonce décidée par un admin, sans les gardes de l'annonce automatique. Enregistrée au flush de l'appelant. */
     public function reannounce(Link $link): void
     {
-        $this->chatter->send($this->card->message($link, $this->bannerStore->store($link)));
+        $this->chatter->send($this->card->message($link));
         $link->markAnnounced($this->clock->now());
     }
 

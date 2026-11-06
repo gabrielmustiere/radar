@@ -4,16 +4,16 @@
 > **Registre** : technique
 > **Story** : `docs/story/020-r-annonce-chat-typee/`
 > **Amont** : `plan.md`
-> **Diff examiné** : `main...HEAD`, 1 commit (`60c1132`), 3 fichiers de test, +28/-7 ; working tree : 2 documents modifiés dans `docs/redesign/`, `docs/redesign/google-chat/` et cette story non suivis
+> **Diff examiné** : `6b3e464..77d552f` (4 commits) + working tree, 15 fichiers modifiés et 3 nouveaux
 
 ## Synthèse
 
 - **Bloquants restants** : 0 / 0
-- **Importants restants** : 0 / 0
+- **Importants restants** : 0 / 1
 - **Mineurs restants** : 0 / 2
-- **Statut** : **PRÊT À COMMITER SOUS RÉSERVE** : seule l'étape 1 sur 5 du plan est réalisée. Cette review ne couvre aucun code de production, et la story ne peut pas être fusionnée en l'état.
+- **Statut** : **PRÊT À COMMITER**
 
-Reprendre `/forge:refactor-implem` à l'étape 2, puis relancer `/forge:review` sur l'ensemble du diff avant `/forge:sync`.
+`/forge:sync`, puis `/forge:commit`. L'envoi réel de §Hors review reste à faire avant le déploiement.
 
 ## Bloquants
 
@@ -21,16 +21,25 @@ _(aucun)_
 
 ## Importants
 
-_(aucun)_
+- [x] **[TEST] Le `safeText()` du domaine n'est couvert par aucun test** — `src/Service/LinkAnnouncementCard.php:153` — retirer cet échappement laisse les 26 tests de la carte verts, alors que le plan compte ce cas comme couvert (§Risques). L'entrée est atteignable : `FeedItem::tryFrom()` accepte une adresse de flux dont l'hôte contient `<`, et `parse_url()` renvoie alors `exa<b>mple.com`. Le code était correct : `testEscapesAHostileHostInTheTitleAndTheDomain` ajouté, la mutation échoue désormais.
 
 ## Mineurs
 
-- [x] **[TEST] Le test d'échec ne couvre que l'échec de mise en file, pas l'échec du webhook** — `tests/Service/LinkAnnouncerTest.php:71` — `ChatMessage` est routé sur `async` : une erreur du webhook survient dans le worker, après `markAnnounced()`, et le lien reste marqué annoncé. Test renommé en `testUnqueuedAnnouncementPropagatesAndLeavesTheLinkUnannounced` ; le message de `60c1132`, déjà publié, reste inchangé.
-- [x] **[DOC] Le README du redesign annoncera des icônes déplacées** — `docs/redesign/README.md:9` — après l'étape 2, `google-chat/` ne contiendra plus de PNG. « icônes PNG » retiré de la ligne, ce fichier s'ajoute au §Périmètre livré.
+- [x] **[TEST] Le test d'échec ne couvre que l'échec de mise en file, pas l'échec du webhook** — `tests/Service/LinkAnnouncerTest.php` — test renommé en `testUnqueuedAnnouncementPropagatesAndLeavesTheLinkUnannounced` ; le message de `60c1132`, déjà publié, reste inchangé.
+- [x] **[DOC] Le README du redesign annonçait des icônes déplacées** — `docs/redesign/README.md:9` — « icônes PNG » retiré de la ligne.
 
 ## Points positifs
 
-- **Tests non vacants** : retirer `remove()` ferait échouer `LinkRemovalTest` et `LinkBannerStoreTest`, puisque le fichier est écrit juste avant. Le test d'échec échouerait aussi si `markAnnounced()` passait avant `send()`.
-- **Arrangements découplés de `store()`** : le filet de `forget()` survivra à l'étape 4 sans réécriture.
-- **Paramètre nommé `failure:`** : le test ne dépend pas de `$storage`, qui disparaît à l'étape 3.
-- **Périmètre tenu** : aucun fichier de `src/` ni de `config/` dans le diff, `make lint` à zéro finding et 18 tests verts sur les 3 classes touchées.
+- **Échappement éprouvé par mutation** : les 9 appels à `safeText()` et `safeUrl()`, retirés un à un, font échouer les tests.
+- **Règles de la story 008 préservées** : `LinkAnnouncer::announce()` et `FetchLinkPreviewHandler` n'ont pas bougé, seul l'argument de bannière a disparu.
+- **Un fichier public de moins par annonce** : plus aucun bandeau écrit, et `remove()` reste couvert pour les anciens.
+- **`security.yaml` intact** : les icônes sont servies en statique, 200 sans session en local.
+- **Test fonctionnel sur le vrai routeur** : `LinkAnnouncementTest` prouve l'URL `http://localhost/chat/icons/article.png`, sans double barre.
+
+## Hors review (à vérifier en environnement réel)
+
+- Envoi réel sur un espace de test : `BORDERLESS` accepté et bouton sans bordure, ligne `#17181C` lisible en thème sombre.
+- Sur ce même espace, poster une carte dont le contexte contient `&lt;users/all&gt;` : `safeText()` ne traite que `<` et `>`, le rendu des entités par Chat n'est pas documenté. Comportement inchangé par rapport à l'ancienne carte.
+- Après déploiement, `https://radar.mustiere.fr/chat/icons/github.png` doit répondre 200 en `image/png` sans session.
+- Préexistant, hors scope : `CardOpenTest::testClickingTheCardBodyOpensTheLink` échoue aussi sur `6b3e464`, cause non identifiée.
+- 15 tests E2E ignorés, raison non examinée.

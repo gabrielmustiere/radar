@@ -25,7 +25,7 @@ La bannière cesse d'être produite, mais reste lisible et supprimable : la rout
 
 ```
 src/Service/
-├── LinkAnnouncementCard.php       # table STYLES à 6 entrées, nouveaux widgets, plus de bannière
+├── LinkAnnouncementCard.php       # style() à 6 cas, nouveaux widgets, plus de bannière
 ├── LinkAnnouncer.php              # reannounce() n'écrit plus de bandeau ; forget() inchangé
 └── Preview/
     ├── LinkBannerStore.php        # path(), name(), remove() seulement
@@ -45,9 +45,9 @@ final readonly class LinkAnnouncementCard
 }
 ```
 
-Correspondance appliquée (clé = nom du PNG) :
+Correspondance appliquée (`icon` = nom du PNG) :
 
-| Clé | Règle | Couleur du bouton | Couleur du texte | Bouton principal |
+| `icon` | Règle | Couleur du bouton | Couleur du texte | Bouton principal |
 |---|---|---|---|---|
 | `youtube` | `SourceType::YouTube` | `#E11D48` | `#BE123C` | Regarder la vidéo |
 | `github` | `SourceType::GitHub` | `#7C3AED` | `#6D28D9` | Voir le dépôt |
@@ -69,7 +69,7 @@ Règles de contenu :
 ### Mécanismes mobilisés
 
 - **Pas de pattern formel : réécriture sur place et retrait de code orphelin.** La classe garde sa responsabilité, seule sa sortie change.
-- **Table de constantes privée** : 6 lignes de données pour un seul consommateur, et la clé donne aussi le nom du fichier d'icône.
+- **Méthode `style()` en `match` sur `SourceType`** : 6 cas de données pour un seul consommateur, et le `match` reste exhaustif si un type apparaît.
 - **Injection de `LinkExtension`** : réutilise le repli de titre et `host()` sans duplication, comme le fait déjà `AdminLinkController`.
 
 ### Alternatives écartées
@@ -78,6 +78,7 @@ Règles de contenu :
 |---|---|
 | Ajouter les styles Chat dans l'enum `SourceType` | `rss` n'est pas un `SourceType`, et la présentation d'un canal n'a rien à faire dans l'enum métier. |
 | Enum ou classe de style dédiée à l'annonce | Abstraction pour un seul usage, contraire aux règles du projet. |
+| Table `private const` indexée par type | L'analyse statique Mago signale l'accès par clé dynamique comme possiblement indéfini. |
 | Extraire le repli de titre de `LinkExtension` vers un service | Déplace du code stable et ses tests pour un seul nouvel appelant. |
 | Supprimer `LinkBannerStore`, la route et l'exception `access_control` | Les annonces déjà envoyées perdraient leur image, et les fichiers existants resteraient à purger. |
 | Garder `store()` | Code mort sans appelant en production. |
@@ -98,6 +99,9 @@ Aucun impact modèle.
 | `public/chat/icons/rss.png` | Idem. |
 | `public/chat/icons/article.png` | Idem. |
 | `public/chat/icons/image.png` | Idem. |
+| `tests/Service/LinkAnnouncementCardTestCase.php` | Base abstraite des tests de la carte : construction de la carte et des liens. |
+| `tests/Service/LinkAnnouncementCardDescriptionTest.php` | Description : types concernés, répétition du titre, coupe à 160 caractères. |
+| `tests/Service/LinkAnnouncementCardSafetyTest.php` | Échappement, hôte hostile, URL, cas limites. |
 
 ### Fichiers à modifier
 
@@ -108,14 +112,17 @@ Aucun impact modèle.
 | `src/Service/Preview/LinkBannerStore.php` | Retirer `store()` et `decode()`, ajuster le docblock. |
 | `src/Service/Preview/ImageCropper.php` | Retirer `onWhite()`. |
 | `src/Controller/MediaController.php` | Corriger le commentaire « Une relance le réécrit », devenu faux. |
-| `tests/Service/LinkAnnouncementCardTest.php` | Réécrire : un cas par ligne du tableau, description, échappement, cas limites. |
-| `tests/Service/LinkAnnouncerTest.php` | Ajouter le test d'échec d'envoi, retirer les deux tests de bannière, adapter le constructeur. |
+| `tests/Service/LinkAnnouncementCardTest.php` | Réécrire : un cas par ligne du tableau, boutons, en-tête, titre de repli. |
+| `tests/Service/LinkAnnouncerTest.php` | Ajouter le test d'échec de mise en file, remplacer les deux tests de bannière par `testAnnouncementWritesNoBanner`, adapter le constructeur. |
 | `tests/Service/Preview/LinkBannerStoreTest.php` | Écrire le bandeau directement dans `testRemovesBannerAndIgnoresAMissingOne`, retirer les tests de `store()`. |
 | `tests/Service/LinkRemovalTest.php` | Écrire le bandeau directement au lieu de passer par `store()`. |
 | `tests/MessageHandler/FetchLinkPreviewHandlerTest.php` | Adapter le constructeur de la carte. |
 | `tests/Service/LinkManagerTest.php` | Adapter le constructeur de la carte. |
 | `tests/Service/LinkManagerReannounceTest.php` | Adapter le constructeur de la carte. |
 | `tests/Service/LinkManagerCompleteTest.php` | Adapter le constructeur de la carte. |
+| `tests/Controller/LinkAnnouncementTest.php` | Adapter les assertions du sous-titre, du contexte et de l'icône. |
+| `tests/Controller/SourceLinkTest.php` | Adapter l'assertion « Via le flux ». |
+| `docs/redesign/README.md` | Retirer les icônes de la description de `google-chat/`. |
 
 ### Clients identifiés
 
@@ -124,7 +131,7 @@ Aucun impact modèle.
 - **`src/Service/LinkManager.php`** — non affecté, `reannounce(Link)` et `forget(Link)` ne changent pas.
 - **`src/Controller/MediaController.php`** — route inchangée, seul un commentaire change.
 - **Tests unitaires** — 6 fichiers construisent `LinkAnnouncementCard` et doivent passer à deux arguments.
-- **Tests fonctionnels** — `AdminLinkReannounceTest` et `MediaControllerTest` non affectés ; `LinkRemovalTest` adapté.
+- **Tests fonctionnels** — `AdminLinkReannounceTest` et `MediaControllerTest` non affectés ; `LinkRemovalTest`, `LinkAnnouncementTest` et `SourceLinkTest` adaptés.
 - **Tests E2E** — `tests/E2E/AdminLinkTest.php` non affecté, le parcours d'annonce ne lit pas la carte.
 - **Configuration** — `security.yaml`, `flysystem.yaml`, `messenger.yaml` et `notifier.yaml` non affectés.
 
@@ -177,6 +184,7 @@ Aucun impact modèle.
 | `tests/MessageHandler/RefreshLinkPreviewHandlerTest.php` | unit | Un rafraîchissement n'annonce pas. |
 | `tests/Service/LinkManagerReannounceTest.php` | unit | Relance refusée tant que l'aperçu est attendu. |
 | `tests/Controller/AdminLinkReannounceTest.php` | functional | Relance admin, jeton CSRF, aperçu en attente. |
+| `tests/Controller/LinkAnnouncementTest.php` | functional | Un ajout produit une annonce, un lien repris aucune, sur le vrai routeur. |
 | `tests/Controller/MediaControllerTest.php` | functional | Bandeau servi sans compte, en-têtes de cache et de type. |
 | `tests/Service/LinkRemovalTest.php` | functional | La suppression d'un lien retire son bandeau. |
 
@@ -184,7 +192,7 @@ Aucun impact modèle.
 
 | Test à créer | Comportement à verrouiller | Type |
 |---|---|---|
-| `tests/Service/LinkAnnouncerTest.php` (nouveau cas) | Un `send()` qui lève une exception la propage et laisse `announcedAt` à `null`. | unit |
+| `tests/Service/LinkAnnouncerTest.php` (nouveau cas) | Un `send()` qui lève, donc une mise en file en échec, propage l'exception et laisse `announcedAt` à `null`. Une erreur du webhook survient plus tard, dans le worker. | unit |
 | `tests/Service/LinkRemovalTest.php` (réécriture de l'arrangement) | `remove()` retire un bandeau écrit directement, sans dépendre de `store()`. | functional |
 | `tests/Service/Preview/LinkBannerStoreTest.php` (réécriture de l'arrangement) | `remove()` retire le fichier et ignore un fichier absent, sans dépendre de `store()`. | unit |
 
@@ -194,13 +202,15 @@ Nouveaux tests de la carte, écrits à l'étape 3 (ils décrivent la cible, pas 
 
 | Code | Type | Ce qu'on vérifie |
 |---|---|---|
-| `LinkAnnouncementCard`, 6 cas du tableau | unit | Icône, existence du PNG dans `public/chat/icons/`, couleur, libellé du bouton, le pourquoi avec et sans contexte. Source suivie : `Via le flux`, priorité sur le type, `imageAltText` « Source suivie ». |
-| `LinkAnnouncementCard`, boutons | unit | `alpha: 1`, `color` absent et `type: BORDERLESS` sur « Voir dans Radar ». |
-| `LinkAnnouncementCard`, titre et sous-titre | unit | Repli `@compte sur X`, domaine pour un article seulement, aucun séparateur final sans catégorie. |
-| `LinkAnnouncementCard`, description | unit | Coupée à 160 caractères multioctets, absente pour YouTube, X et Image, masquée si identique au titre. |
-| `LinkAnnouncementCard`, échappement | unit | `<users/all>` et `<a href=…>` dans le titre, la description, le contexte, le posteur, la source et les catégories : une fois retirées les balises `<b>`, `<i>` et `<font color="#…">` posées par le code, aucun `<` ne reste, ni dans la carte ni dans `fallbackText`. |
-| `LinkAnnouncementCard`, URL | unit | `safeUrl()` sur le bouton principal. |
-| `LinkAnnouncementCard`, cas limites | unit | Une URL sans hôte et un lien sans catégorie ne lèvent pas d'exception. |
+| `LinkAnnouncementCardTest`, 6 cas du tableau | unit | Icône, existence du PNG dans `public/chat/icons/`, couleur, libellé du bouton, le pourquoi avec et sans contexte. Source suivie : `Via le flux`, priorité sur le type, `imageAltText` « Source suivie ». |
+| `LinkAnnouncementCardTest`, boutons | unit | `alpha: 1`, `color` absent et `type: BORDERLESS` sur « Voir dans Radar ». |
+| `LinkAnnouncementCardTest`, titre et sous-titre | unit | Repli `@compte sur X`, domaine pour un article seulement, aucun séparateur final sans catégorie. |
+| `LinkAnnouncementCardDescriptionTest` | unit | Coupée à 160 caractères multioctets, absente pour YouTube, X et Image, masquée si identique au titre. |
+| `LinkAnnouncementCardSafetyTest`, échappement | unit | `<users/all>` et `<a href=…>` dans le titre, la description, le contexte, le posteur, la source et les catégories : une fois retirées les balises `<b>`, `<i>` et `<font color="#…">` posées par le code, aucun `<` ne reste, ni dans la carte ni dans `fallbackText`. |
+| `LinkAnnouncementCardSafetyTest`, hôte hostile | unit | Un `<` dans l'hôte reste échappé dans le titre de repli et le domaine. |
+| `LinkAnnouncementCardSafetyTest`, URL | unit | `safeUrl()` sur le bouton principal. |
+| `LinkAnnouncementCardSafetyTest`, cas limites | unit | Une URL sans hôte et un lien sans catégorie ne lèvent pas d'exception. |
+| `LinkAnnouncerTest::testAnnouncementWritesNoBanner` | unit | Un lien avec aperçu conservé est annoncé sans widget image et sans fichier de bandeau. |
 
 **Hors scope tests** :
 
@@ -212,31 +222,31 @@ Nouveaux tests de la carte, écrits à l'étape 3 (ils décrivent la cible, pas 
 
 Pas de coexistence ancien/nouveau : chaque étape est elle-même un toggle par revert.
 
-1. [ ] **Tests de caractérisation**
+1. [x] **Tests de caractérisation**
    - Objectif : verrouiller l'échec d'envoi et rendre les tests de `remove()` indépendants de `store()`.
    - Fichiers : `tests/Service/LinkAnnouncerTest.php`, `tests/Service/LinkRemovalTest.php`, `tests/Service/Preview/LinkBannerStoreTest.php`.
    - Vérification : `make phpunit` vert, sans code de production touché.
    - Commitable seule : oui.
 
-2. [ ] **Déplacement des icônes**
+2. [x] **Déplacement des icônes**
    - Objectif : rendre les 6 PNG disponibles dans `public/chat/icons/`, encore inutilisés.
    - Fichiers : `public/chat/icons/*.png`.
    - Vérification : 6 fichiers en 128 × 128, `git status` sans changement dans `config/`.
    - Commitable seule : oui.
 
-3. [ ] **Nouvelle carte et `LinkAnnouncer`**
+3. [x] **Nouvelle carte et `LinkAnnouncer`**
    - Objectif : produire la carte de la spec, sans bannière ni écriture de bandeau.
-   - Fichiers : `src/Service/LinkAnnouncementCard.php`, `src/Service/LinkAnnouncer.php`, `tests/Service/LinkAnnouncementCardTest.php`, `tests/Service/LinkAnnouncerTest.php` et les 4 autres fichiers de test qui construisent la carte.
+   - Fichiers : `src/Service/LinkAnnouncementCard.php`, `src/Service/LinkAnnouncer.php`, les 4 classes de test de la carte, `tests/Service/LinkAnnouncerTest.php`, les 4 autres fichiers de test qui construisent la carte, `tests/Controller/LinkAnnouncementTest.php` et `tests/Controller/SourceLinkTest.php`.
    - Vérification : `make phpunit` et `make lint` verts, tests de caractérisation inchangés.
    - Commitable seule : oui, `store()` subsiste sans appelant jusqu'à l'étape 4.
 
-4. [ ] **Retrait du code orphelin**
+4. [x] **Retrait du code orphelin**
    - Objectif : retirer `store()`, `decode()`, `ImageCropper::onWhite()` et leurs tests.
    - Fichiers : `src/Service/Preview/LinkBannerStore.php`, `src/Service/Preview/ImageCropper.php`, `tests/Service/Preview/LinkBannerStoreTest.php`.
    - Vérification : `make phpunit` et `make lint` verts, 0 occurrence résiduelle dans `src/` et `tests/`.
    - Commitable seule : oui.
 
-5. [ ] **Commentaires périmés et QA finale**
+5. [x] **Commentaires périmés et QA finale**
    - Objectif : aligner les commentaires sur le comportement livré.
    - Fichiers : `src/Controller/MediaController.php`, `src/Service/Preview/LinkBannerStore.php`.
    - Vérification : `make lint` et `make phpunit` verts.
@@ -244,13 +254,13 @@ Pas de coexistence ancien/nouveau : chaque étape est elle-même un toggle par r
 
 ## Critères de sortie
 
-- [ ] Tous les tests de caractérisation passent **avant ET après** chaque étape.
-- [ ] `make phpunit` vert, sans nouvelle régression.
-- [ ] `make lint` vert : zéro finding Mago, sans baseline.
-- [ ] Un test par ligne du tableau de correspondance, plus le test d'échappement.
-- [ ] 0 occurrence de `bannerName`, `onWhite` et `->store(` sur `LinkBannerStore`, mesurée par recherche dans `src/` et `tests/`.
-- [ ] `config/packages/security.yaml` absent du diff.
-- [ ] 6 PNG dans `public/chat/icons/`, plus aucun dans `docs/redesign/google-chat/icons/`.
+- [x] Tous les tests de caractérisation passent **avant ET après** chaque étape.
+- [x] `make phpunit` vert, sans nouvelle régression.
+- [x] `make lint` vert : zéro finding Mago, sans baseline.
+- [x] Un test par ligne du tableau de correspondance, plus le test d'échappement.
+- [x] 0 occurrence de `bannerName`, `onWhite` et `->store(` sur `LinkBannerStore`, mesurée par recherche dans `src/` et `tests/`.
+- [x] `config/packages/security.yaml` absent du diff.
+- [x] 6 PNG dans `public/chat/icons/`, plus aucun dans `docs/redesign/google-chat/icons/`.
 - [ ] Avant déploiement, un envoi réel vers un espace Chat de test réussit, avec « Voir dans Radar » sans bordure ; à défaut, retrait de `type: BORDERLESS`.
 - [ ] Le même envoi est relu en thème clair et sombre, notamment le texte `#17181C` du cas Image.
 - [ ] Après déploiement, `https://radar.mustiere.fr/chat/icons/github.png` répond 200 en `image/png` sans session.
@@ -264,7 +274,7 @@ Pas de coexistence ancien/nouveau : chaque étape est elle-même un toggle par r
 | Exception dans la carte, avant le `flush()` de `FetchLinkPreviewHandler` : aperçu perdu jusqu'au retry | faible | Tests de cas limites (URL sans hôte, sans catégorie), aucun appel qui lève dans la construction. |
 | Donnée externe placée dans le HTML sans `safeText()` | moyenne | Test d'échappement sur chaque champ, balises ajoutées uniquement par le code. |
 | Titre de repli ou domaine issu de l'URL non échappé | faible | `safeText()` appliqué au résultat de `LinkExtension`, couvert par le test d'échappement. |
-| Icône redirigée vers la connexion si le fichier n'est pas servi en statique | faible | Même emplacement que `logo.png`, `public/` non exclu de l'image, contrôle sans session après déploiement. `radar.wip` n'a pas pu être testé au cadrage. |
+| Icône redirigée vers la connexion si le fichier n'est pas servi en statique | faible | Même emplacement que `logo.png`, `public/` non exclu de l'image, contrôle sans session après déploiement. Vérifié en local sur le serveur Symfony : 200 sans session. |
 | Texte `#17181C` peu lisible en thème sombre de Chat | moyenne | Contrôle à l'envoi réel ; si illisible, retirer `<font>` pour le cas Image. |
 | `alpha` ignoré par Google | élevée | Sans effet, conservé comme le demande la spec. |
 

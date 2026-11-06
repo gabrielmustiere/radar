@@ -44,7 +44,7 @@ final class SourceLinkTest extends SourceWebTestCase
         self::assertNotificationCount(1);
         $message = self::getNotifierMessage();
         self::assertNotNull($message);
-        self::assertStringContainsString('Agents · Via Journal ' . $run, $message->getSubject());
+        self::assertStringContainsString('Agents · Via le flux Journal ' . $run, $message->getSubject());
 
         $client->request('GET', '/?q=' . $run);
         // La source remplace l'utilisateur système radar dans le pied de carte

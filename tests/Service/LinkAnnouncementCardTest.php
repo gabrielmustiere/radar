@@ -4,197 +4,175 @@ declare(strict_types=1);
 
 namespace App\Tests\Service;
 
-use App\Entity\Category;
 use App\Entity\Link;
-use App\Entity\Source;
-use App\Entity\User;
 use App\Enum\Type\SourceType;
-use App\Service\LinkAnnouncementCard;
-use App\Service\Preview\LinkPreview;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Notifier\Message\ChatMessage;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
 
-final class LinkAnnouncementCardTest extends TestCase
+final class LinkAnnouncementCardTest extends LinkAnnouncementCardTestCase
 {
-    private const string BUTTONS =
-        '{"buttonList":{"buttons":['
-            . '{"text":"Ouvrir le lien","onClick":{"openLink":{"url":"https://maestro.dev"}}},'
-            . '{"text":"Voir dans Radar","onClick":{"openLink":{"url":"https://radar.example/app_link_show"}}}]}}';
-
-    public function testFullCardCarriesBannerContextPosterAndButtons(): void
+    /** @return iterable<string, array{SourceType, array{icon: string, color: string, text: string, action: string, label: string}}> */
+    public static function provideTypes(): iterable
     {
-        $link = $this->link(context: 'Pour la recette mobile.', title: 'Maestro', description: 'Tests mobiles.');
+        yield 'YouTube' => [
+            SourceType::YouTube,
+            [
+                'icon' => 'youtube',
+                'color' => '{"red":0.882,"green":0.114,"blue":0.282,"alpha":1}',
+                'text' => '#BE123C',
+                'action' => 'Regarder la vidéo',
+                'label' => 'Vidéo YouTube',
+            ],
+        ];
+        yield 'GitHub' => [
+            SourceType::GitHub,
+            [
+                'icon' => 'github',
+                'color' => '{"red":0.486,"green":0.227,"blue":0.929,"alpha":1}',
+                'text' => '#6D28D9',
+                'action' => 'Voir le dépôt',
+                'label' => 'Dépôt GitHub',
+            ],
+        ];
+        yield 'X' => [
+            SourceType::X,
+            [
+                'icon' => 'x',
+                'color' => '{"red":0.012,"green":0.412,"blue":0.631,"alpha":1}',
+                'text' => '#0369A1',
+                'action' => 'Voir sur X',
+                'label' => 'Post X',
+            ],
+        ];
+        yield 'Article' => [
+            SourceType::Article,
+            [
+                'icon' => 'article',
+                'color' => '{"red":0.059,"green":0.463,"blue":0.431,"alpha":1}',
+                'text' => '#0F766E',
+                'action' => 'Lire l\'article',
+                'label' => 'Article',
+            ],
+        ];
+        yield 'Image' => [
+            SourceType::Image,
+            [
+                'icon' => 'image',
+                'color' => '{"red":0.09,"green":0.094,"blue":0.11,"alpha":1}',
+                'text' => '#17181C',
+                'action' => 'Voir l\'image',
+                'label' => 'Image',
+            ],
+        ];
+    }
 
-        $card = $this->card($link, 'abc');
+    /** @param array{icon: string, color: string, text: string, action: string, label: string} $expected */
+    #[DataProvider('provideTypes')]
+    public function testCardFollowsTheLinkType(SourceType $type, array $expected): void
+    {
+        $withContext = $this->link($type, 'Pour la recette.', 'Maestro');
+
+        $this->assertIcon($withContext, $expected['icon'], $expected['label']);
+        self::assertStringContainsString(
+            sprintf(
+                '{"text":"%s","color":%s,"onClick":{"openLink":{"url":"https://maestro.dev"}}}',
+                $expected['action'],
+                $expected['color'],
+            ),
+            $this->widgets($withContext),
+        );
+        self::assertStringContainsString(
+            sprintf('<b><font color=\"%s\">marie :</font></b> <i>Pour la recette.</i>', $expected['text']),
+            $this->widgets($withContext),
+        );
+        self::assertStringContainsString(
+            sprintf('<font color=\"%s\">Posté par marie</font>', $expected['text']),
+            $this->widgets($this->link($type, title: 'Maestro')),
+        );
+    }
+
+    #[TestWith([SourceType::Article])]
+    #[TestWith([SourceType::YouTube])]
+    public function testFollowedSourceTakesPrecedenceOverTheType(SourceType $type): void
+    {
+        $link = $this->link($type, title: 'Maestro', source: $this->source('Symfony Blog'));
+
+        $this->assertIcon($link, 'rss', 'Source suivie');
+        self::assertStringContainsString(
+            '{"text":"Lire l\'article","color":{"red":0.761,"green":0.255,"blue":0.047,"alpha":1},'
+            . '"onClick":{"openLink":{"url":"https://maestro.dev"}}}',
+            $this->widgets($link),
+        );
+        self::assertStringContainsString(
+            '<font color=\"#C2410C\">Via le flux Symfony Blog</font>',
+            $this->widgets($link),
+        );
+        self::assertStringNotContainsString('Posté par', $this->widgets($link));
+        self::assertStringEndsWith('Via le flux Symfony Blog', $this->message($link)->getSubject());
+    }
+
+    public function testSecondaryButtonOpensRadarWithoutBorder(): void
+    {
+        self::assertStringContainsString(
+            '{"text":"Voir dans Radar","type":"BORDERLESS",'
+            . '"onClick":{"openLink":{"url":"https://radar.example/app_link_show"}}}',
+            $this->widgets($this->link()),
+        );
+    }
+
+    public function testCardNoLongerCarriesABanner(): void
+    {
+        self::assertStringNotContainsString('"image"', $this->widgets($this->link(description: 'Tests mobiles.')));
+    }
+
+    public function testHeaderMatchesTheSpecification(): void
+    {
+        $link = $this->link(context: 'Pour la recette.', title: 'Maestro');
 
         self::assertSame(
             [
                 'title' => 'Maestro',
-                'subtitle' => 'Article · Tester une app mobile, Outils QA',
-                'imageUrl' => 'https://radar.example/app_pagelogo.png',
+                'subtitle' => 'Article · maestro.dev · Tester une app mobile, Outils QA',
+                'imageUrl' => 'https://radar.example/app_pagechat/icons/article.png',
                 'imageType' => 'SQUARE',
+                'imageAltText' => 'Article',
             ],
-            $card['header'] ?? null,
+            $this->card($link)['header'] ?? null,
         );
-        self::assertSame('[{"image":{"imageUrl":"https://radar.example/app_announcement_banner","altText":"Maestro"}},'
-        . '{"textParagraph":{"text":"Pour la recette mobile."}},'
-        . '{"textParagraph":{"text":"Posté par marie"}},'
-        . self::BUTTONS
-        . ']', $this->widgets($link, 'abc'));
 
-        $message = $this->message($link, 'abc');
+        $message = $this->message($link);
         self::assertSame(
-            'Maestro · Article · Tester une app mobile, Outils QA · Posté par marie',
+            'Maestro · Article · maestro.dev · Tester une app mobile, Outils QA · Posté par marie',
             $message->getSubject(),
         );
         self::assertSame($message->getSubject(), $message->getOptions()?->toArray()['fallbackText'] ?? null);
     }
 
-    public function testCompactCardFallsBackOnWhatTheLinkHas(): void
+    public function testDomainOnlyAppearsForAnArticle(): void
     {
-        $bare = $this->link();
-
-        self::assertSame('[{"textParagraph":{"text":"Posté par marie"}},' . self::BUTTONS . ']', $this->widgets(
-            $bare,
-            null,
-        ));
-        self::assertSame('https://maestro.dev', $this->card($bare, null)['header']['title'] ?? null);
-        self::assertStringContainsString('{"textParagraph":{"text":"Tests mobiles."}}', $this->widgets(
-            $this->link(description: 'Tests mobiles.'),
-            null,
-        ));
+        self::assertSame(
+            'Dépôt GitHub · Tester une app mobile, Outils QA',
+            $this->card($this->link(SourceType::GitHub))['header']['subtitle'] ?? null,
+        );
     }
 
-    public function testNamesTheFollowedSourceInsteadOfThePoster(): void
+    public function testTitleFallsBackLikeTheApp(): void
     {
-        $link = $this->link(
-            source: new Source('https://symfony.com/feed', 'Symfony Blog', [], new \DateTimeImmutable()),
+        self::assertSame(
+            '@symfony sur X',
+            $this->card($this->linkAt('https://x.com/symfony/status/1', SourceType::X))['header']['title'] ?? null,
         );
-
-        $widgets = $this->widgets($link, null);
-
-        self::assertStringContainsString('"Via Symfony Blog"', $widgets);
-        self::assertStringNotContainsString('Posté par', $widgets);
+        self::assertSame('maestro.dev', $this->card($this->link())['header']['title'] ?? null);
     }
 
-    public function testNoUntrustedFragmentKeepsItsMarkup(): void
+    private function assertIcon(Link $link, string $icon, string $altText): void
     {
-        $hostile = '<users/all><a href="https://piege.example">clic</a>';
-        $source = new Source('https://example.com/feed', $hostile, [], new \DateTimeImmutable());
-        $link = new Link(
-            'https://example.com/article',
-            'https://example.com/article',
-            [new Category($hostile, new \DateTimeImmutable())],
-            new User()->setEmail($hostile . '@example.com'),
-            new \DateTimeImmutable(),
-            SourceType::Article,
-            $hostile,
-            source: $source,
+        $card = $this->card($link);
+        self::assertSame(
+            sprintf('https://radar.example/app_pagechat/icons/%s.png', $icon),
+            $card['header']['imageUrl'] ?? null,
         );
-        $link->applyPreview(
-            new LinkPreview(title: $hostile, description: $hostile),
-            null,
-            null,
-            new \DateTimeImmutable(),
-        );
-
-        $message = $this->message($link, 'abc');
-
-        self::assertStringNotContainsString('<', $this->json($message->getOptions()?->toArray()));
-        self::assertStringNotContainsString('<', $message->getSubject());
-        self::assertStringContainsString('‹users/all›', $this->widgets($link, null));
-
-        $withoutContext = new Link(
-            'https://example.com/article',
-            'https://example.com/article',
-            [],
-            new User()->setEmail('<users/all>@example.com'),
-            new \DateTimeImmutable(),
-            SourceType::Article,
-        );
-        $withoutContext->applyPreview(
-            new LinkPreview(description: '<users/all>'),
-            null,
-            null,
-            new \DateTimeImmutable(),
-        );
-        self::assertStringNotContainsString('<', $this->widgets($withoutContext, null));
-    }
-
-    public function testEncodesAnUrlThatWouldBreakOutOfItsMarkup(): void
-    {
-        $url = 'https://example.com/a|b>c<d';
-        $link = new Link(
-            $url,
-            $url,
-            [new Category('Symfony', new \DateTimeImmutable())],
-            new User()->setEmail('marie@example.com'),
-            new \DateTimeImmutable(),
-            SourceType::Article,
-        );
-
-        self::assertSame('https://example.com/a%7Cb%3Ec%3Cd', $this->card($link, null)['header']['title'] ?? null);
-        self::assertStringContainsString('"url":"https://example.com/a%7Cb%3Ec%3Cd"', $this->widgets($link, null));
-    }
-
-    /** @return array<array-key, mixed> */
-    private function card(Link $link, ?string $bannerName): array
-    {
-        $options = $this->message($link, $bannerName)->getOptions();
-        self::assertNotNull($options);
-        /** @var array{cardsV2: array{0: array{card: array<array-key, mixed>}}} $payload */
-        $payload = $options->toArray();
-
-        return $payload['cardsV2'][0]['card'];
-    }
-
-    private function widgets(Link $link, ?string $bannerName): string
-    {
-        return $this->json($this->card($link, $bannerName)['sections'][0]['widgets'] ?? null);
-    }
-
-    private function json(mixed $value): string
-    {
-        return (string) json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    }
-
-    private function message(Link $link, ?string $bannerName): ChatMessage
-    {
-        $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
-        $urlGenerator
-            ->method('generate')
-            ->willReturnCallback(static fn(string $route): string => 'https://radar.example/' . $route);
-
-        return new LinkAnnouncementCard($urlGenerator)->message($link, $bannerName);
-    }
-
-    private function link(
-        ?string $context = null,
-        ?string $title = null,
-        ?string $description = null,
-        ?Source $source = null,
-    ): Link {
-        $link = new Link(
-            'https://maestro.dev',
-            'https://maestro.dev',
-            [
-                new Category('Tester une app mobile', new \DateTimeImmutable()),
-                new Category('Outils QA', new \DateTimeImmutable()),
-            ],
-            new User()->setEmail('marie@example.com'),
-            new \DateTimeImmutable(),
-            SourceType::Article,
-            $context,
-            source: $source,
-        );
-        $link->applyPreview(
-            new LinkPreview(title: $title, description: $description),
-            null,
-            null,
-            new \DateTimeImmutable(),
-        );
-
-        return $link;
+        self::assertSame($altText, $card['header']['imageAltText'] ?? null);
+        self::assertFileExists(sprintf('%s/../../public/chat/icons/%s.png', __DIR__, $icon));
     }
 }

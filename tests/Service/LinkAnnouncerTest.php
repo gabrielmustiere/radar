@@ -13,6 +13,7 @@ use App\Service\LinkAnnouncer;
 use App\Service\Preview\LinkBannerStore;
 use App\Service\Preview\LinkPreview;
 use App\Tests\Service\Preview\TestImage;
+use App\Twig\LinkExtension;
 use League\Flysystem\Filesystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
@@ -39,7 +40,7 @@ final class LinkAnnouncerTest extends TestCase
         );
     }
 
-    public function testBannerOfTheStoredPreviewReachesTheCard(): void
+    public function testAnnouncementWritesNoBanner(): void
     {
         $link = $this->link();
         $link->applyPreview(new LinkPreview(), 'previews/apercu.webp', null, new \DateTimeImmutable());
@@ -49,19 +50,7 @@ final class LinkAnnouncerTest extends TestCase
 
         $this->announcer($sent, $storage)->announce($link);
 
-        self::assertStringContainsString(
-            '"image"',
-            (string) json_encode(($sent[0] ?? null)?->getOptions()?->toArray()),
-        );
-    }
-
-    public function testCardStaysCompactWithoutStoredPreview(): void
-    {
-        $sent = [];
-
-        $this->announcer($sent)->announce($this->link());
-
-        self::assertCount(1, $sent);
+        self::assertSame([], $storage->listContents('banners')->toArray());
         self::assertStringNotContainsString(
             '"image"',
             (string) json_encode(($sent[0] ?? null)?->getOptions()?->toArray()),
@@ -142,7 +131,7 @@ final class LinkAnnouncerTest extends TestCase
 
         return new LinkAnnouncer(
             $chatter,
-            new LinkAnnouncementCard($urlGenerator),
+            new LinkAnnouncementCard($urlGenerator, new LinkExtension()),
             new MockClock('2026-10-29 12:00', 'Europe/Paris'),
             new LinkBannerStore(
                 $storage ?? new Filesystem(new InMemoryFilesystemAdapter()),

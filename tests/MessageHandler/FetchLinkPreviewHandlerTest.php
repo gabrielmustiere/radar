@@ -15,6 +15,7 @@ use App\Service\LinkAnnouncer;
 use App\Service\Preview\LinkBannerStore;
 use App\Tests\Service\Preview\PreviewFixture;
 use App\Tests\Service\Preview\PreviewTestKit;
+use App\Twig\LinkExtension;
 use Doctrine\ORM\EntityManagerInterface;
 use League\Flysystem\Filesystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
@@ -112,7 +113,7 @@ final class FetchLinkPreviewHandlerTest extends TestCase
 
         return new LinkAnnouncer(
             $chatter,
-            new LinkAnnouncementCard($this->createStub(UrlGeneratorInterface::class)),
+            new LinkAnnouncementCard($this->createStub(UrlGeneratorInterface::class), new LinkExtension()),
             new MockClock(),
             new LinkBannerStore(new Filesystem(new InMemoryFilesystemAdapter()), new NullLogger(), 'secret'),
         );

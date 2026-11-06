@@ -34,7 +34,7 @@ final class MediaController extends AbstractController
         return $response;
     }
 
-    /** Bandeau d'une annonce Chat, lu par Google sans compte. Une relance le réécrit : le contenu n'est pas figé. */
+    /** Bandeau d'une annonce déjà envoyée, lu par Google sans compte. Il disparaît avec son lien : pas de cache immuable. */
     #[Route(
         path: '/annonces/bandeaux/{name}.jpg',
         name: 'app_announcement_banner',

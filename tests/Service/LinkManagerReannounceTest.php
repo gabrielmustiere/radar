@@ -15,6 +15,7 @@ use App\Service\LinkManager;
 use App\Service\LinkUrlAnalyzer;
 use App\Service\Preview\LinkBannerStore;
 use App\Service\Preview\LinkPreview;
+use App\Twig\LinkExtension;
 use League\Flysystem\Filesystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
@@ -64,7 +65,7 @@ final class LinkManagerReannounceTest extends TestCase
             $this->createStub(MessageBusInterface::class),
             new LinkAnnouncer(
                 $chatter,
-                new LinkAnnouncementCard($this->createStub(UrlGeneratorInterface::class)),
+                new LinkAnnouncementCard($this->createStub(UrlGeneratorInterface::class), new LinkExtension()),
                 $clock,
                 new LinkBannerStore(new Filesystem(new InMemoryFilesystemAdapter()), new NullLogger(), 'secret'),
             ),
