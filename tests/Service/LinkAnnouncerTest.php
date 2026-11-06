@@ -68,7 +68,7 @@ final class LinkAnnouncerTest extends TestCase
         );
     }
 
-    public function testFailedSendPropagatesAndLeavesTheLinkUnannounced(): void
+    public function testUnqueuedAnnouncementPropagatesAndLeavesTheLinkUnannounced(): void
     {
         $link = $this->link();
         $failure = new \RuntimeException('Chat indisponible');
