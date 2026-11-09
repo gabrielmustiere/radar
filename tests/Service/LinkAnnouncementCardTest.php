@@ -18,7 +18,7 @@ final class LinkAnnouncementCardTest extends LinkAnnouncementCardTestCase
             SourceType::YouTube,
             [
                 'icon' => 'youtube',
-                'color' => '{"red":0.882,"green":0.114,"blue":0.282,"alpha":1}',
+                'color' => '{"red":0.745,"green":0.071,"blue":0.235,"alpha":1}',
                 'text' => '#BE123C',
                 'action' => 'Regarder la vidéo',
                 'label' => 'Vidéo YouTube',
@@ -28,7 +28,7 @@ final class LinkAnnouncementCardTest extends LinkAnnouncementCardTestCase
             SourceType::GitHub,
             [
                 'icon' => 'github',
-                'color' => '{"red":0.486,"green":0.227,"blue":0.929,"alpha":1}',
+                'color' => '{"red":0.357,"green":0.129,"blue":0.714,"alpha":1}',
                 'text' => '#6D28D9',
                 'action' => 'Voir le dépôt',
                 'label' => 'Dépôt GitHub',
@@ -125,19 +125,22 @@ final class LinkAnnouncementCardTest extends LinkAnnouncementCardTestCase
         self::assertStringNotContainsString('"image"', $this->widgets($this->link(description: 'Tests mobiles.')));
     }
 
-    public function testHeaderMatchesTheSpecification(): void
+    public function testHeadingMatchesTheSpecification(): void
     {
         $link = $this->link(context: 'Pour la recette.', title: 'Maestro');
 
+        self::assertArrayNotHasKey('header', $this->card($link));
         self::assertSame(
             [
-                'title' => 'Maestro',
-                'subtitle' => 'Article · maestro.dev · Tester une app mobile, Outils QA',
-                'imageUrl' => 'https://radar.example/app_pagechat/icons/article.png',
-                'imageType' => 'SQUARE',
-                'imageAltText' => 'Article',
+                'startIcon' => [
+                    'iconUrl' => 'https://radar.example/app_pagechat/icons/article.png',
+                    'imageType' => 'SQUARE',
+                    'altText' => 'Article',
+                ],
+                'text' => '<b>Maestro</b>',
+                'bottomLabel' => 'Article · maestro.dev · Tester une app mobile, Outils QA',
             ],
-            $this->card($link)['header'] ?? null,
+            $this->heading($link),
         );
 
         $message = $this->message($link);
@@ -152,27 +155,24 @@ final class LinkAnnouncementCardTest extends LinkAnnouncementCardTestCase
     {
         self::assertSame(
             'Dépôt GitHub · Tester une app mobile, Outils QA',
-            $this->card($this->link(SourceType::GitHub))['header']['subtitle'] ?? null,
+            $this->heading($this->link(SourceType::GitHub))['bottomLabel'],
         );
     }
 
     public function testTitleFallsBackLikeTheApp(): void
     {
         self::assertSame(
-            '@symfony sur X',
-            $this->card($this->linkAt('https://x.com/symfony/status/1', SourceType::X))['header']['title'] ?? null,
+            '<b>@symfony sur X</b>',
+            $this->heading($this->linkAt('https://x.com/symfony/status/1', SourceType::X))['text'],
         );
-        self::assertSame('maestro.dev', $this->card($this->link())['header']['title'] ?? null);
+        self::assertSame('<b>maestro.dev</b>', $this->heading($this->link())['text']);
     }
 
     private function assertIcon(Link $link, string $icon, string $altText): void
     {
-        $card = $this->card($link);
-        self::assertSame(
-            sprintf('https://radar.example/app_pagechat/icons/%s.png', $icon),
-            $card['header']['imageUrl'] ?? null,
-        );
-        self::assertSame($altText, $card['header']['imageAltText'] ?? null);
+        $startIcon = $this->heading($link)['startIcon'];
+        self::assertSame(sprintf('https://radar.example/app_pagechat/icons/%s.png', $icon), $startIcon['iconUrl']);
+        self::assertSame($altText, $startIcon['altText']);
         self::assertFileExists(sprintf('%s/../../public/chat/icons/%s.png', __DIR__, $icon));
     }
 }

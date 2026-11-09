@@ -35,7 +35,7 @@ final class LinkAnnouncementTest extends LinkWebTestCase
         );
         self::assertStringContainsString('<i>À lire.</i>', $card);
         self::assertMatchesRegularExpression('#"url":"http://localhost/liens/\d+"#', $card);
-        self::assertStringContainsString('"imageUrl":"http://localhost/chat/icons/article.png"', $card);
+        self::assertStringContainsString('"iconUrl":"http://localhost/chat/icons/article.png"', $card);
     }
 
     public function testSeededLinkIsNotAnnounced(): void

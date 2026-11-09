@@ -44,15 +44,15 @@ final class LinkAnnouncementCardSafetyTest extends LinkAnnouncementCardTestCase
             $this->withoutOwnMarkup($this->json($message->getOptions()?->toArray())),
         );
         self::assertStringNotContainsString('<', $message->getSubject());
-        self::assertSame('exa‹x›mple.com', $this->card($link)['header']['title'] ?? null);
-        self::assertSame('Article · exa‹x›mple.com', $this->card($link)['header']['subtitle'] ?? null);
+        self::assertSame('<b>exa‹x›mple.com</b>', $this->heading($link)['text']);
+        self::assertSame('Article · exa‹x›mple.com', $this->heading($link)['bottomLabel']);
     }
 
     public function testEncodesAnUrlThatWouldBreakOutOfItsMarkup(): void
     {
         $link = $this->linkAt('https://example.com/a|b>c<d', SourceType::Article);
 
-        self::assertSame('example.com', $this->card($link)['header']['title'] ?? null);
+        self::assertSame('<b>example.com</b>', $this->heading($link)['text']);
         self::assertStringContainsString('"url":"https://example.com/a%7Cb%3Ec%3Cd"', $this->widgets($link));
     }
 
@@ -60,7 +60,7 @@ final class LinkAnnouncementCardSafetyTest extends LinkAnnouncementCardTestCase
     {
         $link = $this->linkAt('mailto:marie', SourceType::Article);
 
-        self::assertSame('Article', $this->card($link)['header']['subtitle'] ?? null);
+        self::assertSame('Article', $this->heading($link)['bottomLabel']);
     }
 
     private function withoutOwnMarkup(string $json): string

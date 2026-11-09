@@ -16,7 +16,7 @@ final class LinkAnnouncementCardDescriptionTest extends LinkAnnouncementCardTest
         $link = $this->link($type, 'Pourquoi.', 'Maestro', 'Tests mobiles.');
 
         self::assertStringContainsString(
-            '[{"textParagraph":{"text":"Tests mobiles."}},{"textParagraph":{"text":"<b>',
+            '"}},{"textParagraph":{"text":"Tests mobiles."}},{"textParagraph":{"text":"<b>',
             $this->widgets($link),
         );
     }
@@ -55,7 +55,7 @@ final class LinkAnnouncementCardDescriptionTest extends LinkAnnouncementCardTest
     {
         $sections = $this->sections($this->link(title: 'Maestro', description: str_repeat('é', times: 200)));
 
-        $text = $sections[0]['textParagraph']['text'] ?? '';
+        $text = $sections[1]['textParagraph']['text'] ?? '';
         self::assertSame(160, mb_strlen($text));
         self::assertTrue(mb_check_encoding($text, encoding: 'UTF-8'));
         self::assertStringEndsWith('é…', $text);

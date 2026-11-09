@@ -30,8 +30,6 @@ final readonly class LinkAnnouncementCard
 
     public function message(Link $link): ChatMessage
     {
-        $style = $this->style($link);
-        $home = $this->urlGenerator->generate('app_page', referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
         $title = $this->safeText($this->linkExtension->title($link));
         $subtitle = $this->subtitle($link);
         // Le transport envoie les options seules : le sujet ne sert qu'aux tests et aux logs.
@@ -40,32 +38,37 @@ final readonly class LinkAnnouncementCard
 
         return new ChatMessage($fallbackText, $options->cardV2([
             'cardId' => sprintf('link-%d', (int) $link->getId()),
-            'card' => [
-                'header' => [
-                    'title' => $title,
-                    'subtitle' => $subtitle,
-                    'imageUrl' => sprintf('%schat/icons/%s.png', $home, $style['icon']),
-                    'imageType' => 'SQUARE',
-                    'imageAltText' => null === $link->getSource() ? $link->getSourceType()->label() : 'Source suivie',
-                ],
-                'sections' => [['widgets' => $this->widgets($link, $title, $style)]],
-            ],
+            'card' => ['sections' => [['widgets' => $this->widgets($link, $title, $subtitle, $this->style($link))]]],
         ]));
     }
 
     /**
+     * Le titre est un `decoratedText` plutôt qu'un en-tête de carte : Chat n'accepte aucun formatage dans
+     * `header.title`, et le titre doit être en gras.
+     *
      * @param Style $style
      *
      * @return list<array<string, mixed>>
      */
-    private function widgets(Link $link, string $title, array $style): array
+    private function widgets(Link $link, string $title, string $subtitle, array $style): array
     {
+        $home = $this->urlGenerator->generate('app_page', referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
         $radarUrl = $this->urlGenerator->generate(
             'app_link_show',
             ['id' => $link->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL,
         );
-        $widgets = [];
+        $widgets = [[
+            'decoratedText' => [
+                'startIcon' => [
+                    'iconUrl' => sprintf('%schat/icons/%s.png', $home, $style['icon']),
+                    'imageType' => 'SQUARE',
+                    'altText' => null === $link->getSource() ? $link->getSourceType()->label() : 'Source suivie',
+                ],
+                'text' => sprintf('<b>%s</b>', $title),
+                'bottomLabel' => $subtitle,
+            ],
+        ]];
 
         $description = $this->description($link, $title);
         if (null !== $description) {
@@ -94,7 +97,8 @@ final readonly class LinkAnnouncementCard
     }
 
     /**
-     * `icon` nomme le fichier de `public/chat/icons/`. Google lit `color` en RGBA de 0 à 1.
+     * `icon` nomme le fichier de `public/chat/icons/`. Google lit `color` en RGBA de 0 à 1. Chat choisit seul la
+     * couleur du texte du bouton et la passe en noir sur un fond trop clair : le violet et le rose sont donc foncés.
      *
      * @return Style
      */
@@ -112,13 +116,13 @@ final readonly class LinkAnnouncementCard
         return match ($link->getSourceType()) {
             SourceType::YouTube => [
                 'icon' => 'youtube',
-                'color' => ['red' => 0.882, 'green' => 0.114, 'blue' => 0.282, 'alpha' => 1],
+                'color' => ['red' => 0.745, 'green' => 0.071, 'blue' => 0.235, 'alpha' => 1],
                 'text' => '#BE123C',
                 'action' => 'Regarder la vidéo',
             ],
             SourceType::GitHub => [
                 'icon' => 'github',
-                'color' => ['red' => 0.486, 'green' => 0.227, 'blue' => 0.929, 'alpha' => 1],
+                'color' => ['red' => 0.357, 'green' => 0.129, 'blue' => 0.714, 'alpha' => 1],
                 'text' => '#6D28D9',
                 'action' => 'Voir le dépôt',
             ],

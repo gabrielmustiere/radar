@@ -36,6 +36,13 @@ abstract class LinkAnnouncementCardTestCase extends TestCase
         return $this->card($link)['sections'][0]['widgets'] ?? [];
     }
 
+    /** @return array{startIcon: array{iconUrl: string, imageType: string, altText: string}, text: string, bottomLabel: string} */
+    protected function heading(Link $link): array
+    {
+        /** @var array{startIcon: array{iconUrl: string, imageType: string, altText: string}, text: string, bottomLabel: string} */
+        return $this->card($link)['sections'][0]['widgets'][0]['decoratedText'] ?? [];
+    }
+
     protected function widgets(Link $link): string
     {
         return $this->json($this->sections($link));
