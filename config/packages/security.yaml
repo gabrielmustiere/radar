@@ -36,6 +36,12 @@ security:
                 check_path: app_login
                 enable_csrf: true
                 default_target_path: app_page
+            # Case « Se souvenir de moi » : cookie signé de 30 jours, invalidé par un changement de mot de passe.
+            # Changer APP_SECRET déconnecte tous ceux qui l'ont cochée.
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 2592000
+                signature_properties: ['password']
             logout:
                 path: app_logout
                 # where to redirect after logout
