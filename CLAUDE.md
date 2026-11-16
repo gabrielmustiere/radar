@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Radar — outil interne de veille technologique et produit : liens partagés en cartes enrichies, classés par besoin, annoncés dans Google Chat (voir `docs/vision.md`).
+Radar — outil interne de veille technologique et produit : liens partagés en cartes enrichies, classés par besoin, annoncés dans Google Chat (voir `forge/vision.md`).
 
 **Tradeoff :** ces directives privilégient la prudence sur la vitesse. Pour les tâches triviales, utilise ton jugement.
 

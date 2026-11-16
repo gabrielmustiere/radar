@@ -4,7 +4,7 @@
 [![Symfony Version](https://img.shields.io/badge/symfony-8.1-black.svg)](https://symfony.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Outil interne de veille technologique et produit : les liens partagés (YouTube, X, GitHub, articles…) deviennent des cartes enrichies, classées par besoin, retrouvables des mois plus tard et annoncées dans Google Chat. Vision : [`docs/vision.md`](docs/vision.md). Dépôt : [`gabrielmustiere/radar`](https://github.com/gabrielmustiere/radar). Amorcé depuis [`gabrielmustiere/symfony-template`](https://github.com/gabrielmustiere/symfony-template).
+Outil interne de veille technologique et produit : les liens partagés (YouTube, X, GitHub, articles…) deviennent des cartes enrichies, classées par besoin, retrouvables des mois plus tard et annoncées dans Google Chat. Vision : [`forge/vision.md`](forge/vision.md). Dépôt : [`gabrielmustiere/radar`](https://github.com/gabrielmustiere/radar). Amorcé depuis [`gabrielmustiere/symfony-template`](https://github.com/gabrielmustiere/symfony-template).
 
 ## Stack
 
@@ -81,7 +81,7 @@ Chaque lien ajouté est annoncé une fois dans l'espace Google Chat de l'équipe
 
 Le design system **"Radar"** (inspiré du shot Dribbble Markit) — tokens (neutres stone, accent teal, Inter, mode sombre système, illustrations Open Doodles) documentés dans [`DESIGN.md`](DESIGN.md), variables `@theme` exposées dans `assets/styles/app.css`.
 
-Stack front retenue (voir [`docs/adr/0001-stack-front-paper-flowbite-ux-toolkit.md`](docs/adr/0001-stack-front-paper-flowbite-ux-toolkit.md)) :
+Stack front retenue (voir [`forge/adr/0001-stack-front-paper-flowbite-ux-toolkit.md`](forge/adr/0001-stack-front-paper-flowbite-ux-toolkit.md)) :
 
 - **Tailwind CSS 4** comme moteur utilitaire.
 - **Flowbite 4** pour les composants interactifs (drawer sidebar, toasts flash, datepicker).

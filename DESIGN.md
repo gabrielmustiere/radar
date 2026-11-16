@@ -23,7 +23,7 @@ rounded:
 
 Interface calme et lumineuse, très inspirée de Markit : fond blanc cassé chaud, noir et blanc sans couleur dominante (la couleur est réservée aux plateformes des cartes), coins généreusement arrondis, bordures fines plutôt qu'ombres, et quelques illustrations dessinées à la main pour la personnalité.
 
-Contrainte permanente : **simplicité**. On reprend le langage visuel de Markit, pas ses fonctionnalités (pas de « Read Later » ni de signets privés — anti-objectifs de `docs/vision.md`).
+Contrainte permanente : **simplicité**. On reprend le langage visuel de Markit, pas ses fonctionnalités (pas de « Read Later » ni de signets privés — anti-objectifs de `forge/vision.md`).
 
 ## Tokens
 
