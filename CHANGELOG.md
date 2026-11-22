@@ -10,6 +10,18 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-22 — Radar installable sur mobile
+
+### ✨ Fonctionnel
+- **Installer Radar sur son téléphone** — Android et iPhone : icône sur l'écran d'accueil, ouverture en plein écran, affichage correct sous l'encoche et au-dessus de la barre d'accueil.
+- **Entrée « Installer l'app »** — dans le menu utilisateur, avec une page d'aide pas à pas pour iPhone, Android et ordinateur ; elle disparaît dans l'app installée.
+- **Partager un lien vers Radar depuis Android** — Radar apparaît dans le menu Partager : le formulaire d'ajout s'ouvre avec le lien déjà rempli, il ne reste qu'à choisir les catégories. Sans lien dans le partage, un message l'indique.
+- **Page « hors ligne »** — sans réseau, l'app affiche un écran clair au lieu de l'erreur du navigateur.
+
+### 🔧 Technique
+- **Canal d'entrée de chaque ajout** — Radar, extension ou partage mobile, enregistré pour compter les ajouts par canal (lecture agrégée uniquement).
+- **Fichiers PWA statiques** — manifeste, service worker de repli hors ligne et icônes dans `public/`, lisibles sans session.
+
 ## [1.4.0] - 2026-11-22 — Cartes Chat typées et connexion mémorisée
 
 ### ✨ Fonctionnel
@@ -233,7 +245,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/gabrielmustiere/radar/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/gabrielmustiere/radar/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/gabrielmustiere/radar/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/gabrielmustiere/radar/compare/v1.1.0...v1.2.0

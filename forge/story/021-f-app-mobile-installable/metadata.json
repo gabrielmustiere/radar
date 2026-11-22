@@ -45,10 +45,15 @@
       "date": "2026-11-22",
       "type": "Livraison",
       "description": "App Radar installable (PWA), partage Android vers le formulaire prérempli, page hors ligne et canal d'entrée de chaque ajout."
+    },
+    {
+      "date": "2026-11-22",
+      "type": "Release",
+      "description": "Publiée dans v1.5.0 — Radar installable sur mobile."
     }
   ],
   "delivery": {
     "date": "2026-11-22",
-    "release": null
+    "release": "v1.5.0"
   }
 }
