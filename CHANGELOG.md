@@ -10,6 +10,11 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-11-22 — Fin du zoom parasite sur iPhone
+
+### ✨ Fonctionnel
+- **Page qui ne déborde plus sur iPhone** — à la première connexion, toucher un champ zoomait la page et la laissait coupée à droite. Les champs sont désormais à 16 px sur écran tactile et le zoom est verrouillé.
+
 ## [1.5.0] - 2026-11-22 — Radar installable sur mobile
 
 ### ✨ Fonctionnel
@@ -245,7 +250,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.5.1...HEAD
+[1.5.1]: https://github.com/gabrielmustiere/radar/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/gabrielmustiere/radar/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/gabrielmustiere/radar/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/gabrielmustiere/radar/compare/v1.2.0...v1.3.0
