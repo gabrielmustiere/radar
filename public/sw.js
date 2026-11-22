@@ -1,7 +1,7 @@
 // Repli hors ligne de l'app installée, et rien d'autre : aucune page de Radar n'est mise en cache,
 // pour ne jamais montrer un contenu périmé ni celui d'un autre compte.
 // Tout changement de offline.html incrémente CACHE, sinon les apps installées gardent l'ancienne page.
-const CACHE = 'radar-offline-v1';
+const CACHE = 'radar-offline-v2';
 const OFFLINE_URL = '/offline.html';
 
 self.addEventListener('install', (event) => {

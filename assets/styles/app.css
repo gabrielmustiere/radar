@@ -317,6 +317,16 @@
     }
 }
 
+/* Écran tactile : Safari iOS zoome sur tout champ sous 16 px et ne dézoome plus, la page déborde alors à droite.
+   Hors @layer pour primer sur les utilitaires text-sm / text-[15px] des champs. */
+@media (pointer: coarse) {
+    input,
+    select,
+    textarea {
+        font-size: 16px;
+    }
+}
+
 /* Requête en cours : soumission Turbo, frame qui charge */
 form[aria-busy='true'],
 turbo-frame[aria-busy='true'] {
