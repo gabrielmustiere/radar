@@ -10,6 +10,12 @@
             L'adresse, une à trois catégories-besoins et, si vous voulez, pourquoi c'est utile : c'est tout.
         </p>
 
+        {% if share_without_link %}
+            <twig:Alert variant="warning" class="mt-6" data-test="share-no-link">
+                <twig:Alert:Description>Aucun lien trouvé dans le partage, collez l'URL.</twig:Alert:Description>
+            </twig:Alert>
+        {% endif %}
+
         <twig:LinkForm :form="form"/>
     </twig:Turbo:Frame>
 {% endblock %}

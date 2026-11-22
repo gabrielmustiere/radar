@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Installer l'app · Radar{% endblock %}
+
+{% set step_card = 'flex flex-col gap-3.5 rounded-[18px] bg-white p-5 ring-1 ring-gray-200/70 dark:bg-gray-900 dark:ring-gray-800' %}
+{% set step_icon = 'grid size-10 shrink-0 place-items-center rounded-xl bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-300' %}
+{% set step_list = 'flex list-decimal flex-col gap-2 pl-5 text-sm leading-relaxed text-gray-700 marker:text-gray-400 dark:text-gray-300' %}
+
+{% block body %}
+    <div class="mx-auto flex max-w-[720px] flex-col gap-6 sm:pt-4">
+        <div class="flex flex-col gap-2.5">
+            <h1 class="font-display text-[34px] leading-[1.1] font-bold tracking-[-0.025em] text-gray-900 dark:text-white">Radar sur votre écran d'accueil.</h1>
+            <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                Installé, Radar s'ouvre d'un geste, en plein écran, comme une app.
+                Sur Android, il apparaît aussi dans le menu Partager : envoyez-y un lien depuis YouTube, X ou votre navigateur.
+            </p>
+        </div>
+
+        <section class="{{ step_card }}" data-test="install-iphone">
+            <div class="flex items-center gap-3">
+                <span class="{{ step_icon }}"><twig:ux:icon name="tabler:brand-apple" class="size-5"/></span>
+                <h2 class="text-[15px] font-semibold text-gray-900 dark:text-white">iPhone et iPad</h2>
+            </div>
+            <ol class="{{ step_list }}">
+                <li>Ouvrez Radar dans Safari.</li>
+                <li>Touchez le bouton Partager <twig:ux:icon name="tabler:share-2" class="inline size-4 align-text-bottom"/>, en bas de l'écran sur iPhone.</li>
+                <li>Choisissez « Sur l'écran d'accueil », puis « Ajouter ».</li>
+            </ol>
+            <p class="text-sm text-gray-500 dark:text-gray-400" data-test="install-iphone-login">
+                Au premier lancement, connectez-vous une fois : l'app installée ne partage pas la connexion de Safari.
+                Cochez « Se souvenir de moi » pour ne plus avoir à le refaire.
+            </p>
+        </section>
+
+        <section class="{{ step_card }}" data-test="install-android">
+            <div class="flex items-center gap-3">
+                <span class="{{ step_icon }}"><twig:ux:icon name="tabler:brand-android" class="size-5"/></span>
+                <h2 class="text-[15px] font-semibold text-gray-900 dark:text-white">Android</h2>
+            </div>
+            <ol class="{{ step_list }}">
+                <li>Ouvrez Radar dans Chrome.</li>
+                <li>Touchez le menu <twig:ux:icon name="tabler:dots-vertical" class="inline size-4 align-text-bottom"/>, puis « Installer l'application » (ou « Ajouter à l'écran d'accueil »).</li>
+                <li>Pour partager un lien, touchez Partager dans n'importe quelle app et choisissez Radar : le formulaire d'ajout s'ouvre avec le lien.</li>
+            </ol>
+        </section>
+
+        <section class="{{ step_card }}" data-test="install-desktop">
+            <div class="flex items-center gap-3">
+                <span class="{{ step_icon }}"><twig:ux:icon name="tabler:device-desktop" class="size-5"/></span>
+                <h2 class="text-[15px] font-semibold text-gray-900 dark:text-white">Ordinateur</h2>
+            </div>
+            <p class="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
+                Dans Chrome ou Edge, cliquez sur l'icône d'installation à droite de la barre d'adresse.
+                Pour ajouter la page que vous lisez, l'<a href="{{ path('app_extension_key') }}" class="font-medium text-gray-900 underline dark:text-white">extension navigateur</a> reste le plus rapide.
+            </p>
+        </section>
+    </div>
+{% endblock %}

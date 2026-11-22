@@ -10,6 +10,7 @@ use ApiPlatform\Validator\Exception\ValidationException;
 use App\ApiResource\ExtensionLink;
 use App\Entity\Category;
 use App\Entity\User;
+use App\Enum\Type\LinkChannel;
 use App\Form\Model\LinkSubmission;
 use App\Repository\CategoryRepository;
 use App\Service\LinkManager;
@@ -44,6 +45,7 @@ final readonly class ExtensionLinkProcessor implements ProcessorInterface
         $submission = new LinkSubmission();
         $submission->url = $data->url;
         $submission->context = $data->context;
+        $submission->channel = LinkChannel::Extension;
         $submission->categories = $this->categoryRepository->findByIdsOrderedByName($data->categories);
 
         $violations = $this->validator->validate($submission);

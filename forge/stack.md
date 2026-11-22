@@ -1,6 +1,6 @@
 # Stack technique — Radar
 
-> Dernière mise à jour : 2026-11-04 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier du dépôt (source entre parenthèses) ou marquée _non renseigné_. Les briques prévues mais pas encore en place figurent dans « Cible non encore en place ».
+> Dernière mise à jour : 2026-11-22 — cartographie factuelle de la stack. Chaque entrée est prouvée par un fichier du dépôt (source entre parenthèses) ou marquée _non renseigné_. Les briques prévues mais pas encore en place figurent dans « Cible non encore en place ».
 
 ## Vue d'ensemble
 
@@ -39,6 +39,7 @@ Monolithe Symfony 8.1 rendu côté serveur (Twig + Symfony UX : Live Components,
 - **Rendu** : Twig + Symfony UX — Live Component `v3.5.1`, Stimulus bundle `v3.5.1`, Turbo `v3.5.1`, UX Icons, UX Toolkit (`composer.lock`, `importmap.php`)
 - **Assets** : AssetMapper + importmap, sans bundler JS (`config/packages/asset_mapper.yaml`, `importmap.php`)
 - **CSS** : Tailwind CSS `4.3.3` via `symfonycasts/tailwind-bundle` (`config/packages/symfonycasts_tailwind.yaml`, `package-lock.json`) ; Flowbite `4.0.2` (`package-lock.json`, `importmap.php`)
+- **App installable (PWA)** : manifeste statique `public/manifest.json` (`display: standalone`, `share_target` GET vers `/liens/ajouter`), icônes `public/icons/`, service worker `public/sw.js` limité au repli hors ligne (`public/offline.html`, aucune page de Radar en cache) enregistré par `assets/app.js` ; fichiers statiques pour rester lisibles sans session (`access_control` `^/` en `ROLE_USER`). **Tout changement de `offline.html` incrémente la constante `CACHE` de `sw.js`**, sinon les apps installées gardent l'ancienne page
 - **Design system** : « Radar », inspiré de Markit — tokens `@theme` (`DESIGN.md`, `assets/styles/app.css`), composants Twig (`templates/components/`)
 - **TypeScript** : non
 
@@ -103,3 +104,4 @@ Briques décidées, à construire via `/tech-plan` (pas encore prouvées par un 
 - 2026-11-02 — Enrichir — Données (base de prod, WAL), Ops (conteneurisation FrankenPHP, reverse proxy, secrets, sauvegarde), DevOps (déploiement), Cible (container de prod livré) — déploiement en production
 - 2026-11-02 — Enrichir — Backend (API Platform, pare-feu `api`, limiteur `extension_api_failure`), Outillage (extension navigateur, `make extension`) — implémentation de la story 014-f-extension-navigateur
 - 2026-11-04 — Enrichir — Ops (extension PHP `zip`), Outillage (paquet de l'extension téléchargé depuis Radar, règle de version) — implémentation de la story 019-f-telechargement-extension
+- 2026-11-22 — Enrichir — Frontend (app installable : manifeste, service worker de repli hors ligne, règle de version du cache) — sync post-livraison de la story 021-f-app-mobile-installable

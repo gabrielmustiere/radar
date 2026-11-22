@@ -2,7 +2,7 @@
 
 > Carte des capacités fonctionnelles et backlog priorisé dérivé de `forge/vision.md`.
 
-_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-11-04._
+_Document vivant — enrichi/édité au fil du cycle de vie, refondu lors d'un pivot. Date de dernière mise à jour : 2026-11-22._
 
 ## Changelog
 
@@ -19,6 +19,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 | 2026-11-03 | Enrichir | C3.5, C4.7, `gestion-comptes` | Comptes gérés depuis Radar, équipes sur les comptes et les catégories, sidebar « Mon équipe » — sync post-livraison de la story 015-f-gestion-comptes |
 | 2026-11-03 | Éditer | C4.7, `gestion-comptes` | Sidebar « Mon équipe » remplacée par le filtre Équipe de la barre de filtres — sync post-livraison de la story 016-r-cartes-typees |
 | 2026-11-04 | Enrichir | C1.10, `telechargement-extension` | Téléchargement de l'extension depuis Radar, procédure d'installation, FAQ et alerte de nouvelle version — sync post-livraison de la story 019-f-telechargement-extension |
+| 2026-11-22 | Enrichir | C1.11, C6.3, P1, `app-mobile-installable` | Radar installable sur téléphone, partage Android vers le formulaire d'ajout prérempli, canal d'entrée de chaque ajout — sync post-livraison de la story 021-f-app-mobile-installable |
 
 ## Domaines fonctionnels
 
@@ -45,6 +46,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - **C1.8** — Un admin peut créer un compte (email, équipe, mot de passe provisoire), le modifier, le désactiver puis le réactiver, et lui donner ou retirer le statut admin (pour ouvrir Radar à un collègue et partager l'administration sans passer par le serveur).
 - **C1.9** — Un membre peut ajouter la page qu'il lit depuis son navigateur (icône ou clic droit), avec les mêmes règles qu'un ajout dans Radar, grâce à une clé personnelle limitée à l'ajout, révocable et expirant après 90 jours sans usage.
 - **C1.10** — Un membre peut télécharger l'extension depuis Radar, suivre sa procédure d'installation, consulter une FAQ et être prévenu dans la bulle qu'une nouvelle version est disponible.
+- **C1.11** — Un membre peut installer Radar sur l'écran d'accueil de son téléphone (Android ou iPhone) et, sur Android, y partager un lien depuis n'importe quelle app : le formulaire d'ajout s'ouvre avec le lien prérempli, aux mêmes règles qu'un ajout dans Radar.
 
 ### D2 — Cartes
 
@@ -81,6 +83,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 
 - **C6.1** — Le système peut enregistrer chaque ouverture d'un lien d'origine avec l'âge du lien à ce moment-là.
 - **C6.2** — L'équipe peut consulter les indicateurs agrégés du mois : liens de plus de 30 jours rouverts, visiteurs distincts, contributeurs distincts.
+- **C6.3** — Le système peut retenir par quel canal chaque nouveau lien est entré (Radar, extension, partage mobile), lu seulement en volumes agrégés (R9).
 
 ## Parcours utilisateurs principaux
 
@@ -88,7 +91,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 
 - **Acteur** : tout contributeur (développeur, producteur, QA, manager).
 - **Déclencheur** : il tombe sur un lien utile.
-- **Étapes** : C1.1 ou C1.9 depuis le navigateur (+ C3.1 si aucune catégorie ne convient) → C1.3 si le lien existe déjà → C1.2 → C2.1 / C2.2 / C2.3 → C5.1.
+- **Étapes** : C1.1, C1.9 depuis le navigateur ou C1.11 depuis le téléphone (+ C3.1 si aucune catégorie ne convient) → C1.3 si le lien existe déjà → C1.2 → C2.1 / C2.2 / C2.3 → C5.1.
 - **État final** : le lien est classé, sa carte est enrichie et l'annonce est postée dans Chat.
 - **Fréquence** : 5 à 20 fois par semaine.
 
@@ -213,7 +216,7 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
   - Story `010-f-fil-derniers-ajouts` · **livrée** v0.2.0
   - C4.4 · P4 · dép. `carte-apercu` · Vision : « la curiosité est le moteur de l'usage »
 
-### V2 — Court terme post-lancement · `5/13 livrées`
+### V2 — Court terme post-lancement · `5/14 livrées`
 
 - [ ] `indicateurs-mensuels` — Permettre au porteur du projet de consulter les indicateurs agrégés du mois pour évaluer les seuils et le signal d'arrêt à 3 mois.
   - Pas encore cadrée
@@ -254,6 +257,9 @@ Historique des évolutions structurantes (création, enrichissements, éditions 
 - [x] `telechargement-extension` — Permettre à un membre de télécharger et d'installer l'extension depuis Radar, avec une FAQ sur la même page et une alerte de nouvelle version, pour s'équiper sans dépendre du Chrome Web Store.
   - Story `019-f-telechargement-extension` · **livrée** v1.3.0
   - C1.10 · P1 · dép. `extension-navigateur` · Vision : principe 1 / signal d'arrêt « ajout trop coûteux »
+- [ ] `app-mobile-installable` — Permettre à un membre d'installer Radar sur son téléphone et, sur Android, d'y partager un lien depuis n'importe quelle app, pour que capter une trouvaille sur mobile coûte moins qu'un post Chat.
+  - Story `021-f-app-mobile-installable` · **clôture en cours**
+  - C1.11, C6.3 · P1, P7 · dép. `ajout-lien`, `doublon-lien` · Vision : principe 1 / hypothèse 2
 
 ### V3 — Long terme
 
@@ -266,7 +272,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 ### Capacités par horizon
 
 - **MVP** — livrées : C1.1, C1.2, C1.3, C1.4, C2.1, C2.3, C2.4, C3.1, C4.1, C4.2, C4.3, C4.4, C5.1, C5.2, C6.1 · planifiées : —
-- **V2** — livrées : C1.6, C1.7, C1.8, C1.9, C1.10, C2.2, C3.5, C4.7 · planifiées : C1.5, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2
+- **V2** — livrées : C1.6, C1.7, C1.8, C1.9, C1.10, C2.2, C3.5, C4.7 · planifiées : C1.5, C1.11, C2.5, C3.2, C3.3, C3.4, C4.5, C4.6, C6.2, C6.3
 - **V3** — livrées : — · planifiées : —
 
 ### Capacités non couvertes (à challenger)
@@ -275,7 +281,7 @@ _(dérivé — recalculé à chaque passe, ne pas maintenir à la main)_
 
 ### Parcours supportés
 
-- **P1** : entièrement supporté en MVP ; cartes par source (C2.2), ajout depuis le navigateur (C1.9) et téléchargement de l'extension (C1.10) livrés en V2.
+- **P1** : entièrement supporté en MVP ; cartes par source (C2.2), ajout depuis le navigateur (C1.9) et téléchargement de l'extension (C1.10) livrés en V2 ; installation mobile et partage Android (C1.11) en clôture en V2.
 - **P2** : entièrement supporté en MVP ; filtre par équipe (C4.7) livré en V2 (filtre par type de source C4.5 planifié en V2).
 - **P3** : partiellement supporté en MVP (reclassement C3.2 reporté en V2).
 - **P4** : entièrement supporté en MVP via le fil C4.4 (C4.6 en V2).

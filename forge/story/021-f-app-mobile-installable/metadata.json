@@ -1,0 +1,54 @@
+{
+  "version": 3,
+  "title": "Installer Radar comme une app sur son téléphone et y partager un lien depuis Android",
+  "created": "2026-11-22",
+  "updated": "2026-11-22",
+  "tags": [
+    "contribution",
+    "mobile",
+    "pwa",
+    "partage",
+    "north-star"
+  ],
+  "changelog": [
+    {
+      "date": "2026-11-22",
+      "type": "Création",
+      "description": "Pitch initial : app installable Android et iPhone, partage Android vers le formulaire prérempli, page hors ligne, canal d'entrée de chaque ajout."
+    },
+    {
+      "date": "2026-11-22",
+      "type": "Planification",
+      "description": "Plan technique validé : fichiers PWA statiques, share_target vers /liens/ajouter, canal en champ caché et colonne nullable, page d'aide /installer ; questions ouvertes du pitch tranchées."
+    },
+    {
+      "date": "2026-11-22",
+      "type": "Implémentation",
+      "description": "Étapes 1 à 4 livrées, QA verte (Mago, 498 PHPUnit, 57 E2E dont 6 skips environnementaux préexistants) ; recette appareils (étape 5) à faire. Écarts : extraction du lien dans SharedLinkExtractor et non LinkUrlAnalyzer (complexité Mago) ; canal porté par la soumission (null pour HistoricalLinkSubmission et publish) au lieu d'un paramètre de create() (Mago : liste de paramètres, drapeau booléen) ; tests du canal dans LinkManagerChannelTest (Mago : trop de méthodes) ; zones de sécurité haut et bas seulement, sans marges latérales (paysage hors critères) ; marge basse ajoutée aux messages flash ; message « collez l'URL » au vouvoiement de l'interface au lieu de « colle » ; helper linkByUrl dans LinkWebTestCase."
+    },
+    {
+      "date": "2026-11-22",
+      "type": "Review",
+      "description": "Prêt à commiter ; 0 bloquant, 0 important, 1 mineur ouvert : [TEST] parcours partage, rendu Live, soumission sans E2E."
+    },
+    {
+      "date": "2026-11-22",
+      "type": "Review",
+      "description": "Prêt à commiter ; 1 mineur corrigé : [TEST] E2E du parcours partage, rendu Live, soumission. review.md conservé pour la section Hors review (recette appareils, hors ligne via Turbo, production)."
+    },
+    {
+      "date": "2026-11-22",
+      "type": "Sync",
+      "description": "8 écarts réalignés dans le plan et le pitch, 8/13 critères d'acceptation et 6/8 critères de sortie cochés, recette sur appareils reportée en dette critique ; backlog et stack enrichis."
+    },
+    {
+      "date": "2026-11-22",
+      "type": "Livraison",
+      "description": "App Radar installable (PWA), partage Android vers le formulaire prérempli, page hors ligne et canal d'entrée de chaque ajout."
+    }
+  ],
+  "delivery": {
+    "date": "2026-11-22",
+    "release": null
+  }
+}

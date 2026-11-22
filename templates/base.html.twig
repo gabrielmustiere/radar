@@ -2,7 +2,8 @@
 <html lang="fr" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    {% include 'common/_pwa_head.html.twig' %}
     {# Turbo 8 : fondu du contenu entre deux pages (navigateurs compatibles, mouvement réduit respecté) #}
     <meta name="view-transition" content="same-origin">
     <title>{% block title %}Radar{% endblock %}</title>
@@ -20,7 +21,8 @@
 <body class="antialiased bg-gray-50 font-body text-gray-800 dark:bg-gray-950 dark:text-gray-200">
 
 {# Topbar : sur téléphone, logo et avatar sur une ligne, recherche pleine largeur dessous #}
-<nav class="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-x-2 gap-y-3 border-b border-gray-200 bg-white px-4 py-3 sm:h-16 sm:flex-nowrap sm:gap-4 sm:py-0 md:px-6 dark:border-gray-800 dark:bg-gray-900">
+{# App installée sur iPhone : la marge haute de la zone de sécurité garde la barre sous l'encoche (0 ailleurs) #}
+<nav class="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-x-2 gap-y-3 border-b border-gray-200 bg-white px-4 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-3 sm:h-[calc(4rem+env(safe-area-inset-top))] sm:flex-nowrap sm:gap-4 sm:pt-[env(safe-area-inset-top)] sm:pb-0 md:px-6 dark:border-gray-800 dark:bg-gray-900">
     <div class="flex shrink-0 items-center">
         <a href="{{ path('app_page') }}">
             {% include 'common/logo.html.twig' with {compact: true} %}
@@ -72,6 +74,12 @@
                     <li>
                         <a href="{{ path('app_extension_key') }}" data-test="extension-key-link" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-white">
                             <twig:ux:icon name="tabler:puzzle" class="size-4"/> Extension navigateur
+                        </a>
+                    </li>
+                    {# Masquée dans l'app installée ; invite native du navigateur quand il en fournit une, page d'aide sinon #}
+                    <li data-controller="pwa-install">
+                        <a href="{{ path('app_install') }}" data-action="pwa-install#install" data-test="install-app-link" class="flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 dark:hover:text-white">
+                            <twig:ux:icon name="tabler:device-mobile" class="size-4"/> Installer l'app
                         </a>
                     </li>
                 </ul>
@@ -128,7 +136,7 @@
 {% if app.user %}
     {# Sur téléphone, le bouton flottant remplace « Ajouter un lien » de la topbar #}
     <a href="{{ path('app_link_new') }}" data-test="add-link-fab" data-turbo-frame="link-modal-frame"
-       class="fixed right-4 bottom-4 z-40 grid size-15 place-items-center rounded-full bg-gray-900 text-white shadow-[0_12px_28px_-10px_rgb(23_24_28/0.6)] transition active:scale-95 sm:hidden dark:bg-white dark:text-gray-900">
+       class="fixed right-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-40 grid size-15 place-items-center rounded-full bg-gray-900 text-white shadow-[0_12px_28px_-10px_rgb(23_24_28/0.6)] transition active:scale-95 sm:hidden dark:bg-white dark:text-gray-900">
         <twig:ux:icon name="tabler:plus" class="size-7"/>
         <span class="sr-only">Ajouter un lien</span>
     </a>

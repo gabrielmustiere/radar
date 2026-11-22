@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\Type\LinkChannel;
 use App\Enum\Type\PreviewStatus;
 use App\Enum\Type\SourceType;
 use App\Repository\LinkRepository;
@@ -89,6 +90,10 @@ class Link
     #[ORM\JoinColumn(name: 'source_id', nullable: true, onDelete: 'SET NULL')]
     private ?Source $source;
 
+    /** `null` pour les liens antérieurs à son suivi, les reprises de l'historique et les articles de source. */
+    #[ORM\Column(name: 'channel', length: 20, nullable: true, enumType: LinkChannel::class)]
+    private ?LinkChannel $channel;
+
     /** @var Collection<int, Category> */
     #[ORM\ManyToMany(targetEntity: Category::class)]
     #[ORM\JoinTable(name: 'link_category')]
@@ -106,9 +111,11 @@ class Link
         ?string $context = null,
         bool $seeded = false,
         ?Source $source = null,
+        ?LinkChannel $channel = null,
     ) {
         $this->seeded = $seeded;
         $this->source = $source;
+        $this->channel = $channel;
         $this->url = $url;
         $this->normalizedUrl = $normalizedUrl;
         $this->sourceType = $sourceType;
@@ -173,6 +180,11 @@ class Link
     public function getSource(): ?Source
     {
         return $this->source;
+    }
+
+    public function getChannel(): ?LinkChannel
+    {
+        return $this->channel;
     }
 
     public function getAnnouncedAt(): ?\DateTimeImmutable

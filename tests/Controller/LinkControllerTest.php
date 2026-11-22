@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Enum\Type\LinkChannel;
+
 final class LinkControllerTest extends LinkWebTestCase
 {
     public function testAnonymousUserIsRedirectedToLogin(): void
@@ -33,6 +35,17 @@ final class LinkControllerTest extends LinkWebTestCase
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-poster"]', 'admin');
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-category"]', 'Symfony');
         self::assertSelectorTextContains(self::FIRST_CARD . ' [data-test="link-context"]', 'Pour la recette mobile.');
+    }
+
+    public function testAddFromTheFormIsRecordedAsWeb(): void
+    {
+        $client = $this->loggedClient();
+        $url = 'https://example.com/' . uniqid('canal-web-');
+
+        $this->submit($client, ['url' => $url, 'categories' => [$this->categoryId('Symfony')]]);
+
+        self::assertResponseRedirects('/');
+        self::assertSame(LinkChannel::Web, $this->linkByUrl($url)->getChannel());
     }
 
     public function testThreeCategoriesAreKept(): void

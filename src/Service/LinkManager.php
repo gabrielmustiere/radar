@@ -59,6 +59,7 @@ final readonly class LinkManager
         $submission = new LinkSubmission();
         $submission->url = $url;
         $submission->categories = array_values($source->getCategories()->toArray());
+        $submission->channel = null;
 
         return $this->create($submission, $poster, $this->clock->now(), seeded: false, source: $source);
     }
@@ -143,6 +144,7 @@ final readonly class LinkManager
             '' === $context ? null : $context,
             $seeded,
             $source,
+            $submission->channel,
         );
 
         $this->linkRepository->save($link);

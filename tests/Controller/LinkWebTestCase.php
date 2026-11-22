@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Controller;
 
+use App\Entity\Link;
 use App\Repository\CategoryRepository;
+use App\Repository\LinkRepository;
 use App\Repository\UserRepository;
 use App\Service\CategoryResolver;
+use App\Service\LinkUrlAnalyzer;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -41,6 +44,18 @@ abstract class LinkWebTestCase extends WebTestCase
         $token = $crawler->filter(sprintf('input[name="%s[_token]"]', $form))->attr('value');
 
         $client->request('POST', $path, [$form => [...$values, '_token' => $token]]);
+    }
+
+    protected function linkByUrl(string $url): Link
+    {
+        $links = self::getContainer()->get(LinkRepository::class);
+        self::assertInstanceOf(LinkRepository::class, $links);
+        $analyzer = self::getContainer()->get(LinkUrlAnalyzer::class);
+        self::assertInstanceOf(LinkUrlAnalyzer::class, $analyzer);
+        $link = $links->findOneByNormalizedUrl($analyzer->normalize($url));
+        self::assertNotNull($link);
+
+        return $link;
     }
 
     /** Catégorie créée comme depuis le formulaire (majuscule initiale), à appeler une fois le client créé. */

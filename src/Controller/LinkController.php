@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Link;
 use App\Entity\User;
+use App\Enum\Type\LinkChannel;
 use App\Exception\DuplicateLinkException;
 use App\Form\HistoricalLinkType;
 use App\Form\LinkType;
@@ -13,6 +14,7 @@ use App\Form\Model\HistoricalLinkSubmission;
 use App\Form\Model\LinkSubmission;
 use App\Service\LinkManager;
 use App\Service\LinkOpeningRecorder;
+use App\Service\SharedLinkExtractor;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,9 +26,26 @@ use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 final class LinkController extends AbstractController
 {
     #[Route(path: '/liens/ajouter', name: 'app_link_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, LinkManager $linkManager, #[CurrentUser] User $user): Response
-    {
+    public function new(
+        Request $request,
+        LinkManager $linkManager,
+        SharedLinkExtractor $sharedLinkExtractor,
+        #[CurrentUser]
+        User $user,
+    ): Response {
         $submission = new LinkSubmission();
+        // Le menu Partager du téléphone ouvre cette page en GET avec `url`, `text` et `title` (manifeste, share_target).
+        $shared =
+            $request->isMethod('GET') && [] !== array_intersect(['url', 'text', 'title'], $request->query->keys());
+        if ($shared) {
+            $submission->url = $sharedLinkExtractor->extract(
+                $request->query->getString('url'),
+                $request->query->getString('text'),
+                $request->query->getString('title'),
+            );
+            $submission->channel = LinkChannel::Share;
+        }
+
         $form = $this->createForm(LinkType::class, $submission);
         $form->handleRequest($request);
 
@@ -44,6 +63,7 @@ final class LinkController extends AbstractController
 
         return $this->render('link/new.html.twig', [
             'form' => $form,
+            'share_without_link' => $shared && null === $submission->url,
         ]);
     }
 

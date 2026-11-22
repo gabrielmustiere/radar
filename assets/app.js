@@ -14,3 +14,8 @@ document.addEventListener('turbo:frame-missing', (event) => {
     event.preventDefault();
     event.detail.visit(event.detail.response);
 });
+
+// App installable : le service worker ne sert que la page hors ligne (public/sw.js).
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+}

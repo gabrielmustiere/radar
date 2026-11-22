@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Model;
 
 use App\Entity\Category;
+use App\Enum\Type\LinkChannel;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class LinkSubmission
@@ -27,4 +28,7 @@ class LinkSubmission
 
     #[Assert\Length(max: 500)]
     public ?string $context = null;
+
+    /** `null` quand le lien n'est pas ajouté par un membre : reprise de l'historique, article de source. */
+    public ?LinkChannel $channel = LinkChannel::Web;
 }

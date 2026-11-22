@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Form\Model;
 
 use App\Entity\User;
+use App\Enum\Type\LinkChannel;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class HistoricalLinkSubmission extends LinkSubmission
@@ -15,4 +16,7 @@ final class HistoricalLinkSubmission extends LinkSubmission
 
     #[Assert\NotNull(message: 'Indiquez qui avait posté le lien.')]
     public ?User $poster = null;
+
+    #[\Override]
+    public ?LinkChannel $channel = null;
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Api;
 
+use App\Enum\Type\LinkChannel;
 use App\Repository\LinkRepository;
 
 final class ExtensionLinkTest extends ExtensionApiTestCase
@@ -27,6 +28,7 @@ final class ExtensionLinkTest extends ExtensionApiTestCase
         self::assertSame($member->getEmail(), $link->getPostedBy()->getEmail());
         self::assertSame('À lire.', $link->getContext());
         self::assertCount(2, $link->getCategories());
+        self::assertSame(LinkChannel::Extension, $link->getChannel());
         self::assertNotificationCount(1);
     }
 
