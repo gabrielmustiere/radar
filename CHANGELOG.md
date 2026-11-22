@@ -10,6 +10,18 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-22 — Cartes Chat typées et connexion mémorisée
+
+### ✨ Fonctionnel
+- **Annonces Chat par type de lien** — chaque carte reprend l'icône, la couleur et le bouton d'action de son type (YouTube, X, GitHub, article, RSS, image), sans bannière d'aperçu.
+- **Titre en gras dans l'annonce** — le titre du lien ressort dans la carte Google Chat.
+- **Se souvenir de moi** — la case à cocher à la connexion fonctionne : la session reste ouverte 30 jours et s'invalide au changement de mot de passe.
+
+### 🔧 Technique
+- **Carte d'annonce refactorée** — `LinkAnnouncementCard` simplifiée, bannières et recadrage d'image retirés, icônes de type publiées dans `public/chat/icons/`.
+- **Tests de l'annonce renforcés** — échec d'envoi, retrait des bandeaux et échappement des hôtes hostiles couverts.
+- **Atelier forge déplacé** — la documentation de pilotage passe de `docs/` à `forge/` ; le dossier `docs/redesign/` est supprimé.
+
 ## [1.3.0] - 2026-11-04 — Extension téléchargeable et cartes Chat
 
 ### ✨ Fonctionnel
@@ -221,7 +233,8 @@ Chaque version porte un **titre** et distingue les **évolutions fonctionnelles*
 - **Outillage qualité** — PHPUnit 13, PHPStan level 10, PHP-CS-Fixer, PHP Insights et Symfony AI Mate.
 - **Tests E2E en PHP** — Playwright PHP remplace Playwright JS : les tests tournent avec PHPUnit (testsuite `e2e`, `make playwright`).
 
-[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/gabrielmustiere/radar/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/gabrielmustiere/radar/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/gabrielmustiere/radar/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/gabrielmustiere/radar/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/gabrielmustiere/radar/compare/v1.0.0...v1.1.0

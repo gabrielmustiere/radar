@@ -2,7 +2,7 @@
   "version": 2,
   "title": "Plan technique — Typer la carte d'annonce Google Chat : icône, couleur et action par type",
   "created": "2026-11-05",
-  "updated": "2026-11-06",
+  "updated": "2026-11-22",
   "tags": [
     "google-chat",
     "annonce",
@@ -48,10 +48,15 @@
       "date": "2026-11-06",
       "type": "Livraison",
       "description": "Commit c5a7b32 poussé sur main ; envoi réel sur espace de test à faire avant le déploiement."
+    },
+    {
+      "date": "2026-11-22",
+      "type": "Release",
+      "description": "Publiée dans v1.4.0 — Cartes Chat typées et connexion mémorisée."
     }
   ],
   "delivery": {
-    "release": null,
+    "release": "v1.4.0",
     "commit": "c5a7b32"
   }
 }
